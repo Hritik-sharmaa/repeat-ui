@@ -19,7 +19,7 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 mx-auto mt-4 px-4 max-w-[60rem] py-3 backdrop-blur-md border border-white/20 rounded-full">
+      className="fixed top-0 left-0 right-0 z-50 mx-auto mt-4 px-4 max-w-[60rem] py-3 backdrop-blur-3xl border border-black/30 dark:border-white/20 rounded-full">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <motion.div
           initial={{ x: -20, opacity: 0 }}

@@ -1,24 +1,47 @@
 @import "tailwindcss";
 
 :root {
+  /* Light theme variables */
   --background: #fef2de;
   --foreground: #06080a;
+  --secondary-text: #333333;
+  --accent: #fa5f1b;
+  --border-color: rgba(0, 0, 0, 0.7);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-secondary: var(--secondary-text);
+  --color-accent: var(--accent);
+  --color-border: var(--border-color);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-html[class="dark"] {
+/* Dark theme overrides: note the selector! */
+html.dark {
   --background: #06080a;
   --foreground: #fef2de;
+  --secondary-text: #cccccc;
+  --accent: #fa5f1b; 
+  --border-color: rgba(255, 255, 255, 0.2);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-sans);
+}
+
+.heading-font {
+  font-family: var(--font-ubuntu);
+}
+
+/* Borders using CSS variable */
+.border-theme {
+  border-color: var(--border-color);
 }

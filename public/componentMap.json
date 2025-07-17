@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Button",
+    "variants": [
+      {
+        "path": "Button/Primary/preview"
+      },
+      {
+        "path": "Button/Secondary/preview"
+      }
+    ]
+  },
+  {
+    "name": "Card",
+    "variants": [
+      {
+        "path": "Card/variant-1"
+      }
+    ]
+  }
+]

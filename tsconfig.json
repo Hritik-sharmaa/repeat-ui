@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/generateComponentMap.js", "types/*.d.ts", "src/app/components/content/button/js-tailwind/primary/preview.jsx", "src/app/components/content/button/js-css/primary/preview.jsx"],
   "exclude": ["node_modules"]
 }

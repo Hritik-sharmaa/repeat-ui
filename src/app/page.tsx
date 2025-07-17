@@ -1,7 +1,11 @@
-import Landing from "./components/landing";
+import Landing from "./components/site/landing";
+import Navbar from "./components/site/landing/navbars";
 
 export default function Home() {
   return (
-    <Landing />
+    <>
+      <Navbar />
+      <Landing />
+    </>
   );
 }

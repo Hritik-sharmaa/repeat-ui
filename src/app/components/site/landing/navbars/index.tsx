@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import ThemeToggle from "@/app/components/ui/ThemeToggler";
+import ThemeToggle from "@/app/components/site/ui/ThemeToggler";
 
 const Navbar = () => {
   const pathname = usePathname();
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/components", label: "Components" },
+    { href: "/components/button/primary", label: "Components" },
   ];
 
   return (
@@ -26,7 +26,9 @@ const Navbar = () => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-2 transition-all duration-300 font-bold">
+          <Link
+            href="/"
+            className="flex items-center gap-2 transition-all duration-300 font-bold">
             <motion.div
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}>

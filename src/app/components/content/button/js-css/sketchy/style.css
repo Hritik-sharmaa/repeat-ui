@@ -1,0 +1,17 @@
+.sketchy-button {
+  background-color: white;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #d4d4d8;
+  transform: translateY(0);
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.sketchy-button:hover {
+  border: 2px solid black;
+  border-radius: 0;
+  box-shadow: 2px 2px 0px black;
+  transform: translateY(-4px);
+}

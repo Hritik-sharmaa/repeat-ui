@@ -1,0 +1,15 @@
+.simple-button {
+  background-color: white;
+  padding-inline: 16px;
+  padding-block: 8px;
+  border-radius: 6px;
+  color: black;
+  border: 1px solid #d4d4d4; 
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.simple-button:hover {
+    transform: translateY(-0.25rem);     
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1)
+}

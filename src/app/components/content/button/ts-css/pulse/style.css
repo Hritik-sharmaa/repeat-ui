@@ -1,0 +1,62 @@
+.pulse-button {
+    position: relative;
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+    overflow: hidden;
+  }
+  
+  .pulse-button:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(
+      circle,
+      rgba(0, 255, 136, 0.6) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+    z-index: 1;
+  }
+  
+  .pulse-button span {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .pulse-button:hover:before {
+    width: 300px;
+    height: 300px;
+    animation: pulse 1.5s infinite;
+  }
+  
+  .pulse-button:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 0.3;
+    }
+  }
+  

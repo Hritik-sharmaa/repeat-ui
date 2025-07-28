@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/components/button/primary", label: "Components" },
+    { href: "/components/button/", label: "Components" },
   ];
 
   return (

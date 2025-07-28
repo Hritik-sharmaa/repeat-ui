@@ -1,0 +1,62 @@
+.button-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .layer {
+    position: absolute;
+    width: 160px;
+    height: 60px;
+    border: 3px solid black;
+    border-radius: 9999px;
+    transition: all 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .layer.layer-3 {
+    background-color: #3b82f6; /* blue-500 */
+    top: 8px;
+    left: 8px;
+    z-index: 0;
+  }
+  
+  .layer.layer-2 {
+    background-color: #2dd4bf; /* teal-400 */
+    top: 4px;
+    left: 4px;
+    z-index: 1;
+  }
+  
+  .layers-button {
+    position: relative;
+    width: 160px;
+    height: 60px;
+    background-color: #facc15; /* yellow-400 */
+    border: 3px solid black;
+    border-radius: 9999px;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .button-container:hover .layers-button {
+    transform: translate(-4px, -4px);
+  }
+  
+  .button-container:hover .layer-2,
+  .button-container:hover .layer-3 {
+    opacity: 1;
+  }
+  
+  .button-container:hover .layer-2 {
+    top: 6px;
+    left: 6px;
+  }
+  
+  .button-container:hover .layer-3 {
+    top: 12px;
+    left: 12px;
+  }
+  

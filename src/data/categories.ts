@@ -4,11 +4,11 @@ export const categories = [
     subcategories: [
       {
         name: "Button",
-        variants: ["primary", "secondary"],
+        variants: ["simple", "sketchy", "pulse", "rotation", "fill", "letter", "creep", "layers", "wiggle", "bubble"],
       },
       {
         name: "Card",
-        variants: ["card1"],
+        variants: ["profile-card", "pricing-card", "3D-card"],
       },
     ],
   },

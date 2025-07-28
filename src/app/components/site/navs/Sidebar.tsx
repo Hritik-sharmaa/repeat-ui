@@ -1,38 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { categories } from "@/data/categories";
 import { useVariant } from "@/app/context/code-context";
 
+function formatName(name: string) {
+  return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 export default function Sidebar() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { flavor } = useVariant();
 
   return (
-    <aside className="w-64 h-full overflow-y-auto border-r border-zinc-800">
-      <nav className="p-4">
+    <aside className="w-full sm:w-56 md:w-64 lg:min-w-[15rem] h-full overflow-y-auto">
+      <nav className="px-2 sm:px-4 md:px-8 lg:px-12 pt-4">
         {categories.map((cat) => (
           <div key={cat.name} className="mb-6">
             <h3 className="text-gray-400 text-sm font-medium mb-3 uppercase tracking-wider">
-              {cat.name}
+              {formatName(cat.name)}
             </h3>
             <ul className="space-y-1">
               {cat.subcategories.map((sub) => (
                 <li key={sub.name}>
                   <div className="text-gray-300 text-sm font-medium mb-2">
-                    {sub.name}
+                    {formatName(sub.name)}
                   </div>
                   <ul className="pl-4 space-y-1">
                     {sub.variants.map((variant) => {
                       const path = `/components/${sub.name.toLowerCase()}/${variant.toLowerCase()}?flavor=${flavor}`;
                       const isActive = pathname === path;
-                      console.log(
-                        "Link:",
-                        `/components/${sub.name.toLowerCase()}/${variant.toLowerCase()}`
-                      );
-
                       return (
                         <li key={variant}>
                           <Link
@@ -45,7 +43,7 @@ export default function Sidebar() {
                                   : "text-gray-400 hover:text-white hover:bg-gray-800/50"
                               }
                             `}>
-                            {variant}
+                            {formatName(variant)}
                           </Link>
                         </li>
                       );

@@ -6,7 +6,7 @@ import { Header } from "./site/navs/header";
 import Sidebar from "./site/navs/Sidebar";
 
 const ComponentsPage = () => {
-  const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const [selectedPath, ] = useState<string | null>(null);
   const [LoadedComponent, setLoadedComponent] = useState<React.ComponentType | null>(null);
 
   useEffect(() => {

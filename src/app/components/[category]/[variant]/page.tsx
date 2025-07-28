@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import ComponentTabs from "../../../components/site/ui/ComponentTabs";
+import PropTable from "../../site/ui/PropTable";
+import DependencyDisplay from "../../site/ui/DependencyDisplay";
+import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
 
 export default async function ComponentVariantPage({
   params,
@@ -10,22 +13,22 @@ export default async function ComponentVariantPage({
   params: { category?: string; variant?: string };
   searchParams?: { flavor?: string };
 }) {
-  const category = params.category?.toLowerCase();
-  const variant = params.variant?.toLowerCase();
+  const category = (await params)?.category?.toLowerCase();
+  const variant = (await params)?.variant?.toLowerCase();
 
-  const flavor = searchParams?.flavor || "ts-tailwind";
+  const flavor = (await searchParams)?.flavor || "ts-tailwind";
   const [lang, style] = flavor.split("-");
 
   if (!category || !variant) return notFound();
 
-  const Component = (
-    await import(
-      `@/app/components/content/${category}/${flavor}/${variant}/preview`
-    )
-  ).default;
+  const DemoModule = await import(
+    `@/app/components/content/${category}/${flavor}/${variant}/demo`
+  );
+  const Demo = DemoModule.default;
+  const propData = DemoModule.propData;
 
   let sourceCode = "";
-  let fileName = "preview.tsx";
+  let fileName = "demo.tsx";
   const extensions = lang === "ts" ? ["tsx", "ts"] : ["jsx", "js"];
 
   try {
@@ -65,6 +68,8 @@ export default async function ComponentVariantPage({
         cssCode = "// CSS file not found";
       }
     }
+    const dependencies = await analyzeComponentDependencies(sourceCode);
+
     return (
       <main className="p-6 max-w-7xl mx-auto">
         <div className="mb-6">
@@ -77,11 +82,15 @@ export default async function ComponentVariantPage({
         </div>
 
         <ComponentTabs
-          component={<Component />}
+          component={<Demo />}
           sourceCode={sourceCode}
           fileName={fileName}
           cssCode={cssCode}
         />
+
+        <DependencyDisplay dependencies={dependencies} />
+
+        <PropTable data={propData} />
       </main>
     );
   } catch (err) {

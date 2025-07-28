@@ -25,7 +25,6 @@ export function Header() {
 
   const [language, style] = flavor.split("-");
 
-  // Sync context with URL on mount
   useEffect(() => {
     const queryFlavor = searchParams.get("flavor");
     if (queryFlavor && queryFlavor !== flavor) {
@@ -43,8 +42,8 @@ export function Header() {
   };
 
   return (
-    <nav className="backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-zinc-800">
-      <div className="container flex h-16 items-center justify-between px-4">
+    <nav className="w-full max-w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-zinc-800">
+      <div className="w-full max-w-[95rem] mx-auto flex h-16 items-center justify-between px-2 sm:px-4 md:px-8 lg:px-12">
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -63,7 +62,6 @@ export function Header() {
         </motion.div>
 
         <div className="flex items-center space-x-4">
-          {/* Search */}
           <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -72,7 +70,6 @@ export function Header() {
             />
           </div>
 
-          {/* Language Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -83,7 +80,7 @@ export function Header() {
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="bg-black">
               <DropdownMenuItem onClick={() => updateFlavor("js", style)}>
                 JavaScript
               </DropdownMenuItem>
@@ -93,7 +90,6 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Style Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -104,7 +100,7 @@ export function Header() {
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="bg-black">
               <DropdownMenuItem onClick={() => updateFlavor(language, "css")}>
                 CSS
               </DropdownMenuItem>
@@ -114,11 +110,7 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Theme Toggle */}
           <ThemeToggle />
-
-          {/* GitHub Button */}
           <motion.a
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -139,8 +131,6 @@ export function Header() {
             </motion.div>
             Star on Github
           </motion.a>
-
-          {/* Mobile Search Icon */}
           <Button variant="ghost" size="sm" className="md:hidden">
             <Search className="h-4 w-4" />
           </Button>

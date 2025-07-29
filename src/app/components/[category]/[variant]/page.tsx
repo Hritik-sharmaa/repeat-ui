@@ -10,8 +10,8 @@ export default async function ComponentVariantPage({
   params,
   searchParams,
 }: {
-  params: { category?: string; variant?: string };
-  searchParams?: { flavor?: string };
+  params: Promise<{ category?: string; variant?: string }>;
+  searchParams?: Promise<{ flavor?: string }>;
 }) {
   const category = (await params)?.category?.toLowerCase();
   const variant = (await params)?.variant?.toLowerCase();

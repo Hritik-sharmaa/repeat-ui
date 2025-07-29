@@ -31,7 +31,7 @@ export default function PropTable({ data }: { data: PropData[] }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((prop, index) => (
+            {data.map((prop) => (
               <tr key={prop.name} className="border-b border-zinc-800/50 hover:bg-zinc-900/30">
                 <td className="px-3 py-3">
                   <code className="text-zinc-200 font-mono text-sm">{prop.name}</code>

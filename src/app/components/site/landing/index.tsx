@@ -15,8 +15,8 @@ const Landing = () => {
 
   const auraTransform = useTransform(
     [x, y],
-    ([latestX, latestY]) =>
-      `translate3d(${latestX - 200}px, ${latestY - 200}px, 0)`
+    (latest: number[]) =>
+      `translate3d(${latest[0] - 200}px, ${latest[1] - 200}px, 0)`
   );
 
   React.useEffect(() => {
@@ -26,7 +26,7 @@ const Landing = () => {
     };
     window.addEventListener("pointermove", handle);
     return () => window.removeEventListener("pointermove", handle);
-  }, []);
+  }, [rawX, rawY]);
 
   return (
     <>

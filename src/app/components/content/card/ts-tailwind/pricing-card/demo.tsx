@@ -1,6 +1,5 @@
 import React from "react";
 import PricingCard from "./preview";
-import { MdDescription } from "react-icons/md";
 
 const propData = [
   {

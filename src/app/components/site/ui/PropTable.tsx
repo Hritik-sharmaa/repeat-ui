@@ -1,66 +1,92 @@
 type PropData = {
-  name: string
-  type: string
-  default: string
-  description: string
-  options?: string[]
-}
+  name: string;
+  type: string;
+  default: string;
+  description: string;
+  options?: string[];
+};
 
 export default function PropTable({ data }: { data: PropData[] }) {
-  if (!data || data.length === 0) return null
+  console.log("PropTable received data:", data);
 
-  const hasOptions = data.some((prop) => prop.options)
+  if (!data || data.length === 0) return null;
+
+  const hasOptions = data.some((prop) => prop.options);
 
   return (
-    <div className="w-full mt-6">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-zinc-800">
-              <th className="px-3 py-2 text-left text-xs font-medium text-zinc-400 uppercase tracking-wide">Prop</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-zinc-400 uppercase tracking-wide">Type</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-zinc-400 uppercase tracking-wide">Default</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-zinc-400 uppercase tracking-wide">
-                Description
-              </th>
-              {hasOptions && (
-                <th className="px-3 py-2 text-left text-xs font-medium text-zinc-400 uppercase tracking-wide">
-                  Options
+    <div className="w-full mt-8">
+      <div className="overflow-hidden rounded-lg border-theme">
+        <div className="overflow-x-auto">
+          <table className="w-full table-theme">
+            <thead className="table-header-theme">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
+                  Prop
                 </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((prop) => (
-              <tr key={prop.name} className="border-b border-zinc-800/50 hover:bg-zinc-900/30">
-                <td className="px-3 py-3">
-                  <code className="text-zinc-200 font-mono text-sm">{prop.name}</code>
-                </td>
-                <td className="px-3 py-3">
-                  <code className="text-zinc-400 font-mono text-sm">{prop.type}</code>
-                </td>
-                <td className="px-3 py-3">
-                  {prop.default ? (
-                    <code className="text-zinc-400 font-mono text-sm">{prop.default}</code>
-                  ) : (
-                    <span className="text-zinc-600">—</span>
-                  )}
-                </td>
-                <td className="px-3 py-3 text-zinc-300">{prop.description}</td>
+                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
+                  Default
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
+                  Description
+                </th>
                 {hasOptions && (
-                  <td className="px-3 py-3">
-                    {prop.options ? (
-                      <code className="text-zinc-400 font-mono text-sm">{prop.options.join(" | ")}</code>
-                    ) : (
-                      <span className="text-zinc-600">—</span>
-                    )}
-                  </td>
+                  <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
+                    Options
+                  </th>
                 )}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y border-theme">
+              {data.map((prop) => (
+                <tr
+                  key={prop.name}
+                  className="transition-colors table-hover-theme">
+                  <td className="px-4 py-4">
+                    <code className="inline-flex items-center px-2 py-1 rounded-md code-neutral-theme text-sm font-mono">
+                      {prop.name}
+                    </code>
+                  </td>
+                  <td className="px-4 py-4">
+                    <code className="inline-flex items-center px-2 py-1 rounded-md code-blue-theme text-sm font-mono">
+                      {prop.type}
+                    </code>
+                  </td>
+                  <td className="px-4 py-4">
+                    {prop.default ? (
+                      <code className="inline-flex items-center px-2 py-1 rounded-md code-green-theme text-sm font-mono">
+                        {prop.default}
+                      </code>
+                    ) : (
+                      <span className="table-text-secondary-theme text-sm">
+                        —
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-4 text-sm table-text-theme leading-relaxed">
+                    {prop.description}
+                  </td>
+                  {hasOptions && (
+                    <td className="px-4 py-4">
+                      {prop.options ? (
+                        <code className="inline-flex items-center px-2 py-1 rounded-md code-purple-theme text-sm font-mono">
+                          {prop.options.join(" | ")}
+                        </code>
+                      ) : (
+                        <span className="table-text-secondary-theme text-sm">
+                          —
+                        </span>
+                      )}
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  )
+  );
 }

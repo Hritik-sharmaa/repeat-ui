@@ -1,0 +1,21 @@
+.flow-text-container {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.flow-text-measure {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  white-space: nowrap;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.flow-text-track {
+  white-space: nowrap;
+  font-size: 30px;
+  font-weight: bold;
+}

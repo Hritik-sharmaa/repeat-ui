@@ -48,7 +48,7 @@ const PricingCardDemo = () => {
     "Unlimited storage",
   ];
   return (
-    <div className="flex gap-20">
+    <div className="flex gap-8 ">
       <PricingCard
         plan="Basic"
         price={90}

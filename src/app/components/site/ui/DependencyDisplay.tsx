@@ -1,7 +1,6 @@
 "use client";
-
-import React from "react";
-import { Package } from "lucide-react";
+import { useState } from "react";
+import { Copy, Check } from "lucide-react";
 import type { ComponentDependencies } from "@/lib/dependencyAnalyzer";
 
 interface DependencyDisplayProps {
@@ -13,45 +12,69 @@ export default function DependencyDisplay({
   dependencies,
   className = "",
 }: DependencyDisplayProps) {
+  const [copied, setCopied] = useState(false);
+
   if (dependencies.dependencies.length === 0) {
     return null;
   }
 
+  const handleCopy = async () => {
+    const installCommand = `npm install ${dependencies.dependencies
+      .map((dep) => dep.name)
+      .join(" ")}`;
+
+    try {
+      await navigator.clipboard.writeText(installCommand);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
   return (
     <div
-      className={`mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 ${className}`}>
-      <div className="flex items-center gap-2 mb-4">
-        <Package className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Dependencies
-        </h3>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          ({dependencies.dependencies.length})
-        </span>
-      </div>
+      className={`mt-6 p-6 rounded-xl ${className}`}>
+      <div className="flex items-center gap-3 mb-6">
 
-      <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-200 dark:border-blue-700">
-        <h4 className="text-sm font-medium text-blue-900 dark:text-blue-300 mb-2">
-          Quick Install
-        </h4>
-        <div className="flex items-center gap-2">
-          <code className="flex-1 text-xs font-mono bg-white dark:bg-gray-900 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
-            npm install{" "}
-            {dependencies.dependencies.map((dep) => dep.name).join(" ")}
-          </code>
-          <button
-            onClick={() => {
-              const installCommand = `npm install ${dependencies.dependencies
-                .map((dep) => dep.name)
-                .join(" ")}`;
-              navigator.clipboard.writeText(installCommand);
-            }}
-            className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-            title="Copy install command">
-            Copy
-          </button>
+        <div className="flex-1">
+          <h3 className="text-xl font-semibold">
+            Dependencies
+          </h3>
         </div>
       </div>
-    </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex-1 relative">
+            <code className="block w-full text-sm font-mono bg-slate-900 dark:bg-slate-950 text-green-400 px-4 py-3 rounded-lg border border-slate-700 overflow-x-auto">
+              <span className="text-slate-500">$</span> npm install{" "}
+              {dependencies.dependencies.map((dep) => dep.name).join(" ")}
+            </code>
+          </div>
+
+          <button
+            onClick={handleCopy}
+            className={`flex items-center gap-2 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+              copied
+                ? "bg-green-600 text-white"
+                : "bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md"
+            }`}
+            title={copied ? "Copied!" : "Copy install command"}>
+            {copied ? (
+              <>
+                <Check className="w-4 h-4" />
+                Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4" />
+                Copy
+              </>
+            )}
+          </button>
+        </div>
+
+      </div>
+
   );
 }

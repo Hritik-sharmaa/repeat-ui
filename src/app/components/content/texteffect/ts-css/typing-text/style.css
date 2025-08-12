@@ -1,0 +1,74 @@
+.typing-text-container {
+  position: relative;
+  font-weight: bold;
+  font-size: 2.25rem; 
+  line-height: 2.5rem;
+}
+
+.typing-text-content {
+  color: inherit;
+}
+
+.typing-text-letter {
+  display: inline;
+}
+
+.typing-text-simple {
+  display: inline;
+}
+
+.typing-text-cursor {
+  display: inline;
+}
+
+.typing-text-cursor--typing {
+  color: #3b82f6; 
+}
+
+.typing-text-cursor--deleting {
+  color: #ef4444; 
+}
+
+@media (prefers-color-scheme: dark) {
+  .typing-text-cursor--typing {
+    color: #60a5fa; 
+  }
+  
+  .typing-text-cursor--deleting {
+    color: #f87171; 
+  }
+}
+
+html.dark .typing-text-cursor--typing {
+  color: #60a5fa; 
+}
+
+html.dark .typing-text-cursor--deleting {
+  color: #f87171; 
+}
+
+.dark .typing-text-cursor--typing {
+  color: #60a5fa; 
+}
+
+.dark .typing-text-cursor--deleting {
+  color: #f87171; 
+}
+
+:root {
+  --typing-text-cursor-typing: #3b82f6;
+  --typing-text-cursor-deleting: #ef4444;
+}
+
+html.dark {
+  --typing-text-cursor-typing: #60a5fa;
+  --typing-text-cursor-deleting: #f87171;
+}
+
+.typing-text-cursor--typing-alt {
+  color: var(--typing-text-cursor-typing);
+}
+
+.typing-text-cursor--deleting-alt {
+  color: var(--typing-text-cursor-deleting);
+}

@@ -1,0 +1,64 @@
+.split-reveal-container {
+  position: relative;
+}
+
+.split-reveal-title {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 6em;
+  text-transform: uppercase;
+  color: transparent;
+}
+
+.split-reveal-title:hover .split-reveal-top {
+  transform: translateY(-18px);
+}
+
+.split-reveal-title:hover .split-reveal-bottom {
+  transform: translateY(18px);
+}
+
+.split-reveal-title:hover .split-reveal-inner {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.split-reveal-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fb923c;
+  transition: all 0.5s;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+}
+
+.split-reveal-bottom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fb923c;
+  transition: all 0.5s;
+  overflow: hidden;
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.split-reveal-inner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) scaleY(0);
+  width: 96%;
+  color: black;
+  background-color: #a3e635;
+  font-size: 15px;
+  padding-left: 10px;
+  font-weight: 500;
+  letter-spacing: 0.7em;
+  text-align: center;
+  transition: all 0.5s;
+}

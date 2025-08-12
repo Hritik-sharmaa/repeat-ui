@@ -25,7 +25,20 @@ export default async function ComponentVariantPage({
     `@/app/components/content/${category}/${flavor}/${variant}/demo`
   );
   const Demo = DemoModule.default;
-  const propData = DemoModule.propData;
+  // Try both ways to get propData
+  const propData = DemoModule.propData || DemoModule.default.propData;
+
+  // Debug: Log what we imported
+  console.log(
+    `Imported from ${category}/${flavor}/${variant}/demo:`,
+    DemoModule
+  );
+  console.log("propData:", propData);
+  console.log("propData type:", typeof propData);
+  console.log("propData is array:", Array.isArray(propData));
+  console.log("propData length:", propData?.length);
+  console.log("DemoModule.propData:", DemoModule.propData);
+  console.log("DemoModule.default.propData:", DemoModule.default.propData);
 
   let sourceCode = "";
   let fileName = "demo.tsx";
@@ -73,12 +86,9 @@ export default async function ComponentVariantPage({
     return (
       <main className="p-6 max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold capitalize mb-2">
+          <h1 className="text-6xl font-bold capitalize mb-8 mt-8">
             {variant.replace(/-/g, " ")}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 capitalize">
-            {category.replace(/-/g, " ")} Component
-          </p>
         </div>
 
         <ComponentTabs

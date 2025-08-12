@@ -3,7 +3,15 @@ import { useState } from "react";
 import type React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Check, Copy, Eye, Code } from "lucide-react";
+import {
+  Eye,
+  Code,
+  Copy,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+} from "lucide-react";
 
 interface ComponentTabsProps {
   component: React.ReactNode;
@@ -23,6 +31,7 @@ export default function ComponentTabs({
   );
   const [copied, setCopied] = useState(false);
   const [showFullCode, setShowFullCode] = useState(false);
+  const [componentKey, setComponentKey] = useState(0);
 
   const codeToDisplay = (
     activeTab === "css" ? cssCode || "" : sourceCode
@@ -38,6 +47,10 @@ export default function ComponentTabs({
     } catch (err) {
       console.error("Failed to copy:", err);
     }
+  };
+
+  const handleReloadComponent = () => {
+    setComponentKey((prev) => prev + 1);
   };
 
   const getLanguage = (filename: string, isCSS = false) => {
@@ -68,26 +81,18 @@ export default function ComponentTabs({
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => setActiveTab("preview")}
-          className={`group flex items-center space-x-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm
-            ${
-              activeTab === "preview"
-                ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-blue-100 dark:shadow-blue-900/20"
-                : "bg-white hover:bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
-            }
-          `}>
+          className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+            activeTab === "preview" ? "tab-active-theme" : "tab-theme"
+          }`}>
           <Eye className="w-4 h-4 transition-transform group-hover:scale-110" />
           <span>Preview</span>
         </button>
 
         <button
           onClick={() => setActiveTab("code")}
-          className={`group flex items-center space-x-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm
-            ${
-              activeTab === "code"
-                ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-blue-100 dark:shadow-blue-900/20"
-                : "bg-white hover:bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
-            }
-          `}>
+          className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+            activeTab === "code" ? "tab-active-theme" : "tab-theme"
+          }`}>
           <Code className="w-4 h-4 transition-transform group-hover:scale-110" />
           <span>Code</span>
         </button>
@@ -95,42 +100,34 @@ export default function ComponentTabs({
         {cssCode && (
           <button
             onClick={() => setActiveTab("css")}
-            className={`group flex items-center space-x-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm
-              ${
-                activeTab === "css"
-                  ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-blue-100 dark:shadow-blue-900/20"
-                  : "bg-white hover:bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
-              }
-            `}>
+            className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+              activeTab === "css" ? "tab-active-theme" : "tab-theme"
+            }`}>
             <Code className="w-4 h-4 transition-transform group-hover:scale-110" />
             <span>CSS</span>
           </button>
         )}
       </div>
 
-      <div className="border border-gray-200/60 dark:border-gray-700/60 rounded-xl overflow-hidden shadow-sm bg-white dark:bg-gray-900">
+      <div className="rounded-xl overflow-hidden shadow-sm tab-content-theme border-theme">
         {activeTab === "preview" && (
-          <div className="p-8 bg-gradient-to-br from-gray-50/30 to-white dark:from-gray-900/30 dark:to-gray-900 min-h-[400px] flex items-center justify-center">
+          <div className="relative p-8 tab-preview-theme min-h-[400px] flex items-center justify-center">
             <div className="w-full max-w-full flex justify-center">
-              {component}
+              <div key={componentKey}>{component}</div>
             </div>
+
+            <button
+              onClick={handleReloadComponent}
+              className="absolute bottom-4 right-4 group flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm tab-theme hover:tab-active-theme backdrop-blur-sm"
+              title="Reload component animation">
+              <RefreshCw className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" />
+            </button>
           </div>
         )}
 
         {(activeTab === "code" || activeTab === "css") && (
           <div className="relative">
-            <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-900 border-b border-gray-700/50">
-              <div className="flex items-center space-x-3">
-                <div className="flex space-x-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                </div>
-                <span className="font-mono text-sm text-gray-300">
-                  {activeTab === "css" ? "style.css" : fileName}
-                </span>
-              </div>
-
+            <div className="flex items-center justify-between px-5 py-3 float-right">
               <button
                 onClick={() =>
                   handleCopy(activeTab === "css" ? cssCode || "" : sourceCode)
@@ -171,12 +168,22 @@ export default function ComponentTabs({
               </SyntaxHighlighter>
 
               {codeToDisplay.length > 20 && (
-                <div className="text-center p-2 bg-gray-100 dark:bg-gray-800">
-                  <button
-                    onClick={() => setShowFullCode(!showFullCode)}
-                    className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition">
-                    {showFullCode ? "Show Less" : "Show More"}
-                  </button>
+                <div className="relative">
+                  {!showFullCode && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent backdrop-blur-sm"></div>
+                  )}
+                  <div className="relative text-center p-6">
+                    <button
+                      onClick={() => setShowFullCode(!showFullCode)}
+                      className="flex items-center gap-2 px-6 py-3 text-sm rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-200 shadow-lg">
+                      <span>{showFullCode ? "Show Less" : "Show More"}</span>
+                      {showFullCode ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

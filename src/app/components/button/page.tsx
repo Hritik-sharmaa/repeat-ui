@@ -21,12 +21,11 @@ export default function ButtonGalleryPage() {
             <Link
               key={variant}
               href={`/components/button/${variant}?flavor=${flavor}`}
-              className="block p-6 bg-white dark:bg-zinc-900 rounded-xl shadow hover:shadow-lg transition border border-zinc-200 dark:border-zinc-800 hover:-translate-y-1">
-              <div className="text-lg font-semibold mb-2 capitalize">
+              className="p-6 bg-white dark:bg-zinc-900 rounded-xl shadow hover:shadow-lg transition border border-zinc-200 dark:border-zinc-800 hover:-translate-y-1 h-48 flex flex-col z-20">
+              <div className="text-lg font-semibold mb-4 capitalize ">
                 {variant}
               </div>
-              <div className="flex items-center justify-center min-h-[48px]">
-                {/* Dynamically import and render the demo component for preview */}
+              <div className="flex items-center justify-center flex-1 overflow-hidden relative">
                 <DemoPreview variant={variant} flavor={flavor} />
               </div>
             </Link>

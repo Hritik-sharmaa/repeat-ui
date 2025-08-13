@@ -1,6 +1,6 @@
-"use client"
-import React from "react";
-import Pulse from "./preview";
+"use client";
+
+import Pulse from "./preview"
 
 const propData = [
   {

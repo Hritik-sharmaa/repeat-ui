@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const TextShadow = ({ text, className }: { text: string; className?: string }) => {
+const TextShadow = ({ text, className }) => {
   const [hover, setHover] = useState(false);
 
   return (
@@ -21,12 +21,11 @@ const TextShadow = ({ text, className }: { text: string; className?: string }) =
             `
             : "none",
           transform: hover ? "translate(-12px, -12px)" : "translate(0,0)",
-        }}
-      >
+        }}>
         {text}
       </h2>
     </div>
   );
-}
+};
 
 export default TextShadow;

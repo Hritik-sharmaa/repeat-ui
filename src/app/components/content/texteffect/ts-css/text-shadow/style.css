@@ -1,0 +1,25 @@
+.text-shadow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-shadow-element {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: calc(2rem + 5vw);
+  color: #f6aca2;
+  text-shadow: none;
+  transform: translate(0, 0);
+  transition: all 0.3s ease;
+}
+
+.text-shadow-element:hover {
+  color: #f6aca2;
+  text-shadow: 
+    3px 3px 0 #f49b90,
+    6px 6px 0 #f28b7d,
+    9px 9px 0 #f07a6a,
+    12px 12px 0 #ee6352;
+  transform: translate(-12px, -12px);
+}

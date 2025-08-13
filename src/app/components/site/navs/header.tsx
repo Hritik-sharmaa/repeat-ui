@@ -44,11 +44,7 @@ export function Header() {
   return (
     <nav className="w-full max-w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-zinc-800">
       <div className="w-full max-w-[95rem] mx-auto flex h-16 items-center justify-between px-2 sm:px-4 md:px-8 lg:px-12">
-        <motion.div
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <Link
             href="/"
             className="flex items-center gap-2 transition-all duration-300 font-bold">
@@ -59,7 +55,7 @@ export function Header() {
             </motion.div>
             <h1 className="text-2xl font-bold">Repeat UI</h1>
           </Link>
-        </motion.div>
+        </div>
 
         <div className="flex items-center space-x-4">
           <div className="relative hidden md:block">
@@ -80,7 +76,7 @@ export function Header() {
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-black">
+            <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => updateFlavor("js", style)}>
                 JavaScript
               </DropdownMenuItem>
@@ -100,7 +96,7 @@ export function Header() {
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-black">
+            <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => updateFlavor(language, "css")}>
                 CSS
               </DropdownMenuItem>
@@ -111,26 +107,16 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
           <ThemeToggle />
-          <motion.a
-            initial={{ y: -10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.6 }}
-            whileHover={{
-              scale: 1.05,
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-            }}
-            whileTap={{ scale: 0.95 }}
+          <a
             href="https://github.com/yourusername/repeat-ui"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:bg-gray-100/20 dark:hover:bg-gray-800/20 transition-all duration-300 font-medium border border-white/30 rounded-lg px-3 py-2">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}>
+            <div>
               <Image src="/github.svg" alt="github" width={20} height={20} />
-            </motion.div>
+            </div>
             Star on Github
-          </motion.a>
+          </a>
           <Button variant="ghost" size="sm" className="md:hidden">
             <Search className="h-4 w-4" />
           </Button>

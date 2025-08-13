@@ -26,7 +26,7 @@ const propData = [
 
 const FlippingTextDemo = () => {
   return (
-    <div className="flex flex-col gap-8 items-center py-8">
+    <div className="flex flex-col items-center ">
       <FlippingText
         text="LinkedIn"
         layout="text-left"

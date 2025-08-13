@@ -81,7 +81,7 @@ export default function ComponentTabs({
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => setActiveTab("preview")}
-          className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+          className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
             activeTab === "preview" ? "tab-active-theme" : "tab-theme"
           }`}>
           <Eye className="w-4 h-4 transition-transform group-hover:scale-110" />
@@ -90,7 +90,7 @@ export default function ComponentTabs({
 
         <button
           onClick={() => setActiveTab("code")}
-          className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+          className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
             activeTab === "code" ? "tab-active-theme" : "tab-theme"
           }`}>
           <Code className="w-4 h-4 transition-transform group-hover:scale-110" />
@@ -100,7 +100,7 @@ export default function ComponentTabs({
         {cssCode && (
           <button
             onClick={() => setActiveTab("css")}
-            className={`group flex items-center space-x-2 px-4 py-[8px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+            className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
               activeTab === "css" ? "tab-active-theme" : "tab-theme"
             }`}>
             <Code className="w-4 h-4 transition-transform group-hover:scale-110" />

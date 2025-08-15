@@ -4,6 +4,7 @@ import { join } from "path";
 import ComponentTabs from "../../../components/site/ui/ComponentTabs";
 import PropTable from "../../site/ui/PropTable";
 import DependencyDisplay from "../../site/ui/DependencyDisplay";
+import CliInstallCommand from "../../site/ui/CliInstallCommand";
 import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
 
 export default async function ComponentVariantPage({
@@ -96,6 +97,11 @@ export default async function ComponentVariantPage({
           sourceCode={sourceCode}
           fileName={fileName}
           cssCode={cssCode}
+        />
+
+        <CliInstallCommand
+          componentName={`${category}-${variant}`}
+          variant={flavor}
         />
 
         <DependencyDisplay dependencies={dependencies} />

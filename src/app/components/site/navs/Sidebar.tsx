@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { categories } from "@/data/categories";
+import { categories, isNewComponent } from "@/data/categories";
 import { useVariant } from "@/app/context/code-context";
 import { motion } from "framer-motion";
-
 
 function formatName(name: string) {
   return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
@@ -15,18 +14,11 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { flavor } = useVariant();
 
-
   return (
     <aside className="w-full h-full overflow-y-auto no-scrollbar">
-      <nav
-        className="pt-6 px-4 space-y-6"
-       
-      >
+      <nav className="pt-6 px-4 space-y-6">
         {categories.map((cat) => (
-          <div
-            key={cat.name}
-            className="space-y-3"
-            >
+          <div key={cat.name} className="space-y-3">
             <ul className="space-y-1">
               {cat.subcategories.map((sub, subIndex) => (
                 <li key={sub.name} className="relative group ">
@@ -41,9 +33,7 @@ export default function Sidebar() {
                       {formatName(sub.name)}
                     </motion.div>
                   </Link>
-                  <ul
-                    className={`ml-4 space-y-0.5 relative`}
-                    >
+                  <ul className={`ml-4 space-y-0.5 relative`}>
                     <motion.div
                       className="absolute left-0 top-0 w-px bg-gray-700"
                       initial={{ height: 0 }}
@@ -53,14 +43,15 @@ export default function Sidebar() {
                             ? "calc(100% - 0.5rem)"
                             : "100%",
                       }}
-                     
                     />
                     {sub.variants.map((variant, variantIndex) => {
-                      const variantPath = `/components/${sub.name.toLowerCase()}/${variant.toLowerCase()}`;
+                      const variantPath = `/components/${sub.name.toLowerCase()}/${variant.name.toLowerCase()}`;
                       const isActive = pathname === variantPath;
+                      const isNew = isNewComponent(variant.dateAdded);
+
                       return (
                         <motion.li
-                          key={variant}
+                          key={variant.name}
                           className={`relative pl-2 group/item transition-colors duration-200 ${
                             isActive
                               ? "text-white"
@@ -79,7 +70,7 @@ export default function Sidebar() {
 
                           <Link
                             href={`${variantPath}?flavor=${flavor}`}
-                            className={`flex items-center py-2 px-3 text-sm rounded-md transition-all duration-200 ${
+                            className={`flex items-center justify-between py-2 px-3 text-sm rounded-md transition-all duration-200 ${
                               isActive
                                 ? "sidebar-active-text"
                                 : "sidebar-inactive-text"
@@ -90,8 +81,22 @@ export default function Sidebar() {
                                 x: 4,
                               }}
                               transition={{ duration: 0.2 }}>
-                              {formatName(variant)}
+                              {formatName(variant.name)}
                             </motion.span>
+
+                            {isNew && (
+                              <motion.span
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                whileHover={{ scale: 1.1 }}
+                                className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30 rounded-full"
+                                title={`Added on ${new Date(
+                                  variant.dateAdded
+                                ).toLocaleDateString()}`}>
+                                NEW
+                              </motion.span>
+                            )}
+
                             {isActive && (
                               <motion.div
                                 className="absolute inset-0 bg-white/10 rounded-md -z-10"

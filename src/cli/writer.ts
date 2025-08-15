@@ -8,6 +8,56 @@ export interface WriteOptions {
   format: boolean;
 }
 
+// Helper function to update categories.ts when a new component is added
+export async function updateCategoriesWithNewComponent(
+  category: string,
+  componentName: string,
+  projectRoot: string
+): Promise<void> {
+  const categoriesPath = path.join(projectRoot, "src/data/categories.ts");
+
+  if (await fs.pathExists(categoriesPath)) {
+    try {
+      let categoriesContent = await fs.readFile(categoriesPath, "utf-8");
+
+      // Find the category and add the new component with today's date
+      const today = new Date().toISOString().split("T")[0];
+      const newVariant = `createVariant("${componentName}", "${today}")`;
+
+      // Look for the category section and add the new variant
+      const categoryRegex = new RegExp(
+        `(name: "${category}"[\\s\\S]*?variants: \\[[\\s\\S]*?)(\\]\\s*,?)`,
+        "i"
+      );
+
+      const match = categoriesContent.match(categoryRegex);
+      if (match) {
+        const beforeClosing = match[1];
+        const closing = match[2];
+
+        // Check if there are existing variants to determine comma placement
+        const hasExistingVariants = beforeClosing.includes("createVariant(");
+        const comma = hasExistingVariants ? "," : "";
+
+        const replacement = `${beforeClosing}${comma}\n          ${newVariant}${closing}`;
+        categoriesContent = categoriesContent.replace(
+          categoryRegex,
+          replacement
+        );
+
+        await fs.writeFile(categoriesPath, categoriesContent, "utf-8");
+        console.log(
+          `✓ Updated categories.ts with new component: ${componentName}`
+        );
+      }
+    } catch (error) {
+      console.warn(
+        `Warning: Could not update categories.ts automatically: ${error}`
+      );
+    }
+  }
+}
+
 export async function writeComponentFiles(
   files: Record<string, string>,
   options: WriteOptions

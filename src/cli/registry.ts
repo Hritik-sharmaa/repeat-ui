@@ -3,6 +3,7 @@ export interface ComponentInfo {
   category: string;
   description: string;
   dependencies: string[];
+  dateAdded: string; // ISO date string
   files: {
     component: string;
     styles?: string;
@@ -23,6 +24,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A simple, clean button component",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -40,6 +42,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with layered hover effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -57,6 +60,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with bubble animation effects",
     dependencies: [],
+    dateAdded: "2025-08-10", // Marked as new for demo
     files: {
       component: "preview",
       styles: "style.css",
@@ -74,6 +78,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with creeping animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -91,6 +96,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with fill animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -108,6 +114,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with letter animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -125,6 +132,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with pulse animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -142,6 +150,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with rotation animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -159,6 +168,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with sketchy animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -176,6 +186,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with wiggle animation effects",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -195,6 +206,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A beautiful 3D card component with hover effects",
     dependencies: [],
+    dateAdded: "2025-08-12", // Marked as new for demo
     files: {
       component: "preview",
       styles: "style.css",
@@ -212,6 +224,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A beautiful pricing card component for subscription plans",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -229,6 +242,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A card component for displaying user profiles",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -243,28 +257,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
   },
 
   // Text Effect Components
-  "texteffect-aurora-title": {
-    name: "Aurora Title",
-    category: "texteffect",
-    description: "A text effect with aurora-like animation",
-    dependencies: [],
-    files: {
-      component: "preview",
-      styles: "style.css",
-      demo: "demo",
-    },
-    variants: {
-      "js-css": true,
-      "js-tailwind": true,
-      "ts-css": true,
-      "ts-tailwind": true,
-    },
-  },
   "texteffect-flipping-text": {
     name: "Flipping Text",
     category: "texteffect",
     description: "A text effect with flipping animation",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -282,6 +280,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with flowing animation",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -299,6 +298,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with popping animation",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -316,6 +316,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with split reveal animation",
     dependencies: [],
+    dateAdded: "2025-08-14", // Marked as new for demo
     files: {
       component: "preview",
       styles: "style.css",
@@ -333,6 +334,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with dynamic shadow animation",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -350,6 +352,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with typing animation",
     dependencies: [],
+    dateAdded: "2025-01-01",
     files: {
       component: "preview",
       styles: "style.css",
@@ -366,7 +369,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
 
 export const getComponentsList = () => Object.keys(componentRegistry);
 export const getComponentInfo = (name: string) => componentRegistry[name];
-export const getComponentsByCategory = (category: string) => 
+export const getComponentsByCategory = (category: string) =>
   Object.entries(componentRegistry)
     .filter(([, info]) => info.category === category)
     .map(([key]) => key);

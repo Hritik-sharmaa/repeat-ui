@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Repeat UI
 
-## Getting Started
+A modern, customizable React component library with live editing and copy-paste integration. Build UIs faster with beautiful, ready-to-use components.
 
-First, run the development server:
+## ✨ Features
+
+- 🎨 **Beautiful Components**: Modern, animated UI components
+- 🛠️ **CLI Integration**: Install components directly via command line
+- 🔄 **Multiple Variants**: JavaScript/TypeScript with CSS/Tailwind options
+- 🆕 **New Component Tracking**: Automatic "NEW" tags for recently added components
+- 📱 **Responsive Design**: Components work seamlessly across all devices
+- 🎭 **Animation Ready**: Built with Framer Motion for smooth interactions
+
+## 🚀 Quick Start
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install the CLI globally
+npm install -g @hritik-sharmaa/repeat-ui
+
+# Or use directly with npx
+npx @hritik-sharmaa/repeat-ui add button-simple
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Clone the repository
+git clone https://github.com/hritik-sharmaa/repeat-ui.git
+cd repeat-ui
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Install dependencies
+npm install
 
-## Learn More
+# Start development server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) to see the component library.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🆕 New Component System
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Components added within the last 30 days automatically display a green "NEW" tag in the sidebar navigation. This helps you quickly discover the latest additions to the library.
 
-## Deploy on Vercel
+### Currently New Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Button/Bubble** - Advanced bubble animation effects
+- **Card/3D Card** - Interactive 3D card with hover effects
+- **Text Effect/Split Reveal** - Split text reveal animation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For more details, see [NEW_TAG_SYSTEM.md](./docs/NEW_TAG_SYSTEM.md).
+
+## 📦 Available Components
+
+### Buttons
+
+- Simple, Sketchy, Pulse, Rotation
+- Fill, Letter, Creep, Layers
+- Wiggle, Bubble (NEW!)
+
+### Cards
+
+- Profile Card, Pricing Card
+- 3D Card (NEW!)
+
+### Text Effects
+
+- Flipping Text, Typing Text, Flow Text
+- Text Shadow, Pop Text
+- Split Reveal Text (NEW!)
+
+## 🛠️ CLI Usage
+
+```bash
+# List all available components
+repeat-ui list
+
+# Add a component to your project
+repeat-ui add button-simple
+
+# Add with specific variant
+repeat-ui add button-simple --variant ts-tailwind
+
+# Install to custom directory
+repeat-ui add card-profile --output ./src/components
+```
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── components/         # All UI components
+│   │   ├── content/        # Component implementations
+│   │   └── site/           # Site layout components
+│   └── context/           # React contexts
+├── cli/                   # CLI tool implementation
+├── data/                  # Component metadata
+└── lib/                   # Utility functions
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-component`)
+3. Add your component with proper date tracking
+4. Commit your changes (`git commit -m 'Add amazing component'`)
+5. Push to the branch (`git push origin feature/amazing-component`)
+6. Open a Pull Request
+
+### Adding New Components
+
+When adding new components, make sure to:
+
+1. Update `src/data/categories.ts` with current date
+2. Add entry to `src/cli/registry.ts`
+3. Follow the existing file structure
+4. Include all variant types (js-css, js-tailwind, ts-css, ts-tailwind)
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## 🔗 Links
+
+- [Documentation](./docs/)
+- [Component Examples](http://localhost:3000/components)
+- [GitHub Repository](https://github.com/hritik-sharmaa/repeat-ui)
+
+---
+
+Built with ❤️ using Next.js, TypeScript, Tailwind CSS, and Framer Motion.

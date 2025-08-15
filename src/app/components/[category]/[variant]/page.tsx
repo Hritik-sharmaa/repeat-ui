@@ -6,6 +6,7 @@ import PropTable from "../../site/ui/PropTable";
 import DependencyDisplay from "../../site/ui/DependencyDisplay";
 import CliInstallCommand from "../../site/ui/CliInstallCommand";
 import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
+import { categories } from "@/data/categories";
 
 export default async function ComponentVariantPage({
   params,
@@ -22,24 +23,22 @@ export default async function ComponentVariantPage({
 
   if (!category || !variant) return notFound();
 
+  const categoryData = categories.find((cat) =>
+    cat.subcategories.some((sub) => sub.name.toLowerCase() === category)
+  );
+  const subcategoryData = categoryData?.subcategories.find(
+    (sub) => sub.name.toLowerCase() === category
+  );
+  const variantData = subcategoryData?.variants.find(
+    (v) => v.name.toLowerCase() === variant
+  );
+  const description = variantData?.description;
+
   const DemoModule = await import(
     `@/app/components/content/${category}/${flavor}/${variant}/demo`
   );
   const Demo = DemoModule.default;
-  // Try both ways to get propData
   const propData = DemoModule.propData || DemoModule.default.propData;
-
-  // Debug: Log what we imported
-  console.log(
-    `Imported from ${category}/${flavor}/${variant}/demo:`,
-    DemoModule
-  );
-  console.log("propData:", propData);
-  console.log("propData type:", typeof propData);
-  console.log("propData is array:", Array.isArray(propData));
-  console.log("propData length:", propData?.length);
-  console.log("DemoModule.propData:", DemoModule.propData);
-  console.log("DemoModule.default.propData:", DemoModule.default.propData);
 
   let sourceCode = "";
   let fileName = "demo.tsx";
@@ -90,6 +89,11 @@ export default async function ComponentVariantPage({
           <h1 className="text-6xl font-bold capitalize mb-8 mt-8">
             {variant.replace(/-/g, " ")}
           </h1>
+          {description && (
+            <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-4">
+              {description}
+            </p>
+          )}
         </div>
 
         <ComponentTabs

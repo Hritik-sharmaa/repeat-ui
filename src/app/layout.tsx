@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Ubuntu } from "next/font/google";
+import { Geist, Geist_Mono, Cal_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/app/context/theme-provider";
 import { VariantProvider } from "./context/code-context";
+import { SearchProvider } from "./context/search-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +15,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const ubuntu = Ubuntu({
-  variable: "--font-ubuntu",
+const calSans = Cal_Sans({
+  variable: "--font-Cal-Sans",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -37,9 +38,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ubuntu.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${calSans.variable}  antialiased`}>
         <VariantProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <SearchProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </SearchProvider>
         </VariantProvider>
       </body>
     </html>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { categories, isNewComponent } from "@/data/categories";
 import { useVariant } from "@/app/context/code-context";
 import { motion } from "framer-motion";
+import { formatDateForDisplay } from "@/lib/dateUtils";
 
 function formatName(name: string) {
   return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
@@ -54,14 +55,14 @@ export default function Sidebar() {
                           key={variant.name}
                           className={`relative pl-2 group/item transition-colors duration-200 ${
                             isActive
-                              ? "text-white"
-                              : "text-zinc-400 hover:text-white"
+                              ? "dark:text-white text-black"
+                              : "dark:text-zinc-400 dark:hover:text-white "
                           }`}
                           initial="hidden"
                           animate="visible"
                           transition={{ delay: 0.3 + variantIndex * 0.1 }}>
                           <motion.div
-                            className={`absolute left-0 top-0 w-px bg-white h-full origin-top transition-transform duration-200 ease-out rounded-full ${
+                            className={`absolute left-0 top-0 w-px dark:bg-white bg-zinc-400 h-full origin-top transition-transform duration-200 ease-out rounded-full ${
                               isActive
                                 ? "scale-y-100"
                                 : "scale-y-0 group-hover/item:scale-y-100"
@@ -88,18 +89,17 @@ export default function Sidebar() {
                               <motion.span
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                whileHover={{ scale: 1.1 }}
-                                className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30 rounded-full"
-                                title={`Added on ${new Date(
+                                className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-green-500/20 text-green-400 border border-green-500/30 rounded-full"
+                                title={`Added on ${formatDateForDisplay(
                                   variant.dateAdded
-                                ).toLocaleDateString()}`}>
-                                NEW
+                                )}`}>
+                                New
                               </motion.span>
                             )}
 
                             {isActive && (
                               <motion.div
-                                className="absolute inset-0 bg-white/10 rounded-md -z-10"
+                                className="absolute inset-0 dark:bg-white/10 bg-black/10 rounded-md -z-10"
                                 layoutId="activeTab"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

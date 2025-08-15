@@ -19,14 +19,14 @@ export default function ButtonGalleryPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {buttonCategory.variants.map((variant) => (
             <Link
-              key={variant}
-              href={`/components/button/${variant}?flavor=${flavor}`}
-              className="p-6 bg-white dark:bg-zinc-900 rounded-xl shadow hover:shadow-lg transition border border-zinc-200 dark:border-zinc-800 hover:-translate-y-1 h-48 flex flex-col z-20">
-              <div className="text-lg font-semibold mb-4 capitalize ">
-                {variant}
+              key={variant.name}
+              href={`/components/button/${variant.name}?flavor=${flavor}`}
+              className="p-6 bg-white dark:bg-zinc-900 rounded-xl shadow hover:shadow-lg transition border border-zinc-200 dark:border-zinc-800 hover:-translate-y-1 h-56 flex flex-col z-20">
+              <div className="text-lg font-semibold mb-4 capitalize">
+                {variant.name.replace(/-/g, " ")}
               </div>
               <div className="flex items-center justify-center flex-1 overflow-hidden relative">
-                <DemoPreview variant={variant} flavor={flavor} />
+                <DemoPreview variant={variant.name} flavor={flavor} />
               </div>
             </Link>
           ))}

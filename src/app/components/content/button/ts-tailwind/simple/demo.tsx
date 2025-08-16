@@ -19,7 +19,6 @@ const propData = [
     type: "string",
     default: "md",
     description: "Button size variant.",
-    options: ["sm", "md", "lg"],
   },
 ];
 

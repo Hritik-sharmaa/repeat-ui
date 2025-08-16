@@ -1,10 +1,11 @@
-export default function Fill({
+"use client"
+const Fill= ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+})  => {
   return (
     <>
       <style jsx>{`
@@ -32,3 +33,5 @@ export default function Fill({
     </>
   );
 }
+
+export default Fill;

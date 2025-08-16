@@ -56,7 +56,12 @@ export default async function ComponentVariantPage({
     `@/app/components/content/${category}/${flavor}/${variant}/demo`
   );
   const Demo = DemoModule.default;
-  const propData = DemoModule.propData || DemoModule.default.propData;
+  let propData = DemoModule.propData || DemoModule.default.propData;
+
+  // Handle case where propData is a function (client component issue)
+  if (typeof propData === "function") {
+    propData = DemoModule.default?.propData || [];
+  }
 
   let sourceCode = "";
   let fileName = "demo.tsx";
@@ -126,8 +131,6 @@ export default async function ComponentVariantPage({
           variant={flavor}
           dependencies={dependencies}
         />
-
-       
 
         <PropTable data={propData} />
       </main>

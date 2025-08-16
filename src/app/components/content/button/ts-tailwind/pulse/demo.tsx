@@ -1,6 +1,5 @@
-"use client";
-
-import Pulse from "./preview"
+import React from "react";
+import Pulse from "./preview";
 
 const propData = [
   {
@@ -20,7 +19,6 @@ const propData = [
     type: "string",
     default: "md",
     description: "Button size variant.",
-    options: ["sm", "md", "lg"],
   },
 ];
 

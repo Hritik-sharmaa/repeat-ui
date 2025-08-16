@@ -1,3 +1,5 @@
+"use client";
+
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
 export default function Simple({

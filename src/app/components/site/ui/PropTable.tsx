@@ -18,7 +18,7 @@ export default function PropTable({ data }: { data: PropData[] }) {
       <div className="mb-6">
         <h2 className="text-2xl font-bold mb-3">Props Table</h2>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Choose your preferred installation method below.
+          Configuration options and properties for this component.
         </p>
       </div>
       <div className="overflow-hidden rounded-lg border-theme">

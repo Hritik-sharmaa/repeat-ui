@@ -39,36 +39,24 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see the component library.
 
-## 🆕 New Component System
-
-Components added within the last 30 days automatically display a green "NEW" tag in the sidebar navigation. This helps you quickly discover the latest additions to the library.
-
-### Currently New Components
-
-- **Button/Bubble** - Advanced bubble animation effects
-- **Card/3D Card** - Interactive 3D card with hover effects
-- **Text Effect/Split Reveal** - Split text reveal animation
-
-For more details, see [NEW_TAG_SYSTEM.md](./docs/NEW_TAG_SYSTEM.md).
-
 ## 📦 Available Components
 
 ### Buttons
 
 - Simple, Sketchy, Pulse, Rotation
 - Fill, Letter, Creep, Layers
-- Wiggle, Bubble (NEW!)
+- Wiggle, Bubble 
 
 ### Cards
 
 - Profile Card, Pricing Card
-- 3D Card (NEW!)
+- 3D Card 
 
 ### Text Effects
 
 - Flipping Text, Typing Text, Flow Text
 - Text Shadow, Pop Text
-- Split Reveal Text (NEW!)
+- Split Reveal Text 
 
 ## 🛠️ CLI Usage
 

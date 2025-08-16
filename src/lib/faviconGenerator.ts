@@ -1,9 +1,9 @@
 export function generateComponentMetadata(category: string, variant: string) {
-  const displayName = variant.replace(/-/g, ' ');
+  const displayName = variant.replace(/-/g, " ");
   const capitalizedDisplayName = displayName
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   return {
     title: `${capitalizedDisplayName} - Repeat UI`,

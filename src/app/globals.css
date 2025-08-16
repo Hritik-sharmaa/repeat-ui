@@ -18,7 +18,7 @@
 
   /* Table specific variables */
   --table-background: #ffffff;
-  --table-header-bg: #d8e0e7;
+  --table-header-bg: #eeeeee;
   --table-border: #e5e7eb;
   --table-text: #374151;
   --table-text-secondary: #6b7280;
@@ -47,7 +47,6 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-cal-sans: var(--font-cal-sans);
 }
 
 @theme inline {
@@ -63,20 +62,21 @@
   --color-table-text-secondary: var(--table-text-secondary);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-cal-sans: var(--font-cal-sans);
+  --font-cal-sans: var(--font-cal-Sans);
+  --font-family-cal-sans: var(--font-cal-Sans);
 }
 
 /* Dark theme overrides: note the selector! */
 .dark {
-  --background: #06080a;
+  --background: #030303;
   --foreground: #fef2de;
   --secondary-text: #cccccc;
   --accent: #fa5f1b;
   --border-color: rgba(255, 255, 255, 0.2);
 
   /* Dark table variables */
-  --table-background: #111827;
-  --table-header-bg: #1f2937;
+  --table-background: #161616;
+  --table-header-bg: #292929;
   --table-border: #374151;
   --table-text: #d1d5db;
   --table-text-secondary: #9ca3af;
@@ -95,7 +95,7 @@
   --tab-text: #d1d5db;
   --tab-border: #374151;
   --tab-border-hover: #4b5563;
-  --tab-active-bg: #2563eb;
+  --tab-active-bg: #ffffff;
   --tab-active-text: #ffffff;
   --tab-content-bg: #1b222e;
   --tab-preview-bg: #111827;
@@ -229,3 +229,61 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Custom scrollbar styles - Only thumb, no track */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.6) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.6);
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.9);
+}
+
+/* Dark theme scrollbar */
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(75, 85, 99, 0.8) transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.8);
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 85, 99, 1);
+}
+
+/* Font utility classes */

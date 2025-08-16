@@ -13,10 +13,11 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "../ui/ThemeToggler";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useVariant } from "@/app/context/code-context";
 import { useSearch } from "@/app/context/search-context";
 import { SearchModal } from "@/app/components/site/ui/SearchModal";
+import { fetchGitHubStars, formatStarCount } from "@/lib/utils";
 
 export function Header() {
   const router = useRouter();
@@ -24,6 +25,8 @@ export function Header() {
   const searchParams = useSearchParams();
   const { flavor, setFlavor } = useVariant();
   const { isSearchOpen, openSearch, closeSearch } = useSearch();
+  const [starCount, setStarCount] = useState<number>(0);
+  const [isLoadingStars, setIsLoadingStars] = useState(true);
 
   const [language, style] = flavor.split("-");
 
@@ -33,6 +36,22 @@ export function Header() {
       setFlavor(queryFlavor);
     }
   }, [searchParams, flavor, setFlavor]);
+
+  useEffect(() => {
+    const loadStars = async () => {
+      try {
+        setIsLoadingStars(true);
+        const stars = await fetchGitHubStars("hritik-sharmaa", "repeat-ui");
+        setStarCount(stars);
+      } catch (error) {
+        console.warn("Failed to load GitHub stars:", error);
+      } finally {
+        setIsLoadingStars(false);
+      }
+    };
+
+    loadStars();
+  }, []);
 
   const updateFlavor = (newLang: string, newStyle: string) => {
     const newFlavor = `${newLang}-${newStyle}`;
@@ -56,7 +75,7 @@ export function Header() {
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                 <Image src="/Logo.png" alt="logo" width={32} height={32} />
               </motion.div>
-              <h1 className="text-2xl font-bold">Repeat UI</h1>
+              <h1 className="text-2xl font-bold font-cal-sans">Repeat UI</h1>
             </Link>
           </div>
 
@@ -141,7 +160,10 @@ export function Header() {
                   <path d="M9 18c-4.51 2-5-2-7-2" />
                 </svg>
               </div>
-              Star on Github
+              <span>Star on Github</span>
+              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-2 py-1 rounded-full text-xs font-mono min-w-[2rem] text-center">
+                {isLoadingStars ? "..." : formatStarCount(starCount)}
+              </span>
             </a>
             <Button
               variant="ghost"

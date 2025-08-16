@@ -54,14 +54,14 @@ const Landing = () => {
 
           <div className="mb-8">
             <motion.h1
-              className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-4"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-4 font-cal-sans"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}>
               Build Beautiful
             </motion.h1>
             <motion.h2
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-700 dark:text-gray-300"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-700 dark:text-gray-300 font-cal-sans"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}>
@@ -78,33 +78,35 @@ const Landing = () => {
             project. Perfect styles and smooth animations, right out of the box.
           </motion.p>
 
-          <motion.div
+            <motion.div
             className="flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}>
-            <motion.button
-              className="px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl relative z-30"
+            <motion.a
+              href="https://github.com/Hritik-sharmaa/repeat-ui"
+              className="px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl relative z-30 inline-block"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}>
               <span className="flex items-center gap-2">
-                <Heart className="w-4 h-4" />
-                Contribute Here!
+              <Heart className="w-4 h-4" />
+              Contribute Here!
               </span>
-            </motion.button>
+            </motion.a>
 
-            <motion.button
-              className="px-8 py-4 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-2xl font-semibold hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl backdrop-blur-sm relative z-30"
+            <motion.a
+              href="/components/button"
+              className="px-8 py-4 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-2xl font-semibold hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl backdrop-blur-sm relative z-30 inline-block"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}>
               <span className="flex items-center gap-2">
-                <ArrowRight className="w-4 h-4" />
-                Browse Components
+              <ArrowRight className="w-4 h-4" />
+              Browse Components
               </span>
-            </motion.button>
-          </motion.div>
+            </motion.a>
+            </motion.div>
 
           {[...Array(6)].map((_, i) => (
             <motion.div

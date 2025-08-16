@@ -29,7 +29,7 @@ const Footer = () => {
           <p className="">
             A library crafted with <span className="text-pink-500">♥</span> by{" "}
             <Link
-              href="#"
+              href="https://hritik-sharma-portfolio.vercel.app/"
               className="text-purple-400 underline hover:text-purple-300">
               ME
             </Link>
@@ -37,10 +37,10 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-wrap gap-4 mt-4 md:mt-0">
-          <Link href="#" className="hover:text-white transition">
+          <Link href="https://github.com/Hritik-sharmaa/repeat-ui" className="hover:text-white transition">
             GitHub
           </Link>
-          <Link href="#" className="hover:text-white transition">
+          <Link href="/components/button" className="hover:text-white transition">
             Docs
           </Link>
         </div>

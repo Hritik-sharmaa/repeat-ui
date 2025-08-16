@@ -37,7 +37,7 @@ export default function CliInstallCommand({
       </div>
 
       <div className="flex items-center gap-3">
-        <code className="flex-1 text-sm font-mono bg-slate-900 dark:bg-slate-950 text-green-400 px-4 py-3 rounded-lg border border-slate-700 overflow-x-auto">
+        <code className="flex-1 text-sm font-mono bg-slate-900 dark:bg-slate-950 text-white px-4 py-3 rounded-lg border border-slate-700 overflow-x-auto">
           <span className="text-slate-500">$</span> {command}
         </code>
 
@@ -62,10 +62,6 @@ export default function CliInstallCommand({
           )}
         </button>
       </div>
-
-      <p className="text-sm text-slate-600 dark:text-slate-400 mt-3">
-        Install this component directly into your project with the Repeat UI CLI
-      </p>
     </div>
   );
 }

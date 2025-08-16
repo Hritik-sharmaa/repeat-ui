@@ -3,10 +3,28 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 import ComponentTabs from "../../../components/site/ui/ComponentTabs";
 import PropTable from "../../site/ui/PropTable";
-import DependencyDisplay from "../../site/ui/DependencyDisplay";
-import CliInstallCommand from "../../site/ui/CliInstallCommand";
+import InstallationGuide from "../../site/ui/InstallationGuide";
 import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
 import { categories } from "@/data/categories";
+import { generateComponentMetadata } from "@/lib/faviconGenerator";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category?: string; variant?: string }>;
+}) {
+  const category = (await params)?.category?.toLowerCase();
+  const variant = (await params)?.variant?.toLowerCase();
+
+  if (!category || !variant) {
+    return {
+      title: "Component Not Found - Repeat UI",
+      description: "The requested component could not be found.",
+    };
+  }
+
+  return generateComponentMetadata(category, variant);
+}
 
 export default async function ComponentVariantPage({
   params,
@@ -86,7 +104,7 @@ export default async function ComponentVariantPage({
     return (
       <main className="p-6 max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-6xl font-bold capitalize mb-8 mt-8">
+          <h1 className="text-6xl font-bold capitalize mb-4 mt-8 font-cal-sans">
             {variant.replace(/-/g, " ")}
           </h1>
           {description && (
@@ -103,12 +121,13 @@ export default async function ComponentVariantPage({
           cssCode={cssCode}
         />
 
-        <CliInstallCommand
+        <InstallationGuide
           componentName={`${category}-${variant}`}
           variant={flavor}
+          dependencies={dependencies}
         />
 
-        <DependencyDisplay dependencies={dependencies} />
+       
 
         <PropTable data={propData} />
       </main>

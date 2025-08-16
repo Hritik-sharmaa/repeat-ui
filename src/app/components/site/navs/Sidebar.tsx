@@ -22,7 +22,7 @@ export default function Sidebar() {
           <div key={cat.name} className="space-y-3">
             <ul className="space-y-1">
               {cat.subcategories.map((sub, subIndex) => (
-                <li key={sub.name} className="relative group ">
+                <li key={sub.name} className="relative group font-cal-sans">
                   <Link href={`/components/${sub.name.toLowerCase()}`}>
                     <motion.div
                       className="text-sm font-medium mb-2 px-2 py-1 transition-colors rounded-md"
@@ -89,7 +89,7 @@ export default function Sidebar() {
                               <motion.span
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-green-500/20 text-green-400 border border-green-500/30 rounded-full"
+                                className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30 rounded-full"
                                 title={`Added on ${formatDateForDisplay(
                                   variant.dateAdded
                                 )}`}>

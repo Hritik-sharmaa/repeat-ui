@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 const calSans = Cal_Sans({
-  variable: "--font-Cal-Sans",
+  variable: "--font-cal-sans",
   subsets: ["latin"],
   weight: ["400"],
 });

@@ -1,4 +1,4 @@
-import SimpleCarousel from "./preview";
+import LoopDeck from "./preview";
 
 const propData = [
   {
@@ -9,41 +9,10 @@ const propData = [
       "Array of carousel items to display. Each item should have id, title, subtitle, image, description, and color (which is optional) properties.",
   },
   {
-    name: "autoPlay",
-    type: "boolean",
-    default: "true",
-    description:
-      "Whether the carousel should automatically advance to the next slide",
-  },
-  {
     name: "autoPlayInterval",
     type: "number",
     default: "5000",
     description: "Time in milliseconds between automatic slide transitions",
-  },
-  {
-    name: "showControls",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show navigation arrows and play/pause button",
-  },
-  {
-    name: "showProgress",
-    type: "boolean",
-    default: "true",
-    description: "Whether to display the progress bar at the bottom",
-  },
-  {
-    name: "showThumbnails",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show thumbnail previews at the bottom",
-  },
-  {
-    name: "showIndicators",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show slide indicator dots at the bottom",
   },
   {
     name: "className",
@@ -53,7 +22,7 @@ const propData = [
   },
 ];
 
-const carouselItems= [
+const carouselItems = [
   {
     id: 1,
     title: "Mountain Vista",
@@ -92,15 +61,7 @@ const CarouselDemo = () => {
   return (
     <main className=" p-8 flex items-center justify-center">
       <div className="space-y-8 w-full">
-        <SimpleCarousel
-          items={carouselItems}
-          autoPlay={true}
-          autoPlayInterval={4000}
-          showControls={true}
-          showProgress={true}
-          showThumbnails={true}
-          showIndicators={true}
-        />
+        <LoopDeck items={carouselItems} autoPlayInterval={1000} />
       </div>
     </main>
   );

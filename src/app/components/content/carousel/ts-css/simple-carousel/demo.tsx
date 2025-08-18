@@ -1,4 +1,4 @@
-import SimpleCarousel from "./preview";
+import SimpleCarousel, { CarouselItem } from "./preview";
 
 const propData = [
   {
@@ -53,7 +53,7 @@ const propData = [
   },
 ];
 
-const carouselItems= [
+const carouselItems: CarouselItem[] = [
   {
     id: 1,
     title: "Mountain Vista",

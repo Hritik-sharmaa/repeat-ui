@@ -1,4 +1,5 @@
-import SimpleCarousel from "./preview";
+import ModernCarousel from "./preview";
+import "./style.css"
 
 const propData = [
   {
@@ -22,30 +23,6 @@ const propData = [
     description: "Time in milliseconds between automatic slide transitions",
   },
   {
-    name: "showControls",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show navigation arrows and play/pause button",
-  },
-  {
-    name: "showProgress",
-    type: "boolean",
-    default: "true",
-    description: "Whether to display the progress bar at the bottom",
-  },
-  {
-    name: "showThumbnails",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show thumbnail previews at the bottom",
-  },
-  {
-    name: "showIndicators",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show slide indicator dots at the bottom",
-  },
-  {
     name: "className",
     type: "string",
     default: '""',
@@ -53,7 +30,7 @@ const propData = [
   },
 ];
 
-const carouselItems= [
+const carouselItems = [
   {
     id: 1,
     title: "Mountain Vista",
@@ -90,16 +67,12 @@ const carouselItems= [
 
 const CarouselDemo = () => {
   return (
-    <main className=" p-8 flex items-center justify-center">
-      <div className="space-y-8 w-full">
-        <SimpleCarousel
+    <main className="modern-carousel-root">
+      <div className="">
+        <ModernCarousel
           items={carouselItems}
           autoPlay={true}
           autoPlayInterval={4000}
-          showControls={true}
-          showProgress={true}
-          showThumbnails={true}
-          showIndicators={true}
         />
       </div>
     </main>

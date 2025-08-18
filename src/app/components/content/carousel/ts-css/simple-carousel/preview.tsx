@@ -5,6 +5,25 @@ import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import Image from "next/image";
 
+export interface CarouselItem {
+  id: number;
+  title: string;
+  subtitle: string;
+  image: string;
+  description: string;
+}
+
+interface SimpleCarouselProps {
+  items: CarouselItem[];
+  autoPlay?: boolean;
+  autoPlayInterval?: number;
+  showControls?: boolean;
+  showProgress?: boolean;
+  showThumbnails?: boolean;
+  showIndicators?: boolean;
+  className?: string;
+}
+
 const SimpleCarousel = ({
   items,
   autoPlay = true,
@@ -14,7 +33,7 @@ const SimpleCarousel = ({
   showThumbnails = true,
   showIndicators = true,
   className = "",
-}) => {
+}: SimpleCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
   const [direction, setDirection] = useState(0);
@@ -40,7 +59,7 @@ const SimpleCarousel = ({
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
 
-  const goToSlide = (index) => {
+  const goToSlide = (index: number) => {
     setDirection(index > currentIndex ? 1 : -1);
     setCurrentIndex(index);
   };
@@ -59,7 +78,7 @@ const SimpleCarousel = ({
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
       },
     },
     exit: {
@@ -82,7 +101,7 @@ const SimpleCarousel = ({
       transition: {
         duration: 0.6,
         delay: 0.3,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -90,10 +109,9 @@ const SimpleCarousel = ({
   const currentItem = items[currentIndex];
 
   return (
-    <div
-      className={`relative w-full max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl ${className}`}>
-      <div className="relative h-[600px] overflow-hidden">
-        <div className="absolute inset-0">
+    <div className={`simple-carousel-container ${className}`}>
+      <div className="simple-carousel-image-wrapper">
+        <div className="simple-carousel-image-bg">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={currentIndex}
@@ -102,41 +120,41 @@ const SimpleCarousel = ({
               initial={direction > 0 ? "hiddenRight" : "hiddenLeft"}
               animate="visible"
               exit="exit"
-              className="absolute inset-0">
+              className="simple-carousel-image-motion">
               <Image
                 src={currentItem.image}
                 alt={currentItem.title}
                 fill
-                className="object-cover dark:opacity-50 opacity-80"
+                className="simple-carousel-image"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="absolute inset-0 flex items-center justify-between p-12">
+        <div className="simple-carousel-content-row">
           <motion.div
             key={`content-${currentIndex}`}
             variants={textVariants}
             initial="hidden"
             animate="visible"
-            className="flex-1 text-white z-10">
+            className="simple-carousel-content">
             <motion.p
-              className="text-lg font-light mb-2 tracking-wide opacity-90"
+              className="simple-carousel-subtitle"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 0.9, y: 0 }}
               transition={{ delay: 0.4 }}>
               {currentItem.subtitle}
             </motion.p>
             <motion.h1
-              className="text-6xl font-bold mb-6 leading-tight"
+              className="simple-carousel-title"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}>
               {currentItem.title}
             </motion.h1>
             <motion.p
-              className="text-xl font-light max-w-md leading-relaxed opacity-90"
+              className="simple-carousel-description"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 0.9, y: 0 }}
               transition={{ delay: 0.6 }}>
@@ -145,11 +163,11 @@ const SimpleCarousel = ({
           </motion.div>
 
           <motion.div
-            className="text-white text-right z-10"
+            className="simple-carousel-index"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7 }}>
-            <div className="text-6xl font-thin mb-4">
+            <div className="simple-carousel-index-number">
               {String(currentIndex + 1).padStart(2, "0")}
             </div>
           </motion.div>
@@ -159,13 +177,13 @@ const SimpleCarousel = ({
           <>
             <button
               onClick={prevSlide}
-              className="absolute -left-6 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
-              <ChevronLeft className="w-6 h-6 text-white" />
+              className="simple-carousel-control simple-carousel-control-left">
+              <ChevronLeft className="simple-carousel-control-icon" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute -right-6 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110">
-              <ChevronRight className="w-6 h-6 text-white" />
+              className="simple-carousel-control simple-carousel-control-right">
+              <ChevronRight className="simple-carousel-control-icon" />
             </button>
           </>
         )}
@@ -173,37 +191,35 @@ const SimpleCarousel = ({
         {showControls && (
           <button
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="absolute top-6 right-6 z-20 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300">
+            className="simple-carousel-autoplay-toggle">
             {isAutoPlaying ? (
-              <Pause className="w-5 h-5 text-white" />
+              <Pause className="simple-carousel-control-icon" />
             ) : (
-              <Play className="w-5 h-5 text-white ml-0.5" />
+              <Play className="simple-carousel-control-icon" />
             )}
           </button>
         )}
       </div>
 
       {(showIndicators || showProgress || showThumbnails) && (
-        <div className="dark:bg-white/5 bg-black/30 p-6">
+        <div className="simple-carousel-footer">
           {showProgress ? (
-            <div className="flex items-center justify-between">
+            <div className="simple-carousel-progress-row">
               {showIndicators && (
-                <div className="flex space-x-3">
+                <div className="simple-carousel-indicators">
                   {items.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className="group relative">
+                      className="simple-carousel-indicator-btn">
                       <div
-                        className={`w-12 h-2 rounded-full transition-all duration-300 ${
-                          index === currentIndex
-                            ? "dark:bg-white"
-                            : "dark:bg-white/30 dark:hover:bg-white/50 bg-black/40"
+                        className={`simple-carousel-indicator-bar${
+                          index === currentIndex ? " active" : ""
                         }`}
                       />
                       {index === currentIndex && (
                         <motion.div
-                          className="absolute inset-0 bg-white rounded-full"
+                          className="simple-carousel-indicator-motion"
                           layoutId="activeIndicator"
                           transition={{
                             type: "spring",
@@ -217,10 +233,10 @@ const SimpleCarousel = ({
                 </div>
               )}
 
-              <div className="flex-1 mx-8">
-                <div className="w-full bg-white/20 rounded-full h-1">
+              <div className="simple-carousel-progress-bar-wrapper">
+                <div className="simple-carousel-progress-bar-bg">
                   <motion.div
-                    className="bg-white h-1 rounded-full"
+                    className="simple-carousel-progress-bar"
                     initial={{ width: "0%" }}
                     animate={{
                       width: `${((currentIndex + 1) / items.length) * 100}%`,
@@ -231,21 +247,19 @@ const SimpleCarousel = ({
               </div>
 
               {showThumbnails && (
-                <div className="flex space-x-2">
+                <div className="simple-carousel-thumbnails">
                   {items.map((item, index) => (
                     <button
                       key={item.id}
                       onClick={() => goToSlide(index)}
-                      className={`relative w-16 h-12 rounded-lg overflow-hidden transition-all duration-300 ${
-                        index === currentIndex
-                          ? "ring-2 ring-white scale-110"
-                          : "opacity-60 hover:opacity-80"
+                      className={`simple-carousel-thumbnail-btn${
+                        index === currentIndex ? " active" : ""
                       }`}>
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="simple-carousel-thumbnail-img"
                         sizes="64px"
                       />
                     </button>
@@ -254,24 +268,22 @@ const SimpleCarousel = ({
               )}
             </div>
           ) : (
-            <div className="flex items-center justify-center space-x-8">
+            <div className="simple-carousel-indicators-row">
               {showIndicators && (
-                <div className="flex space-x-3">
+                <div className="simple-carousel-indicators">
                   {items.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className="group relative">
+                      className="simple-carousel-indicator-btn">
                       <div
-                        className={`w-12 h-2 rounded-full transition-all duration-300 ${
-                          index === currentIndex
-                            ? "bg-white"
-                            : "bg-white/30 hover:bg-white/50"
+                        className={`simple-carousel-indicator-bar${
+                          index === currentIndex ? " active" : ""
                         }`}
                       />
                       {index === currentIndex && (
                         <motion.div
-                          className="absolute inset-0 bg-white rounded-full"
+                          className="simple-carousel-indicator-motion"
                           layoutId="activeIndicator"
                           transition={{
                             type: "spring",
@@ -286,21 +298,19 @@ const SimpleCarousel = ({
               )}
 
               {showThumbnails && (
-                <div className="flex space-x-2">
+                <div className="simple-carousel-thumbnails">
                   {items.map((item, index) => (
                     <button
                       key={item.id}
                       onClick={() => goToSlide(index)}
-                      className={`relative w-16 h-12 rounded-lg overflow-hidden transition-all duration-300 ${
-                        index === currentIndex
-                          ? "ring-2 ring-white scale-110"
-                          : "opacity-60 hover:opacity-80"
+                      className={`simple-carousel-thumbnail-btn${
+                        index === currentIndex ? " active" : ""
                       }`}>
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="simple-carousel-thumbnail-img"
                         sizes="64px"
                       />
                     </button>

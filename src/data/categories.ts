@@ -116,12 +116,22 @@ export const categories: Category[] = [
           createVariant(
             "simple-carousel",
             "2025-08-17",
-            "Sleek carousel with smooth animations and modern design"
+            "Basic carousel with navigation arrows and dot indicators"
+          ),
+          createVariant(
+            "modern-carousel",
+            "2025-08-17",
+            "Advanced carousel with fade transitions and auto-play"
+          ),
+           createVariant(
+            "loop-deck",
+            "2025-08-17",
+            "Infinite loop carousel with card deck style presentation"
           ),
         ],
       },
       {
-        name: "texteffect",
+        name: "text-effect",
         variants: [
           createVariant(
             "flipping-text",

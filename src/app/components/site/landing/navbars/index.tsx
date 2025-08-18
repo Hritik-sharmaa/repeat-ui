@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import ThemeToggle from "@/app/components/site/ui/ThemeToggler";
 import { useEffect, useState } from "react";
 import { fetchGitHubStars, formatStarCount } from "@/lib/utils";

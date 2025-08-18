@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { categories, isNewComponent } from "@/data/categories";
 import { useVariant } from "@/app/context/code-context";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { formatDateForDisplay } from "@/lib/dateUtils";
 
 function formatName(name: string) {

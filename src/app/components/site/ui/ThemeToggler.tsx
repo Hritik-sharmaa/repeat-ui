@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/app/components/site/ui/Button";
 import { useThemeAnimation } from "@/app/context/theme-provider";
 import { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();

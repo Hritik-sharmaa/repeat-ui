@@ -77,6 +77,7 @@ function filterThirdPartyImports(imports: string[]): string[] {
     "os",
     "child_process",
     "react",
+    "next",
   ]);
 
   return imports.filter((importPath) => {
@@ -148,7 +149,7 @@ async function getPackageDescription(
 ): Promise<string | undefined> {
   const knownDescriptions: Record<string, string> = {
     "react-icons": "Popular icon library for React",
-    "framer-motion": "Production-ready motion library for React",
+    "motion/react": "Production-ready motion library for React",
     gsap: "Professional-grade animation library",
     "@radix-ui/react-dropdown-menu":
       "Unstyled, accessible dropdown menu component",

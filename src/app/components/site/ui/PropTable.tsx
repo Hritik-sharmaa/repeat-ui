@@ -7,7 +7,6 @@ type PropData = {
 };
 
 export default function PropTable({ data }: { data: PropData[] }) {
-  console.log("PropTable received data:", data);
 
   if (!data || data.length === 0) return null;
 

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ArrowRight, Heart } from "lucide-react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import Footer from "../footer/index";
 
 const SPRING = { stiffness: 150, damping: 18, mass: 0.5 };

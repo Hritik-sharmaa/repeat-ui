@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Search, X, ChevronRight, Folder, FileCode } from "lucide-react";
 import { Button } from "./Button";
 import { Input } from "./Input";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { categories } from "@/data/categories";
 import { useRouter } from "next/navigation";
 import { useVariant } from "@/app/context/code-context";

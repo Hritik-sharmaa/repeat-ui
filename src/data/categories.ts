@@ -1,7 +1,7 @@
 export interface ComponentVariant {
   name: string;
-  dateAdded: string; // ISO date string
-  description?: string; // Optional description for the component
+  dateAdded: string;
+  description?: string;
 }
 
 export interface Subcategory {
@@ -107,6 +107,16 @@ export const categories: Category[] = [
             "3D-card",
             "2025-08-14",
             "Interactive 3D card with hover tilt effects"
+          ),
+        ],
+      },
+      {
+        name: "carousel",
+        variants: [
+          createVariant(
+            "simple-carousel",
+            "2025-08-17",
+            "Sleek carousel with smooth animations and modern design"
           ),
         ],
       },

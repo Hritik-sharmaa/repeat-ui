@@ -1,12 +1,12 @@
 import "./style.css";
 
-export default function Creep({
+const Creep = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <div className="creepy-container">
       <div className="eyes-layer">
@@ -28,3 +28,5 @@ export default function Creep({
     </div>
   );
 }
+
+export default Creep;

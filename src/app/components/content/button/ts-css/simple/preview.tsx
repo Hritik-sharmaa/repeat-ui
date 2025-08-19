@@ -1,13 +1,13 @@
 import "./style.css";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Simple({
+const Simple = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <button
       className={`simple-button ${className}`}
@@ -17,4 +17,5 @@ export default function Simple({
       {children}
     </button>
   );
-}
+};
+export default Simple;

@@ -1,11 +1,12 @@
 "use client"
-export default function Pulse({
+
+const Pulse = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) =>{
   return (
     <>
       <style jsx>{`
@@ -56,3 +57,5 @@ export default function Pulse({
     </>
   );
 }
+
+export default Pulse;

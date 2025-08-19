@@ -2,12 +2,12 @@
 
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Letter({
+const Letter = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
       <style jsx global>{`
@@ -46,3 +46,5 @@ export default function Letter({
     </>
   );
 }
+
+export default Letter;

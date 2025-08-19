@@ -1,12 +1,12 @@
 import "./style.css";
 
-export default function Sketchy({
+const Sketchy = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <button
       className={`sketchy-button ${className}`}
@@ -16,3 +16,5 @@ export default function Sketchy({
     </button>
   );
 }
+
+export default Sketchy;

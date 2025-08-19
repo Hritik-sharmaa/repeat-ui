@@ -2,13 +2,13 @@
 
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Simple({
+const Rotation = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
       <style jsx>{`
@@ -78,3 +78,4 @@ export default function Simple({
     </>
   );
 }
+export default Rotation;

@@ -1,12 +1,12 @@
 "use client";
 
-export default function Letter({
+const Letter = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <>
       <style jsx global>{`
@@ -46,3 +46,5 @@ export default function Letter({
     </>
   );
 }
+
+export default Letter;

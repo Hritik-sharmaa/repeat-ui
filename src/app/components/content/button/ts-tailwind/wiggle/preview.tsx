@@ -2,12 +2,12 @@
 import { useState } from "react";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Wiggle({
+const Wiggle = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
     const [hovered, setHovered] = useState(false);
   return (
     <div
@@ -55,3 +55,5 @@ export default function Wiggle({
     </div>
   );
 }
+
+export default Wiggle;

@@ -1,12 +1,12 @@
 import "./style.css";
 
-export default function Wiggle({
+const Wiggle = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
 
   return (
     <div className="fancy-button">
@@ -23,3 +23,5 @@ export default function Wiggle({
     </div>
   );
 }
+
+export default Wiggle;

@@ -1,12 +1,12 @@
 import "./style.css";
 
-export default function Letter({
+const Letter = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <button className={`letter-button ${className}`} onClick={onClick} {...rest}>
       {children.split("").map((char, index) => (
@@ -21,3 +21,5 @@ export default function Letter({
     </button>
   );
 }
+
+export default Letter;

@@ -104,7 +104,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
                     ease: [0.4, 0, 0.2, 1],
                   }}
                   className={`fixed inset-0 z-50 pointer-events-none ${
-                    animationType === "expand" ? "bg-gray-950" : "bg-[#fae3bb]"
+                    animationType === "expand" ? "bg-gray-950" : "bg-[#ffff]"
                   }`}
                 />
 

@@ -1,6 +1,6 @@
 "use client";
 
-export default function Layers({ children, onClick, className = "", ...rest }) {
+const Layers = ({ children, onClick, className = "", ...rest }) => {
   return (
     <div className="relative inline-block group w-[160px] h-[60px]">
       <div className="absolute w-[160px] h-[60px] bg-blue-500 border-[3px] border-black rounded-full opacity-0 transition-all duration-300 ease-in-out pointer-events-none top-[8px] left-[8px] group-hover:opacity-100 group-hover:top-[12px] group-hover:left-[12px] z-0" />
@@ -13,4 +13,6 @@ export default function Layers({ children, onClick, className = "", ...rest }) {
       </button>
     </div>
   );
-}
+};
+
+export default Layers;

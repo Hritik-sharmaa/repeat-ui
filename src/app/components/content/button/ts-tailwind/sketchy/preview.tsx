@@ -1,11 +1,11 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Sketchy({
+const Sketchy = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <button
       className={`
@@ -21,3 +21,5 @@ export default function Sketchy({
     </button>
   );
 }
+
+export default Sketchy;

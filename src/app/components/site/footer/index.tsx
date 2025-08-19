@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 
 const Footer = () => {
   return (
-    <footer className="w-full border-t border-white/10 py-8">
+    <footer className="w-full border-t border-white/10 py-8 bg-neutral-50 dark:bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm">
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-center md:text-left">
           <motion.div

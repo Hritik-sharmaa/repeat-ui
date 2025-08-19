@@ -1,12 +1,12 @@
 import "./style.css";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Layers({
+const Layers = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <div className="button-container">
       <div className="layer layer-3"></div>
@@ -20,3 +20,4 @@ export default function Layers({
     </div>
   );
 }
+export default Layers;

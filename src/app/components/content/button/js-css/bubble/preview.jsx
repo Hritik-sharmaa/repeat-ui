@@ -3,13 +3,13 @@
 import { useState } from "react";
 import "./style.css";
 
-export default function Bubble({
+const Bubble = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   const [bubbles, setBubbles] = useState([]);
 
   const createBubbles = () => {
@@ -55,3 +55,5 @@ export default function Bubble({
     </div>
   );
 }
+
+export default Bubble;

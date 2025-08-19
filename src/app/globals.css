@@ -4,8 +4,8 @@
 
 :root {
   /* Light theme variables */
-  --background: #fef2de;
-  --foreground: #06080a;
+  --background: #fafafa;
+  --foreground: #030712;
   --secondary-text: #333333;
   --accent: #fa5f1b;
   --border-color: rgba(0, 0, 0, 0.7);
@@ -68,8 +68,8 @@
 
 /* Dark theme overrides: note the selector! */
 .dark {
-  --background: #030303;
-  --foreground: #fef2de;
+  --background: bg-gray-950;
+  --foreground: bg-neutral-50
   --secondary-text: #cccccc;
   --accent: #fa5f1b;
   --border-color: rgba(255, 255, 255, 0.2);

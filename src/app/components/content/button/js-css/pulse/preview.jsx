@@ -1,15 +1,16 @@
 import "./style.css";
-
-export default function Pulse({
+const Pulse = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <button className={`pulse-button ${className}`} onClick={onClick} {...rest}>
       {children}
     </button>
   );
-}
+};
+
+export default Pulse;

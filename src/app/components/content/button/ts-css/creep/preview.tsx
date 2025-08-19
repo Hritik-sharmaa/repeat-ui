@@ -1,13 +1,13 @@
 import "./style.css";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Creep({
+const Creep = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <div className="creepy-container">
       <div className="eyes-layer">
@@ -31,3 +31,5 @@ export default function Creep({
     </div>
   );
 }
+
+export default Creep;

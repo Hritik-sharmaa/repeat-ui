@@ -1,13 +1,13 @@
 import "./style.css";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Simple({
+const Pulse = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <button
       className={`pulse-button ${className}`}
@@ -18,3 +18,5 @@ export default function Simple({
     </button>
   );
 }
+
+export default Pulse;

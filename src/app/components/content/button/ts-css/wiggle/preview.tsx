@@ -1,13 +1,13 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 import "./style.css";
 
-export default function Wiggle({
+const Wiggle = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <div className="fancy-button">
       <div className="layer-circle"></div>
@@ -21,3 +21,4 @@ export default function Wiggle({
     </div>
   );
 }
+export default Wiggle;

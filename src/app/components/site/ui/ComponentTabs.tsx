@@ -243,7 +243,7 @@ export default function ComponentTabs({
         )}
       </div>
 
-      <div className="rounded-xl overflow-hidden shadow-sm dark:bg-zinc-900/20 bg-[#f7ce89]/40">
+      <div className="rounded-xl overflow-hidden shadow-sm dark:bg-zinc-900/20 bg-neutral-200">
         {activeTab === "preview" && (
           <div className="relative p-8 dark:bg-zinc-900/20 min-h-[400px] flex items-center justify-center">
             <div className="w-full max-w-full flex justify-center">

@@ -1,11 +1,11 @@
 "use client"
-export default function Pulse({
+const Rotation = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   return (
     <>
       <style jsx>{`
@@ -45,7 +45,7 @@ export default function Pulse({
           left: 2px;
           right: 2px;
           bottom: 2px;
-          background: #1f2937; /* Same as bg-gray-800 */
+          background: #1f2937; 
           border-radius: 6px;
           z-index: 1;
         }
@@ -75,3 +75,5 @@ export default function Pulse({
     </>
   );
 }
+
+export default Rotation;

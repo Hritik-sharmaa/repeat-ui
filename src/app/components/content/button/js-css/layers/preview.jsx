@@ -1,6 +1,6 @@
 import "./style.css";
 
-export default function Layers({ children, onClick, className = "", ...rest }) {
+const Layers = ({ children, onClick, className = "", ...rest }) => {
   return (
     <div className="button-container">
       <div className="layer layer-3"></div>
@@ -14,3 +14,5 @@ export default function Layers({ children, onClick, className = "", ...rest }) {
     </div>
   );
 }
+
+export default Layers;

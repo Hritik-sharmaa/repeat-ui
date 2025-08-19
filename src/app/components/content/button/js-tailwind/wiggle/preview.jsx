@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 
-export default function Wiggle({
+const Wiggle = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -58,3 +58,5 @@ export default function Wiggle({
     </div>
   );
 }
+
+export default Wiggle;

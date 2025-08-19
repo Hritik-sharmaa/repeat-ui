@@ -2,9 +2,9 @@
 
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Fill({
+const Fill = ({
   children,
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
       <style jsx>{`
@@ -32,3 +32,5 @@ export default function Fill({
     </>
   );
 }
+
+export default Fill;

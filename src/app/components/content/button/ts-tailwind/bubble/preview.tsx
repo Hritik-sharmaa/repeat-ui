@@ -11,12 +11,12 @@ type Bubble = {
   color: string;
 };
 
-export default function Bubble({
+const Bubble = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   const createBubbles = () => {
@@ -82,3 +82,5 @@ export default function Bubble({
     </>
   );
 }
+
+export default Bubble;

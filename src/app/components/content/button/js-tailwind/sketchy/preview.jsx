@@ -1,9 +1,9 @@
-export default function SketchyButton({
+  const SketchyButton = ({
   children,
   className = "",
   onClick,
   ...rest
-}) {
+}) => {
   return (
     <button
       className={` bg-white text-black px-4 py-2 rounded-md border border-neutral-300 
@@ -16,3 +16,5 @@ export default function SketchyButton({
     </button>
   );
 }
+
+export default SketchyButton;

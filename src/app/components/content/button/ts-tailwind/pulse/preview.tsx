@@ -2,12 +2,12 @@
 
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Pulse({
+const Pulse = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
       <style jsx>{`
@@ -57,3 +57,5 @@ export default function Pulse({
     </>
   );
 }
+
+export default Pulse;

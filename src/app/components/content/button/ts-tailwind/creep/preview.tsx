@@ -1,11 +1,11 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Creep({
+const Creep = ({
   children,
   onClick,
   className = "",
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <div className="relative w-[300px] h-[100px] mx-auto my-[100px] group">
       <div className="absolute inset-0 bg-black rounded-full border-4 border-black overflow-hidden z-0">
@@ -28,3 +28,5 @@ export default function Creep({
     </div>
   );
 }
+
+export default Creep;

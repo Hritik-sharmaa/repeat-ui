@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 
-export default function Bubble({
+const Bubble = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}) {
+}) => {
   const [bubbles, setBubbles] = useState([]);
 
   const createBubbles = () => {
@@ -76,3 +76,5 @@ export default function Bubble({
     </>
   );
 }
+
+export default Bubble;

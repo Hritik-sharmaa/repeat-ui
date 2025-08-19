@@ -163,7 +163,6 @@ export const categories: Category[] = [
             "2025-08-14",
             "Split and reveal text letter by letter"
           ),
-          //createVariant("aurora-title"),
         ],
       },
     ],

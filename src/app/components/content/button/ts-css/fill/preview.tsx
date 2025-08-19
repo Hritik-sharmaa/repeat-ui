@@ -2,13 +2,13 @@ import React from "react";
 import "./style.css";
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
-export default function Fill({
+const Fill = ({
   children,
   onClick,
   className = "",
   disabled = false,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) {
+}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <button
       className={`fill-button ${className}`}
@@ -19,3 +19,5 @@ export default function Fill({
     </button>
   );
 }
+
+export default Fill;

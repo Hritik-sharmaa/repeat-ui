@@ -2,14 +2,14 @@ import { FaUser } from "react-icons/fa";
 import { BsPlus } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
 
-export default function ProfileCard({
+const ProfileCard = ({
   image,
   name,
   verified,
   bio,
   followers,
   onFollow,
-}) {
+}) => {
   return (
     <div className="w-[300px] rounded-[40px] overflow-hidden shadow-lg bg-white transition-all duration-300 ease-in-out text-black p-2.5 hover:-translate-y-0.5">
       <img
@@ -38,3 +38,5 @@ export default function ProfileCard({
     </div>
   );
 }
+
+export default ProfileCard;

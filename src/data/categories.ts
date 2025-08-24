@@ -165,6 +165,26 @@ export const categories: Category[] = [
           ),
         ],
       },
+      {
+        name: "grid",
+        variants: [
+          createVariant(
+            "2-column-bento-grid",
+            "2025-08-14",
+            "Dynamic grid layout with animated items"
+          ),
+          createVariant(
+            "3-column-bento-grid",
+            "2025-08-14",
+            "Masonry style grid with variable item heights"
+          ),
+          createVariant(
+            "pinterest-grid",
+            "2025-08-14",
+            "Photo gallery grid with lightbox effect"
+          ),
+        ],
+      },
     ],
   },
 ];

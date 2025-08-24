@@ -300,9 +300,9 @@ export default function ComponentTabs({
                     width: "max-content",
                     minWidth: "100%",
                   }}
-                  showLineNumbers={false}
-                  wrapLines={false}
-                  wrapLongLines={false}>
+                  showLineNumbers={true}
+                  wrapLines={true}
+                  wrapLongLines={true}>
                   {visibleCode.join("\n")}
                 </SyntaxHighlighter>
               </div>

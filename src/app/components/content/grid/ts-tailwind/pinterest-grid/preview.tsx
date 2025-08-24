@@ -1,0 +1,249 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion } from "motion/react";
+import Image from "next/image";
+
+interface PinterestItem {
+  id: string;
+  src: string;
+  alt?: string;
+  title?: string;
+  description?: string;
+  author?: string;
+  tags?: string[];
+  width?: number;
+  height?: number;
+}
+
+interface PinterestGridProps {
+  items?: PinterestItem[];
+  columns?: number;
+  gap?: number;
+  onItemClick?: (item: PinterestItem) => void;
+}
+
+const PinterestGrid = ({
+  items = [
+    {
+      id: "1",
+      src: "https://images.unsplash.com/photo-1616262373426-18bfa28bafab?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Dragon sculpture on building",
+      title: "Dragon on building",
+      description:
+        "Architectural dragon sculpture mounted on a building facade",
+      author: "Alex Chen",
+    },
+    {
+      id: "2",
+      src: "https://plus.unsplash.com/premium_photo-1675620963970-41055a7d6cfc?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Ocean water waves",
+      title: "Ocean water",
+      description:
+        "Clear blue ocean water with gentle waves and natural movement",
+    },
+    {
+      id: "3",
+      src: "https://images.unsplash.com/photo-1542128047-9b51cb9b931d?q=80&w=1499&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Vintage camera rolls",
+      title: "Camera rolls",
+      description:
+        "Collection of vintage film camera rolls and photography equipment",
+      author: "Sarah Johnson",
+    },
+
+    {
+      id: "4",
+      src: "https://plus.unsplash.com/premium_vector-1746288322059-bddfbcf3a8f7?q=80&w=740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Llama in desert landscape",
+      title: "Llama in the Desert",
+      description:
+        "Cute llama standing in a desert environment with sand dunes",
+    },
+    {
+      id: "5",
+      src: "https://images.unsplash.com/photo-1457195740896-7f345efef228?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Ocean waves crashing",
+      title: "Ocean Waves",
+      description:
+        "Powerful ocean waves crashing with white foam and blue water",
+    },
+    {
+      id: "6",
+      src: "https://plus.unsplash.com/premium_photo-1683746563185-2567c3ca093a?q=80&w=1422&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Hotdog with sauce and toppings",
+      title: "Hotdog with sauce",
+      description: "Delicious hotdog served with sauce and various toppings",
+    },
+    {
+      id: "7",
+      src: "https://images.unsplash.com/photo-1492362764835-5733512e3ddc?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Girl smoking cigarette",
+      title: "Smoking girl",
+      description:
+        "Portrait of a girl smoking a cigarette in artistic lighting",
+      author: "Marcus Rodriguez",
+    },
+    {
+      id: "8",
+      src: "https://images.unsplash.com/photo-1595401735913-4ca17c66e755?q=80&w=675&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Praktica vintage camera",
+      title: "parktica camera",
+      description: "Classic Praktica vintage film camera with retro design",
+    },
+    {
+      id: "9",
+      src: "https://plus.unsplash.com/premium_vector-1746416995848-7fb8a141686f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Spider artwork illustration",
+      title: "Spider Art",
+      description:
+        "Artistic illustration or design featuring spider motifs and patterns",
+    },
+    {
+      id: "10",
+      src: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      alt: "Spider-man superhero",
+      title: "Spider-man",
+      description: "Spider-man superhero character in action pose or costume",
+    },
+  ],
+  columns = 4,
+  gap = 16,
+  onItemClick,
+}: PinterestGridProps) => {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  };
+
+  const distributeItems = () => {
+    const columnHeights = new Array(columns).fill(0);
+    const columnItems: PinterestItem[][] = new Array(columns)
+      .fill(null)
+      .map(() => []);
+
+    items.forEach((item) => {
+      const shortestColumnIndex = columnHeights.indexOf(
+        Math.min(...columnHeights)
+      );
+      columnItems[shortestColumnIndex].push(item);
+      columnHeights[shortestColumnIndex] +=
+        ((item.height || 300) / (item.width || 400)) * 400 + 100;
+    });
+
+    return columnItems;
+  };
+
+  const columnItems = distributeItems();
+
+  return (
+    <div className="w-full">
+      <motion.div
+        className="max-w-7xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible">
+        <div className="flex gap-4" style={{ gap: `${gap}px` }}>
+          {columnItems.map((column, columnIndex) => (
+            <div key={columnIndex} className="flex-1 flex flex-col gap-4">
+              {column.map((item) => (
+                <motion.div
+                  key={item.id}
+                  variants={itemVariants}
+                  whileHover={{
+                    scale: 1.02,
+                    y: -5,
+                    transition: { duration: 0.2 },
+                  }}
+                  className="relative group cursor-pointer"
+                  onMouseEnter={() => setHoveredItem(item.id)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  onClick={() => onItemClick?.(item)}>
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg bg-white">
+                    {imageErrors.has(item.id) ? (
+                      <div
+                        className="w-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center"
+                        style={{ height: `${item.height || 300}px` }}>
+                        <div className="text-center text-gray-500">
+                          <div className="text-4xl mb-2">🖼️</div>
+                          <p className="text-sm">Image not available</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <Image
+                        src={item.src}
+                        alt={item.alt || "Pinterest image"}
+                        width={item.width || 400}
+                        height={item.height || 300}
+                        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+                        onError={() => {
+                          setImageErrors((prev) => new Set(prev).add(item.id));
+                        }}
+                        unoptimized={true}
+                      />
+                    )}
+
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-all duration-300 ${
+                        hoveredItem === item.id ? "opacity-100" : "opacity-0"
+                      }`}>
+                      <div
+                        className={`absolute bottom-0 left-0 right-0 p-4 text-white transform transition-transform duration-300 ${
+                          hoveredItem === item.id
+                            ? "translate-y-0"
+                            : "translate-y-2"
+                        }`}>
+                        {item.title && (
+                          <h3 className="text-lg font-semibold mb-2 text-white drop-shadow-lg">
+                            {item.title}
+                          </h3>
+                        )}
+                        {item.description && (
+                          <p
+                            className="text-sm text-gray-200 drop-shadow-md overflow-hidden text-ellipsis"
+                            style={{
+                              display: "-webkit-box",
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: "vertical",
+                            }}>
+                            {item.description}
+                          </p>
+                        )}
+                        {item.author && (
+                          <p className="text-xs text-gray-300 mt-2 opacity-80">
+                            by {item.author}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default PinterestGrid;

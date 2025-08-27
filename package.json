@@ -27,8 +27,8 @@
     "README.md"
   ],
   "bin": {
-    "repeat-ui": "dist/cli/index.js",
-    "rui": "dist/cli/index.js"
+    "repeat-ui": "dist/cli/cli/index.js",
+    "rui": "dist/cli/cli/index.js"
   },
   "scripts": {
     "dev": "next dev --turbo",

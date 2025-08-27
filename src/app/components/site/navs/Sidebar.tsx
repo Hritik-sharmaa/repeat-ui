@@ -6,6 +6,7 @@ import { categories, isNewComponent } from "@/data/categories";
 import { useVariant } from "@/app/context/code-context";
 import { motion } from "motion/react";
 import { formatDateForDisplay } from "@/lib/dateUtils";
+import { useEffect, useRef, useState } from "react";
 
 function formatName(name: string) {
   return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
@@ -14,13 +15,57 @@ function formatName(name: string) {
 export default function Sidebar() {
   const pathname = usePathname();
   const { flavor } = useVariant();
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const asideRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = asideRef.current;
+      if (!el) return;
+      
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const scrollableHeight = scrollHeight - clientHeight;
+      
+      setIsScrollable(scrollableHeight > 0);
+      
+      setIsAtBottom(scrollTop >= scrollableHeight - 5);
+    };
+
+    const checkInitialState = () => {
+      const el = asideRef.current;
+      if (!el) return;
+      
+      const { scrollHeight, clientHeight } = el;
+      setIsScrollable(scrollHeight > clientHeight);
+      setIsAtBottom(false);
+    };
+
+    const el = asideRef.current;
+    if (el) {
+      checkInitialState();
+      
+      el.addEventListener("scroll", handleScroll);
+      
+      const resizeObserver = new ResizeObserver(checkInitialState);
+      resizeObserver.observe(el);
+      
+      return () => {
+        el.removeEventListener("scroll", handleScroll);
+        resizeObserver.disconnect();
+      };
+    }
+  }, []);
 
   return (
-    <aside className="w-full h-full overflow-y-auto no-scrollbar">
-      <nav className="pt-6 px-4 space-y-6">
+    <aside
+      ref={asideRef}
+      className="w-full h-full overflow-y-auto no-scrollbar relative">
+      <nav className="space-y-6 pb-4">
         {categories.map((cat) => (
           <div key={cat.name} className="space-y-3">
-            <ul className="space-y-1">
+            <h1 className="text-lg font-semibold">All components</h1>
+            <ul className="space-y-3">
               {cat.subcategories.map((sub, subIndex) => (
                 <li key={sub.name} className="relative group font-cal-sans">
                   <Link href={`/components/${sub.name.toLowerCase()}`}>
@@ -34,7 +79,7 @@ export default function Sidebar() {
                       {formatName(sub.name)}
                     </motion.div>
                   </Link>
-                  <ul className={`ml-4 space-y-0.5 relative`}>
+                  <ul className={`ml-3 space-y-0.5 relative`}>
                     <motion.div
                       className="absolute left-0 top-0 w-px bg-gray-700"
                       initial={{ height: 0 }}
@@ -118,6 +163,10 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
+      
+      {isScrollable && !isAtBottom && (
+        <div className="pointer-events-none fixed bottom-0 left-0 w-full h-14 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent z-20" />
+      )}
     </aside>
   );
 }

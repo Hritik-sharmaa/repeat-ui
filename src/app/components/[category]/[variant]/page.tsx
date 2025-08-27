@@ -7,6 +7,7 @@ import InstallationGuide from "../../site/ui/InstallationGuide";
 import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
 import { categories } from "@/data/categories";
 import { generateComponentMetadata } from "@/lib/faviconGenerator";
+import ScrollToTopButton from "../../site/ui/ScrollToTopButton";
 
 export async function generateMetadata({
   params,
@@ -109,7 +110,7 @@ export default async function ComponentVariantPage({
     return (
       <main className="p-6 max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-6xl font-bold capitalize mb-4 mt-8 font-cal-sans">
+          <h1 className="text-6xl font-bold capitalize mb-4 font-cal-sans">
             {variant.replace(/-/g, " ")}
           </h1>
           {description && (
@@ -131,8 +132,11 @@ export default async function ComponentVariantPage({
           variant={flavor}
           dependencies={dependencies}
         />
+        <div className="mb-28">
+          <PropTable data={propData} />
+        </div>
 
-        <PropTable data={propData} />
+        <ScrollToTopButton />
       </main>
     );
   } catch (err) {

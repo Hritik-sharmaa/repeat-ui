@@ -2,6 +2,7 @@ import "./style.css";
 import { FaUser } from "react-icons/fa";
 import { BsPlus } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
+import Image from "next/image";
 
 interface ProfileCardProps {
   className: string;
@@ -23,7 +24,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 }) => {
   return (
     <div className="profile-card">
-      <img src={image} alt={name} className="profile-image" />
+      <Image
+        src={image}
+        alt={name}
+        className="profile-image"
+        width={100}
+        height={100}
+      />
       <div className="card-content">
         <div className="card-header">
           <span className="name">{name}</span>

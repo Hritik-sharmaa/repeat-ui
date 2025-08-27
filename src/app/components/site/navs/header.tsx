@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, Github } from 'lucide-react';
 import { Button } from "@/app/components/site/ui/Button";
 import {
   DropdownMenu,
@@ -8,10 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/site/ui/Dropdown-menu";
-import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggle from "../ui/ThemeToggler";
+import ThemeToggle from "@/app/components/site/ui/ThemeToggler";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useVariant } from "@/app/context/code-context";
@@ -64,53 +63,74 @@ export function Header() {
 
   return (
     <>
-      <nav className="w-full max-w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-zinc-800">
-        <div className="w-full max-w-[95rem] mx-auto flex h-16 items-center justify-between px-2 sm:px-4 md:px-8 lg:px-12">
-          <div className="flex items-center gap-2">
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-5xl">
+        <div className="rounded-2xl shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-zinc-900/90 border border-zinc-200/50 dark:border-zinc-700/50 flex items-center justify-between px-6 py-3">
+          <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="flex items-center gap-2 transition-all duration-300">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}>
-                <Image src="/Logo.png" alt="logo" width={32} height={32} />
-              </motion.div>
-              <h1 className="text-2xl font-bold font-cal-sans">Repeat UI</h1>
+              className="flex items-center gap-3 transition-all duration-300 hover:opacity-80"
+            >
+              <div className="relative">
+                <Image 
+                  src="/Logo.png" 
+                  alt="Repeat UI Logo" 
+                  width={36} 
+                  height={36}
+                  className="rounded-lg"
+                />
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
+                Repeat UI
+              </h1>
             </Link>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="relative hidden md:block">
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:block">
               <Button
-                variant="ghost"
+                variant="outline"
                 onClick={openSearch}
-                className="w-64 justify-start gap-3 bg-muted/50 border border-zinc-400 dark:border-white/30 rounded-full px-4 py-2 text-muted-foreground hover:text-white cursor-pointer ">
+                className="w-64 justify-start gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200"
+              >
                 <Search className="h-4 w-4" />
                 <span className="flex-1 text-left">Search components...</span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-full border border-white/30 bg-muted px-1.5 font-mono text-[10px] text-muted-foreground opacity-100">
+                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-300 dark:border-zinc-600 bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                   <span className="text-xs">⌘</span>K
                 </kbd>
               </Button>
             </div>
 
+            <Button
+              variant="outline"
+              size="sm"
+              className="lg:hidden rounded-xl border-zinc-300 dark:border-zinc-600"
+              onClick={openSearch}
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
+                  variant="outline"
                   size="sm"
-                  className="gap-1 bg-transparent outline-none rounded-full border border-zinc-400 dark:border-white/30 cursor-pointer">
+                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[80px]"
+                >
                   {language.toUpperCase()}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="border border-zinc-400 dark:border-white/30 rounded-2xl m-4 p-2 ">
+              <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
                 <DropdownMenuItem
                   onClick={() => updateFlavor("js", style)}
-                  className="rounded-2xl">
+                  className="rounded-lg"
+                >
                   JavaScript
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateFlavor("ts", style)}
-                  className="rounded-2xl">
+                  className="rounded-lg"
+                >
                   TypeScript
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -119,59 +139,44 @@ export function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
+                  variant="outline"
                   size="sm"
-                  className="gap-1 bg-transparent outline-none rounded-full border border-zinc-400 dark:border-white/30 cursor-pointer">
+                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[100px]"
+                >
                   {style === "tailwind" ? "Tailwind" : "CSS"}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="border border-zinc-400 dark:border-white/30 rounded-2xl m-4 p-2 ">
+              <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
                 <DropdownMenuItem
                   onClick={() => updateFlavor(language, "css")}
-                  className="rounded-2xl">
+                  className="rounded-lg"
+                >
                   CSS
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateFlavor(language, "tailwind")}
-                  className="rounded-2xl">
+                  className="rounded-lg"
+                >
                   Tailwind CSS
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
             <ThemeToggle />
+
             <a
               href="https://github.com/hritik-sharmaa/repeat-ui"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:bg-gray-100/20 dark:hover:bg-gray-800/20 transition-all duration-300 font-medium border dark:border-white/30 border-zinc-400 rounded-full px-3 py-2">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-github-icon lucide-github">
-                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                  <path d="M9 18c-4.51 2-5-2-7-2" />
-                </svg>
-              </div>
-              <span>Star on Github</span>
-              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-2 py-1 rounded-full text-xs font-mono min-w-[2rem] text-center">
+              className="hidden md:flex items-center gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-3 py-2 text-sm"
+            >
+              <Github className="h-4 w-4" />
+              <span className="hidden lg:inline">Star on GitHub</span>
+              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-2 py-1 rounded-md text-xs font-mono min-w-[2rem] text-center">
                 {isLoadingStars ? "..." : formatStarCount(starCount)}
               </span>
             </a>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
-              onClick={openSearch}>
-              <Search className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       </nav>

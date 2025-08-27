@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 type PropData = {
   name: string;
@@ -75,7 +75,7 @@ export default function PropTable({ data }: { data: PropData[] }) {
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
               {data.map((prop) => (
-                <>
+                <React.Fragment key={prop.name}>
                   <tr
                     key={prop.name}
                     className="transition-colors table-hover-theme">
@@ -224,7 +224,7 @@ export default function PropTable({ data }: { data: PropData[] }) {
                         </td>
                       </tr>
                     )}
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>

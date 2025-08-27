@@ -3,7 +3,7 @@ export interface ComponentInfo {
   category: string;
   description: string;
   dependencies: string[];
-  dateAdded: string; // ISO date string
+  dateAdded: string;
   files: {
     component: string;
     styles?: string;
@@ -60,7 +60,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with bubble animation effects",
     dependencies: [],
-    dateAdded: "2025-08-10", // Marked as new for demo
+    dateAdded: "2025-08-10",
     files: {
       component: "preview",
       styles: "style.css",
@@ -206,7 +206,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A beautiful 3D card component with hover effects",
     dependencies: [],
-    dateAdded: "2025-08-12", // Marked as new for demo
+    dateAdded: "2025-08-12", 
     files: {
       component: "preview",
       styles: "style.css",
@@ -316,7 +316,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "texteffect",
     description: "A text effect with split reveal animation",
     dependencies: [],
-    dateAdded: "2025-08-14", // Marked as new for demo
+    dateAdded: "2025-08-14", 
     files: {
       component: "preview",
       styles: "style.css",
@@ -351,6 +351,62 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Typing Text",
     category: "texteffect",
     description: "A text effect with typing animation",
+    dependencies: [],
+    dateAdded: "2025-01-01",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+
+  //grid components
+  "grid-2-column-bento-grid": {
+    name: "2 Column Bento Grid",
+    category: "grid",
+    description: "A 2 column layout with bento style grid",
+    dependencies: [],
+    dateAdded: "2025-01-01",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+  "grid-3-column-bento-grid": {
+    name: "3 Column Bento Grid",
+    category: "grid",
+    description: "A 3 column layout with bento style grid",
+    dependencies: [],
+    dateAdded: "2025-01-01",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+  "grid-pinterest-grid": {
+    name: "Pinterest Grid",
+    category: "grid",
+    description: "A Pinterest style grid layout",
     dependencies: [],
     dateAdded: "2025-01-01",
     files: {

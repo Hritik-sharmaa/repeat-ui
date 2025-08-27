@@ -1,4 +1,4 @@
-import React from "react";
+
 import Card3D from "./preview";
 
 const propData = [

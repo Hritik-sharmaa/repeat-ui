@@ -104,7 +104,7 @@ export const categories: Category[] = [
             "Elegant pricing plan showcase card"
           ),
           createVariant(
-            "3D-card",
+            "3d-card",
             "2025-08-14",
             "Interactive 3D card with hover tilt effects"
           ),
@@ -123,7 +123,7 @@ export const categories: Category[] = [
             "2025-08-17",
             "Advanced carousel with fade transitions and auto-play"
           ),
-           createVariant(
+          createVariant(
             "loop-deck",
             "2025-08-17",
             "Infinite loop carousel with card deck style presentation"

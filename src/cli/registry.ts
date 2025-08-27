@@ -24,7 +24,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A simple, clean button component",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -42,7 +42,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with layered hover effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -60,7 +60,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with bubble animation effects",
     dependencies: [],
-    dateAdded: "2025-08-10",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -78,7 +78,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with creeping animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -96,7 +96,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with fill animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -114,7 +114,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with letter animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -132,7 +132,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with pulse animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -150,7 +150,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with rotation animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -168,7 +168,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with sketchy animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -186,7 +186,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "button",
     description: "A button with wiggle animation effects",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -206,7 +206,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A beautiful 3D card component with hover effects",
     dependencies: [],
-    dateAdded: "2025-08-12", 
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -224,7 +224,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A beautiful pricing card component for subscription plans",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -242,7 +242,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "card",
     description: "A card component for displaying user profiles",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -257,12 +257,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
   },
 
   // Text Effect Components
-  "texteffect-flipping-text": {
+  "text-effect-flipping-text": {
     name: "Flipping Text",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with flipping animation",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -275,12 +275,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
-  "texteffect-flow-text": {
+  "text-effect-flow-text": {
     name: "Flow Text",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with flowing animation",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -293,12 +293,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
-  "texteffect-pop-text": {
+  "text-effect-pop-text": {
     name: "Pop Text",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with popping animation",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -311,12 +311,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
-  "texteffect-split-reveal-text": {
+  "text-effect-split-reveal-text": {
     name: "Split Reveal Text",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with split reveal animation",
     dependencies: [],
-    dateAdded: "2025-08-14", 
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -329,12 +329,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
-  "texteffect-text-shadow": {
+  "text-effect-text-shadow": {
     name: "Text Shadow",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with dynamic shadow animation",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -347,12 +347,12 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
-  "texteffect-typing-text": {
+  "text-effect-typing-text": {
     name: "Typing Text",
-    category: "texteffect",
+    category: "text-effect",
     description: "A text effect with typing animation",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -366,13 +366,13 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     },
   },
 
-  //grid components
+  // Grid Components
   "grid-2-column-bento-grid": {
     name: "2 Column Bento Grid",
     category: "grid",
     description: "A 2 column layout with bento style grid",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -390,7 +390,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "grid",
     description: "A 3 column layout with bento style grid",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
     files: {
       component: "preview",
       styles: "style.css",
@@ -408,7 +408,63 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     category: "grid",
     description: "A Pinterest style grid layout",
     dependencies: [],
-    dateAdded: "2025-01-01",
+    dateAdded: "2025-08-14",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+
+  // Carousel Components
+  "carousel-simple-carousel": {
+    name: "Simple Carousel",
+    category: "carousel",
+    description: "Basic carousel with navigation arrows and dot indicators",
+    dependencies: [],
+    dateAdded: "2025-08-17",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+  "carousel-modern-carousel": {
+    name: "Modern Carousel",
+    category: "carousel",
+    description: "Advanced carousel with fade transitions and auto-play",
+    dependencies: [],
+    dateAdded: "2025-08-17",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+  "carousel-loop-deck": {
+    name: "Loop Deck Carousel",
+    category: "carousel",
+    description: "Infinite loop carousel with card deck style presentation",
+    dependencies: [],
+    dateAdded: "2025-08-17",
     files: {
       component: "preview",
       styles: "style.css",

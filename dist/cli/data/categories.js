@@ -33,7 +33,7 @@ export const categories = [
                 variants: [
                     createVariant("profile-card", "2025-08-14", "Beautiful user profile display card"),
                     createVariant("pricing-card", "2025-08-14", "Elegant pricing plan showcase card"),
-                    createVariant("3D-card", "2025-08-14", "Interactive 3D card with hover tilt effects"),
+                    createVariant("3d-card", "2025-08-14", "Interactive 3D card with hover tilt effects"),
                 ],
             },
             {

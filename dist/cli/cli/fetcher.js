@@ -37,8 +37,14 @@ export async function fetchComponentFiles(componentKey, component, variant) {
     else if (componentKey.startsWith("texteffect-")) {
         componentFolderName = componentKey.replace("texteffect-", "");
     }
+    else if (componentKey.startsWith("text-effect-")) {
+        componentFolderName = componentKey.replace("text-effect-", "");
+    }
     else if (componentKey.startsWith("grid-")) {
         componentFolderName = componentKey.replace("grid-", "");
+    }
+    else if (componentKey.startsWith("carousel-")) {
+        componentFolderName = componentKey.replace("carousel-", "");
     }
     else {
         componentFolderName = componentKey;

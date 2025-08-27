@@ -1,6 +1,6 @@
 {
   "name": "@hritik-sharmaa/repeat-ui",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "private": false,
   "description": "A collection of beautiful UI components with CLI installation",
   "keywords": [
@@ -21,6 +21,7 @@
   },
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
+  "type": "module",
   "files": [
     "dist/cli/**/*",
     "src/cli/**/*",

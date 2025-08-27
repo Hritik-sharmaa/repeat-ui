@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { categories, isNewComponent } from "../data/categories.js";
+import { categories, isNewComponent } from "../data/categories";
 
 export function getNewComponents() {
   const newComponents: Array<{

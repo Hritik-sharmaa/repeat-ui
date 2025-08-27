@@ -43,6 +43,8 @@ export async function fetchComponentFiles(
     componentFolderName = componentKey.replace("card-", "");
   } else if (componentKey.startsWith("texteffect-")) {
     componentFolderName = componentKey.replace("texteffect-", "");
+  } else if (componentKey.startsWith("grid-")) {
+    componentFolderName = componentKey.replace("grid-", "");
   } else {
     componentFolderName = componentKey;
   }

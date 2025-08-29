@@ -7,6 +7,10 @@ import { motion } from "motion/react";
 import ThemeToggle from "@/app/components/site/ui/ThemeToggler";
 import { useEffect, useState } from "react";
 import { fetchGitHubStars, formatStarCount } from "@/lib/utils";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -28,6 +32,23 @@ const Navbar = () => {
 
     loadStars();
   }, []);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: target, offsetY: 80 },
+          ease: "power2.out",
+        });
+      }
+    }
+  };
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -74,6 +95,7 @@ const Navbar = () => {
                 className="relative">
                 <Link
                   href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
                   className={`flex items-center gap-2 hover:text-[#fa5f1b] transition-all duration-300 font-medium relative ${
                     isActive ? "text-[#fa5f1b]" : ""
                   }`}>

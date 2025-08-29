@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, ChevronDown, Github } from 'lucide-react';
+import { Search, ChevronDown, Github } from "lucide-react";
 import { Button } from "@/app/components/site/ui/Button";
 import {
   DropdownMenu,
@@ -17,6 +17,10 @@ import { useVariant } from "@/app/context/code-context";
 import { useSearch } from "@/app/context/search-context";
 import { SearchModal } from "@/app/components/site/ui/SearchModal";
 import { fetchGitHubStars, formatStarCount } from "@/lib/utils";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 export function Header() {
   const router = useRouter();
@@ -61,6 +65,23 @@ export function Header() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const handleAnchorClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: target, offsetY: 80 },
+          ease: "power2.out",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-5xl">
@@ -69,12 +90,12 @@ export function Header() {
             <Link
               href="/"
               className="flex items-center gap-3 transition-all duration-300 hover:opacity-80"
-            >
+              onClick={(e) => handleAnchorClick(e, "/")}>
               <div className="relative">
-                <Image 
-                  src="/Logo.png" 
-                  alt="Repeat UI Logo" 
-                  width={36} 
+                <Image
+                  src="/Logo.png"
+                  alt="Repeat UI Logo"
+                  width={36}
                   height={36}
                   className="rounded-lg"
                 />
@@ -90,8 +111,7 @@ export function Header() {
               <Button
                 variant="outline"
                 onClick={openSearch}
-                className="w-64 justify-start gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200"
-              >
+                className="w-64 justify-start gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200">
                 <Search className="h-4 w-4" />
                 <span className="flex-1 text-left">Search components...</span>
                 <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-300 dark:border-zinc-600 bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
@@ -104,8 +124,7 @@ export function Header() {
               variant="outline"
               size="sm"
               className="lg:hidden rounded-xl border-zinc-300 dark:border-zinc-600"
-              onClick={openSearch}
-            >
+              onClick={openSearch}>
               <Search className="h-4 w-4" />
             </Button>
 
@@ -114,8 +133,7 @@ export function Header() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[80px]"
-                >
+                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[80px]">
                   {language.toUpperCase()}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
@@ -123,14 +141,12 @@ export function Header() {
               <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
                 <DropdownMenuItem
                   onClick={() => updateFlavor("js", style)}
-                  className="rounded-lg"
-                >
+                  className="rounded-lg">
                   JavaScript
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateFlavor("ts", style)}
-                  className="rounded-lg"
-                >
+                  className="rounded-lg">
                   TypeScript
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -141,8 +157,7 @@ export function Header() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[100px]"
-                >
+                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[100px]">
                   {style === "tailwind" ? "Tailwind" : "CSS"}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
@@ -150,14 +165,12 @@ export function Header() {
               <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
                 <DropdownMenuItem
                   onClick={() => updateFlavor(language, "css")}
-                  className="rounded-lg"
-                >
+                  className="rounded-lg">
                   CSS
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateFlavor(language, "tailwind")}
-                  className="rounded-lg"
-                >
+                  className="rounded-lg">
                   Tailwind CSS
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -169,8 +182,7 @@ export function Header() {
               href="https://github.com/hritik-sharmaa/repeat-ui"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-3 py-2 text-sm"
-            >
+              className="hidden md:flex items-center gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-3 py-2 text-sm">
               <Github className="h-4 w-4" />
               <span className="hidden lg:inline">Star on GitHub</span>
               <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-2 py-1 rounded-md text-xs font-mono min-w-[2rem] text-center">

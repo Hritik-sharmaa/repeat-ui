@@ -7,6 +7,10 @@ import { useVariant } from "@/app/context/code-context";
 import { motion } from "motion/react";
 import { formatDateForDisplay } from "@/lib/dateUtils";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 function formatName(name: string) {
   return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
@@ -23,19 +27,19 @@ export default function Sidebar() {
     const handleScroll = () => {
       const el = asideRef.current;
       if (!el) return;
-      
+
       const { scrollTop, scrollHeight, clientHeight } = el;
       const scrollableHeight = scrollHeight - clientHeight;
-      
+
       setIsScrollable(scrollableHeight > 0);
-      
+
       setIsAtBottom(scrollTop >= scrollableHeight - 5);
     };
 
     const checkInitialState = () => {
       const el = asideRef.current;
       if (!el) return;
-      
+
       const { scrollHeight, clientHeight } = el;
       setIsScrollable(scrollHeight > clientHeight);
       setIsAtBottom(false);
@@ -44,18 +48,35 @@ export default function Sidebar() {
     const el = asideRef.current;
     if (el) {
       checkInitialState();
-      
+
       el.addEventListener("scroll", handleScroll);
-      
+
       const resizeObserver = new ResizeObserver(checkInitialState);
       resizeObserver.observe(el);
-      
+
       return () => {
         el.removeEventListener("scroll", handleScroll);
         resizeObserver.disconnect();
       };
     }
   }, []);
+
+  const handleAnchorClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: target, offsetY: 80 },
+          ease: "power2.out",
+        });
+      }
+    }
+  };
 
   return (
     <aside
@@ -68,7 +89,14 @@ export default function Sidebar() {
             <ul className="space-y-3">
               {cat.subcategories.map((sub, subIndex) => (
                 <li key={sub.name} className="relative group font-cal-sans">
-                  <Link href={`/components/${sub.name.toLowerCase()}`}>
+                  <Link
+                    href={`/components/${sub.name.toLowerCase()}`}
+                    onClick={(e) =>
+                      handleAnchorClick(
+                        e,
+                        `/components/${sub.name.toLowerCase()}`
+                      )
+                    }>
                     <motion.div
                       className="text-sm font-medium mb-2 px-2 py-1 transition-colors rounded-md"
                       whileHover={{
@@ -116,6 +144,12 @@ export default function Sidebar() {
 
                           <Link
                             href={`${variantPath}?flavor=${flavor}`}
+                            onClick={(e) =>
+                              handleAnchorClick(
+                                e,
+                                `${variantPath}?flavor=${flavor}`
+                              )
+                            }
                             className={`flex items-center justify-between py-2 px-3 text-sm rounded-md transition-all duration-200 ${
                               isActive
                                 ? "sidebar-active-text"
@@ -163,7 +197,7 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
-      
+
       {isScrollable && !isAtBottom && (
         <div className="pointer-events-none fixed bottom-0 left-0 w-full h-14 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent z-20" />
       )}

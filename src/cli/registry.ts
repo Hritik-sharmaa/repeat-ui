@@ -241,7 +241,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Profile Card",
     category: "card",
     description: "A card component for displaying user profiles",
-    dependencies: [],
+    dependencies: ["react-icons/fa", "react-icons/bs", "react-icons/md"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -261,7 +261,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Flipping Text",
     category: "text-effect",
     description: "A text effect with flipping animation",
-    dependencies: [],
+    dependencies: ["motion/react"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -351,7 +351,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Typing Text",
     category: "text-effect",
     description: "A text effect with typing animation",
-    dependencies: [],
+    dependencies: ["motion/react"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -371,7 +371,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "2 Column Bento Grid",
     category: "grid",
     description: "A 2 column layout with bento style grid",
-    dependencies: [],
+    dependencies: ["motion/react"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -389,7 +389,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "3 Column Bento Grid",
     category: "grid",
     description: "A 3 column layout with bento style grid",
-    dependencies: [],
+    dependencies: ["motion/react"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -407,7 +407,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Pinterest Grid",
     category: "grid",
     description: "A Pinterest style grid layout",
-    dependencies: [],
+    dependencies: ["motion/react"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",
@@ -427,7 +427,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Simple Carousel",
     category: "carousel",
     description: "Basic carousel with navigation arrows and dot indicators",
-    dependencies: [],
+    dependencies: ["lucide-react", "motion/react"],
     dateAdded: "2025-08-17",
     files: {
       component: "preview",
@@ -445,7 +445,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Modern Carousel",
     category: "carousel",
     description: "Advanced carousel with fade transitions and auto-play",
-    dependencies: [],
+    dependencies: ["lucide-react", "motion/react"],
     dateAdded: "2025-08-17",
     files: {
       component: "preview",
@@ -463,7 +463,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "Loop Deck Carousel",
     category: "carousel",
     description: "Infinite loop carousel with card deck style presentation",
-    dependencies: [],
+    dependencies: ["lucide-react"],
     dateAdded: "2025-08-17",
     files: {
       component: "preview",

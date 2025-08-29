@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type React from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { useTheme } from "next-themes";
@@ -14,6 +14,10 @@ import {
 } from "lucide-react";
 import { tomorrow } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+gsap.registerPlugin(ScrollToPlugin);
+import { useRef } from "react";
 
 declare module "react-syntax-highlighter/dist/cjs/styles/prism";
 
@@ -37,6 +41,7 @@ export default function ComponentTabs({
   const [copied, setCopied] = useState(false);
   const [showFullCode, setShowFullCode] = useState(false);
   const [componentKey, setComponentKey] = useState(0);
+  const tabListRef = useRef<HTMLDivElement>(null);
 
   const codeToDisplay = (
     activeTab === "css" ? cssCode || "" : sourceCode
@@ -84,6 +89,32 @@ export default function ComponentTabs({
         return "typescript";
     }
   };
+
+  const smoothScroll = (direction: "up" | "down", amount?: number) => {
+    const el = tabListRef.current;
+    if (!el) return;
+    const scrollAmount = amount ?? 820;
+    const targetY =
+      direction === "up"
+        ? el.scrollTop - scrollAmount
+        : el.scrollTop + scrollAmount;
+    gsap.to(el, {
+      duration: 2.5,
+      scrollTo: { y: targetY },
+      ease: "expo.out",
+    });
+  };
+
+  useEffect(() => {
+    const el = tabListRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      smoothScroll(e.deltaY < 0 ? "up" : "down", Math.abs(e.deltaY));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [activeTab]);
 
   return (
     <div className="w-full" data-component-tabs>
@@ -165,7 +196,9 @@ export default function ComponentTabs({
               </button>
             </div>
 
-            <div className="w-full overflow-x-auto custom-scrollbar relative">
+            <div
+              className="w-full overflow-x-auto custom-scrollbar relative"
+              ref={tabListRef}>
               <div className="min-w-max">
                 <SyntaxHighlighter
                   language={getLanguage(fileName, activeTab === "css")}
@@ -200,6 +233,21 @@ export default function ComponentTabs({
                   }
                 `}</style>
               </div>
+
+              <button
+                className="absolute top-2 right-2 z-20 bg-black/60 text-white rounded-full p-2 shadow hover:bg-black"
+                onClick={() => smoothScroll("up")}
+                title="Scroll Up"
+                style={{ display: "block" }}>
+                <ChevronUp className="w-4 h-4" />
+              </button>
+              <button
+                className="absolute bottom-2 right-2 z-20 bg-black/60 text-white rounded-full p-2 shadow hover:bg-black"
+                onClick={() => smoothScroll("down")}
+                title="Scroll Down"
+                style={{ display: "block" }}>
+                <ChevronDown className="w-4 h-4" />
+              </button>
 
               {codeToDisplay.length > 20 && (
                 <div className="absolute bottom-0 left-0 right-0 z-10">

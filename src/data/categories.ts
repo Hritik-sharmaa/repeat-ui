@@ -185,6 +185,17 @@ export const categories: Category[] = [
           ),
         ],
       },
+      {
+        name: "commons",
+        variants: [
+          createVariant(
+            "document-upload-modal",
+            "2025-08-14",
+            "Dynamic modal component for displaying content"
+          ),
+          
+        ],
+      },
     ],
   },
 ];

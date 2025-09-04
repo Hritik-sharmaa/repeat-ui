@@ -371,7 +371,7 @@ export const componentRegistry: Record<string, ComponentInfo> = {
     name: "2 Column Bento Grid",
     category: "grid",
     description: "A 2 column layout with bento style grid",
-    dependencies: ["motion/react"],
+    dependencies: ["motion"],
     dateAdded: "2025-08-14",
     files: {
       component: "preview",

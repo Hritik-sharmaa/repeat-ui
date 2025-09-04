@@ -14,6 +14,7 @@ import { writeComponentFiles } from "./writer.js";
 import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs-extra";
+import path from "path";
 
 const execAsync = promisify(exec);
 const program = new Command();
@@ -143,21 +144,59 @@ program
       if (options.deps && dependencies.length > 0) {
         const installSpinner = ora("Installing dependencies...").start();
         try {
-          await execAsync(`npm install ${dependencies.join(" ")}`);
-          installSpinner.succeed(
-            chalk.green("Dependencies installed successfully!")
-          );
-        } catch {
+          // Check which dependencies are already installed
+          const packageJsonPath = path.join(process.cwd(), "package.json");
+          let existingDeps: Record<string, string> = {};
+
+          try {
+            const packageJson = JSON.parse(
+              await fs.readFile(packageJsonPath, "utf-8")
+            );
+            existingDeps = {
+              ...packageJson.dependencies,
+              ...packageJson.devDependencies,
+            };
+          } catch {
+            // package.json doesn't exist or can't be read
+          }
+
+          const missingDeps = dependencies.filter((dep) => !existingDeps[dep]);
+
+          if (missingDeps.length > 0) {
+            installSpinner.text = `Installing ${
+              missingDeps.length
+            } dependencies: ${missingDeps.join(", ")}`;
+            await execAsync(`npm install ${missingDeps.join(" ")}`);
+            installSpinner.succeed(
+              chalk.green(
+                `Dependencies installed successfully! (${missingDeps.join(
+                  ", "
+                )})`
+              )
+            );
+          } else {
+            installSpinner.succeed(
+              chalk.green("All dependencies already installed!")
+            );
+          }
+        } catch (error) {
           installSpinner.fail(chalk.red("Failed to install dependencies"));
           console.log(
             chalk.yellow("Please install manually:"),
             `npm install ${dependencies.join(" ")}`
           );
+          console.log(
+            chalk.red("Error details:"),
+            error instanceof Error ? error.message : error
+          );
         }
       } else if (dependencies.length > 0) {
         console.log(
-          chalk.yellow("Dependencies needed:"),
+          chalk.yellow("\n📦 Dependencies required:"),
           `npm install ${dependencies.join(" ")}`
+        );
+        console.log(
+          chalk.blue("💡 Tip: Use --deps flag to install automatically")
         );
       }
 

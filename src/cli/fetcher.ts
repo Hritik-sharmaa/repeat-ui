@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { readFile } from "fs/promises";
 import path from "path";
 import { ComponentInfo } from "./registry.js";
+import { analyzeComponentDependencies } from "../lib/dependencyAnalyzer.js";
 
 const GITHUB_RAW_BASE =
   "https://raw.githubusercontent.com/hritik-sharmaa/repeat-ui/refs/heads/main/src/app/components/content";
@@ -34,6 +35,7 @@ export async function fetchComponentFiles(
 ): Promise<{ files: Record<string, string>; dependencies: string[] }> {
   const files: Record<string, string> = {};
   const [lang, style] = variant.split("-");
+  const allDependencies = new Set(component.dependencies);
 
   // Map component keys to folder names
   let componentFolderName: string;
@@ -73,6 +75,19 @@ export async function fetchComponentFiles(
 
     if (componentContent) {
       files[`${componentFolderName}.${componentExt}`] = componentContent;
+
+      // Analyze dependencies from the actual component code
+      try {
+        const { dependencies: analyzedDeps } =
+          await analyzeComponentDependencies(componentContent);
+        analyzedDeps.forEach((dep) => {
+          if (!dep.name.startsWith(".") && !isBuiltInPackage(dep.name)) {
+            allDependencies.add(dep.name);
+          }
+        });
+      } catch (error) {
+        console.warn(`Warning: Could not analyze dependencies: ${error}`);
+      }
     } else {
       console.warn(
         `Warning: Could not fetch component file from GitHub or local filesystem`
@@ -122,8 +137,33 @@ export async function fetchComponentFiles(
       files[`${componentFolderName}.demo.${demoExt}`] = demoContent;
     }
 
-    return { files, dependencies: component.dependencies };
+    return { files, dependencies: Array.from(allDependencies) };
   } catch (error) {
     throw new Error(`Failed to fetch component files: ${error}`);
   }
+}
+
+// Helper function to identify built-in packages that shouldn't be installed
+function isBuiltInPackage(packageName: string): boolean {
+  const builtInPackages = [
+    "react",
+    "react-dom",
+    "next",
+    "next/image",
+    "next/router",
+    "next/link",
+    "fs",
+    "path",
+    "util",
+    "crypto",
+    "http",
+    "https",
+    "url",
+    "querystring",
+  ];
+
+  return builtInPackages.some(
+    (builtIn) =>
+      packageName === builtIn || packageName.startsWith(`${builtIn}/`)
+  );
 }

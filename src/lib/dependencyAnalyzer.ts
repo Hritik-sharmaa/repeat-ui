@@ -76,19 +76,35 @@ function filterThirdPartyImports(imports: string[]): string[] {
     "process",
     "os",
     "child_process",
+  ]);
+
+  const reactEcosystem = new Set([
     "react",
-    "next",
+    "react-dom",
+    "next/image",
+    "next/link",
+    "next/router",
+    "next/head",
+    "next/navigation",
   ]);
 
   return imports.filter((importPath) => {
+    // Skip relative imports
     if (importPath.startsWith(".") || importPath.startsWith("/")) {
       return false;
     }
 
+    // Skip Node.js built-ins
     if (nodeBuiltins.has(importPath)) {
       return false;
     }
 
+    // Skip React ecosystem (assumed to be available)
+    if (reactEcosystem.has(importPath)) {
+      return false;
+    }
+
+    // Skip internal/alias imports
     if (importPath.startsWith("@/")) {
       return false;
     }
@@ -98,6 +114,16 @@ function filterThirdPartyImports(imports: string[]): string[] {
 }
 
 function getBasePackageName(importPath: string): string {
+  // Handle special cases like motion/react -> motion
+  const specialMappings: Record<string, string> = {
+    "motion/react": "motion",
+    "framer-motion": "framer-motion",
+  };
+
+  if (specialMappings[importPath]) {
+    return specialMappings[importPath];
+  }
+
   if (importPath.startsWith("@")) {
     const parts = importPath.split("/");
     return parts.length >= 2 ? `${parts[0]}/${parts[1]}` : importPath;

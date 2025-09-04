@@ -221,7 +221,7 @@ export const componentRegistry = {
         name: "Profile Card",
         category: "card",
         description: "A card component for displaying user profiles",
-        dependencies: [],
+        dependencies: ["react-icons/fa", "react-icons/bs", "react-icons/md"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -240,7 +240,7 @@ export const componentRegistry = {
         name: "Flipping Text",
         category: "text-effect",
         description: "A text effect with flipping animation",
-        dependencies: [],
+        dependencies: ["motion/react"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -330,7 +330,7 @@ export const componentRegistry = {
         name: "Typing Text",
         category: "text-effect",
         description: "A text effect with typing animation",
-        dependencies: [],
+        dependencies: ["motion/react"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -349,7 +349,7 @@ export const componentRegistry = {
         name: "2 Column Bento Grid",
         category: "grid",
         description: "A 2 column layout with bento style grid",
-        dependencies: [],
+        dependencies: ["motion"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -367,7 +367,7 @@ export const componentRegistry = {
         name: "3 Column Bento Grid",
         category: "grid",
         description: "A 3 column layout with bento style grid",
-        dependencies: [],
+        dependencies: ["motion/react"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -385,7 +385,7 @@ export const componentRegistry = {
         name: "Pinterest Grid",
         category: "grid",
         description: "A Pinterest style grid layout",
-        dependencies: [],
+        dependencies: ["motion/react"],
         dateAdded: "2025-08-14",
         files: {
             component: "preview",
@@ -404,7 +404,7 @@ export const componentRegistry = {
         name: "Simple Carousel",
         category: "carousel",
         description: "Basic carousel with navigation arrows and dot indicators",
-        dependencies: [],
+        dependencies: ["lucide-react", "motion/react"],
         dateAdded: "2025-08-17",
         files: {
             component: "preview",
@@ -422,7 +422,7 @@ export const componentRegistry = {
         name: "Modern Carousel",
         category: "carousel",
         description: "Advanced carousel with fade transitions and auto-play",
-        dependencies: [],
+        dependencies: ["lucide-react", "motion/react"],
         dateAdded: "2025-08-17",
         files: {
             component: "preview",
@@ -440,8 +440,45 @@ export const componentRegistry = {
         name: "Loop Deck Carousel",
         category: "carousel",
         description: "Infinite loop carousel with card deck style presentation",
-        dependencies: [],
+        dependencies: ["lucide-react"],
         dateAdded: "2025-08-17",
+        files: {
+            component: "preview",
+            styles: "style.css",
+            demo: "demo",
+        },
+        variants: {
+            "js-css": true,
+            "js-tailwind": true,
+            "ts-css": true,
+            "ts-tailwind": true,
+        },
+    },
+    // Commons Components
+    "commons-search-bar": {
+        name: "Search Bar with Hotkey",
+        category: "commons",
+        description: "A search bar component with keyboard shortcuts (Ctrl+K) and modal support",
+        dependencies: ["lucide-react"],
+        dateAdded: "2025-09-04",
+        files: {
+            component: "preview",
+            styles: "style.css",
+            demo: "demo",
+        },
+        variants: {
+            "js-css": true,
+            "js-tailwind": true,
+            "ts-css": true,
+            "ts-tailwind": true,
+        },
+    },
+    "commons-document-upload-modal": {
+        name: "Document Upload Modal",
+        category: "commons",
+        description: "A modal component for uploading documents with drag and drop support",
+        dependencies: [],
+        dateAdded: "2025-09-04",
         files: {
             component: "preview",
             styles: "style.css",

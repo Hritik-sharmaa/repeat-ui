@@ -477,6 +477,46 @@ export const componentRegistry: Record<string, ComponentInfo> = {
       "ts-tailwind": true,
     },
   },
+
+  // Commons Components
+  "commons-search-bar": {
+    name: "Search Bar with Hotkey",
+    category: "commons",
+    description:
+      "A search bar component with keyboard shortcuts (Ctrl+K) and modal support",
+    dependencies: ["lucide-react"],
+    dateAdded: "2025-09-04",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
+  "commons-document-upload-modal": {
+    name: "Document Upload Modal",
+    category: "commons",
+    description:
+      "A modal component for uploading documents with drag and drop support",
+    dependencies: [],
+    dateAdded: "2025-09-04",
+    files: {
+      component: "preview",
+      styles: "style.css",
+      demo: "demo",
+    },
+    variants: {
+      "js-css": true,
+      "js-tailwind": true,
+      "ts-css": true,
+      "ts-tailwind": true,
+    },
+  },
 };
 
 export const getComponentsList = () => Object.keys(componentRegistry);

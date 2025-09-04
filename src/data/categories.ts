@@ -190,10 +190,14 @@ export const categories: Category[] = [
         variants: [
           createVariant(
             "document-upload-modal",
-            "2025-08-14",
-            "Dynamic modal component for displaying content"
+            "2025-09-04",
+            "Document upload modal with drag and drop support"
           ),
-          
+          createVariant(
+            "search-bar",
+            "2025-09-04",
+            "Search bar component with keyboard shortcuts (Ctrl+K) and modal support"
+          ),
         ],
       },
     ],

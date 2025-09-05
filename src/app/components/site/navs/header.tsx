@@ -84,37 +84,39 @@ export function Header() {
 
   return (
     <>
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-5xl">
-        <div className="rounded-2xl shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-zinc-900/90 border border-zinc-200/50 dark:border-zinc-700/50 flex items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-3">
+      <nav className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-5xl">
+        <div className="rounded-2xl shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-zinc-900/90 border border-zinc-200/50 dark:border-zinc-700/50 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 gap-3 sm:gap-0">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/"
-              className="flex items-center gap-3 transition-all duration-300 hover:opacity-80"
+              className="flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:opacity-80"
               onClick={(e) => handleAnchorClick(e, "/")}>
               <div className="relative">
                 <Image
                   src="/Logo.png"
                   alt="Repeat UI Logo"
-                  width={36}
-                  height={36}
-                  className="rounded-lg"
+                  width={28}
+                  height={28}
+                  className="sm:w-9 sm:h-9 rounded-lg"
                 />
               </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
                 Repeat UI
               </h1>
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:block">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-end">
+            <div className="hidden md:block">
               <Button
                 variant="outline"
                 onClick={openSearch}
-                className="w-64 justify-start gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200">
+                className="w-48 lg:w-64 justify-start gap-2 lg:gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-3 lg:px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200">
                 <Search className="h-4 w-4" />
-                <span className="flex-1 text-left">Search components...</span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-zinc-300 dark:border-zinc-600 bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                <span className="flex-1 text-left text-sm lg:text-base">
+                  Search components...
+                </span>
+                <kbd className="pointer-events-none inline-flex h-4 lg:h-5 select-none items-center gap-1 rounded border border-zinc-300 dark:border-zinc-600 bg-muted/50 px-1 lg:px-1.5 font-mono text-[9px] lg:text-[10px] font-medium text-muted-foreground">
                   <span className="text-xs">⌘</span>K
                 </kbd>
               </Button>
@@ -123,7 +125,7 @@ export function Header() {
             <Button
               variant="outline"
               size="sm"
-              className="lg:hidden rounded-xl border-zinc-300 dark:border-zinc-600"
+              className="md:hidden rounded-xl border-zinc-300 dark:border-zinc-600 px-2"
               onClick={openSearch}>
               <Search className="h-4 w-4" />
             </Button>
@@ -133,8 +135,10 @@ export function Header() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[80px]">
-                  {language.toUpperCase()}
+                  className="gap-1 sm:gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[60px] sm:min-w-[80px] px-2 sm:px-3">
+                  <span className="text-xs sm:text-sm">
+                    {language.toUpperCase()}
+                  </span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
@@ -157,8 +161,10 @@ export function Header() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[100px]">
-                  {style === "tailwind" ? "Tailwind" : "CSS"}
+                  className="gap-1 sm:gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[70px] sm:min-w-[100px] px-2 sm:px-3">
+                  <span className="text-xs sm:text-sm">
+                    {style === "tailwind" ? "TW" : "CSS"}
+                  </span>
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
@@ -182,10 +188,10 @@ export function Header() {
               href="https://github.com/hritik-sharmaa/repeat-ui"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-3 py-2 text-sm">
-              <Github className="h-4 w-4" />
+              className="hidden sm:flex items-center gap-1 sm:gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-2 sm:px-3 py-2 text-xs sm:text-sm">
+              <Github className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="hidden lg:inline">Star on GitHub</span>
-              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-2 py-1 rounded-md text-xs font-mono min-w-[2rem] text-center">
+              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md text-xs font-mono min-w-[1.5rem] sm:min-w-[2rem] text-center">
                 {isLoadingStars ? "..." : formatStarCount(starCount)}
               </span>
             </a>

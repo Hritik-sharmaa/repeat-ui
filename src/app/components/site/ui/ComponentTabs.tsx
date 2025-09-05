@@ -118,68 +118,68 @@ export default function ComponentTabs({
 
   return (
     <div className="w-full" data-component-tabs>
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6 overflow-x-auto pb-2">
         <button
           onClick={() => setActiveTab("preview")}
-          className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm  ${
+          className={`group flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-[6px] rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 border shadow-sm whitespace-nowrap ${
             activeTab === "preview"
               ? "bg-zinc-900 text-white dark:bg-white dark:text-black"
               : "tab-theme"
           }`}>
-          <Eye className="w-4 h-4 transition-transform group-hover:scale-110" />
+          <Eye className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
           <span>Preview</span>
         </button>
 
         <button
           onClick={() => setActiveTab("code")}
           data-code-tab
-          className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+          className={`group flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-[6px] rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 border shadow-sm whitespace-nowrap ${
             activeTab === "code"
               ? "bg-zinc-900 text-white dark:bg-white dark:text-black"
               : "tab-theme"
           }`}>
-          <Code className="w-4 h-4 transition-transform group-hover:scale-110" />
+          <Code className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
           <span>Code</span>
         </button>
 
         {cssCode && (
           <button
             onClick={() => setActiveTab("css")}
-            className={`group flex items-center space-x-2 px-4 py-[6px] rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm ${
+            className={`group flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-[6px] rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 border shadow-sm whitespace-nowrap ${
               activeTab === "css"
                 ? "bg-zinc-900 text-white dark:bg-white dark:text-black"
                 : "tab-theme"
             }`}>
-            <Code className="w-4 h-4 transition-transform group-hover:scale-110" />
+            <Code className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
             <span>CSS</span>
           </button>
         )}
       </div>
 
-      <div className="rounded-xl overflow-hidden shadow-sm dark:bg-zinc-900/20 bg-neutral-200">
+      <div className="rounded-lg sm:rounded-xl overflow-hidden shadow-sm dark:bg-zinc-900/20 bg-neutral-200">
         {activeTab === "preview" && (
-          <div className="relative p-8 dark:bg-zinc-900/20 min-h-[400px] flex items-center justify-center">
+          <div className="relative p-4 sm:p-8 dark:bg-zinc-900/20 min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
             <div className="w-full max-w-full flex justify-center">
               <div key={componentKey}>{component}</div>
             </div>
 
             <button
               onClick={handleReloadComponent}
-              className="absolute bottom-4 right-4 group flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 border shadow-sm tab-theme hover:tab-active-theme backdrop-blur-sm"
+              className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 border shadow-sm tab-theme hover:tab-active-theme backdrop-blur-sm"
               title="Reload component animation">
-              <RefreshCw className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" />
+              <RefreshCw className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:rotate-180 duration-300" />
             </button>
           </div>
         )}
 
         {(activeTab === "code" || activeTab === "css") && (
           <div className="relative">
-            <div className="absolute top-3 right-5 z-10">
+            <div className="absolute top-2 right-3 sm:top-3 sm:right-5 z-10">
               <button
                 onClick={() =>
                   handleCopy(activeTab === "css" ? cssCode || "" : sourceCode)
                 }
-                className="group flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-200 text-white backdrop-blur-sm bg-black dark:bg-neutral-100 dark:text-black">
+                className="group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg transition-all duration-200 text-white backdrop-blur-sm bg-black dark:bg-neutral-100 dark:text-black text-xs sm:text-sm">
                 {copied ? (
                   <>
                     <Check className="w-4 h-4 dark:text-green-400 text-green-400 transition-transform group-hover:scale-110" />

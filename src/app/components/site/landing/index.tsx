@@ -84,9 +84,9 @@ const Landing = () => {
           }}
         />
 
-        <section className="flex flex-col items-center justify-center min-h-[80vh] max-w-5xl mx-auto px-6 text-center pt-40 relative z-10">
+        <section className="flex flex-col items-center justify-center min-h-[80vh] max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-50 sm:pt-32 md:pt-40 relative z-10">
           <motion.div
-            className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm border border-gray-200/80 dark:border-gray-800 rounded-full text-sm font-medium mb-10 shadow-sm"
+            className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm border border-gray-200/80 dark:border-gray-800 rounded-full text-xs sm:text-sm font-medium mb-6 sm:mb-10 shadow-sm"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}>
@@ -105,16 +105,16 @@ const Landing = () => {
                 aria-hidden
               />
 
-              <div className="px-8 md:px-12 py-12 md:py-16">
+              <div className="px-4 sm:px-8 md:px-12 py-8 sm:py-12 md:py-16">
                 <motion.h1
-                  className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-3 font-cal-sans tracking-tight"
+                  className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3 font-cal-sans tracking-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1, duration: 0.6 }}>
                   Build Beautiful
                 </motion.h1>
                 <motion.h2
-                  className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-700 dark:text-gray-300 font-cal-sans tracking-tight"
+                  className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-gray-700 dark:text-gray-300 font-cal-sans tracking-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25, duration: 0.6 }}>
@@ -122,7 +122,7 @@ const Landing = () => {
                 </motion.h2>
 
                 <motion.p
-                  className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mt-6 leading-relaxed"
+                  className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mt-4 sm:mt-6 leading-relaxed px-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.6 }}>
@@ -132,13 +132,13 @@ const Landing = () => {
                 </motion.p>
 
                 <motion.div
-                  className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+                  className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.6 }}>
                   <motion.a
                     href="https://github.com/Hritik-sharmaa/repeat-ui"
-                    className="px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl relative z-30 inline-block border border-transparent dark:border-gray-200/60"
+                    className="px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl relative z-30 inline-block border border-transparent dark:border-gray-200/60 text-sm sm:text-base w-full sm:w-auto text-center"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{
@@ -154,7 +154,7 @@ const Landing = () => {
 
                   <motion.a
                     href="/components/button"
-                    className="px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl backdrop-blur-sm relative z-30 inline-block"
+                    className="px-6 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 rounded-2xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl backdrop-blur-sm relative z-30 inline-block text-sm sm:text-base w-full sm:w-auto text-center"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{
@@ -170,12 +170,12 @@ const Landing = () => {
                 </motion.div>
 
                 <motion.div
-                  className="mt-10 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-gray-800"
+                  className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-gray-800 gap-2 sm:gap-0 max-w-2xl mx-auto"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.6 }}>
-                  <div className="py-4 px-4">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <div className="py-3 sm:py-4 px-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                       <AnimatedCounter
                         from={0}
                         to={totalComponents}
@@ -187,8 +187,8 @@ const Landing = () => {
                       Ready Components
                     </div>
                   </div>
-                  <div className="py-4 px-4">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <div className="py-3 sm:py-4 px-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                       <AnimatedCounter
                         from={0}
                         to={totalCategories}
@@ -199,8 +199,8 @@ const Landing = () => {
                       Categories
                     </div>
                   </div>
-                  <div className="py-4 px-4">
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <div className="py-3 sm:py-4 px-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                       Copy & Go
                     </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -210,11 +210,11 @@ const Landing = () => {
                 </motion.div>
 
                 <motion.div
-                  className="mt-12 border-t border-gray-200 dark:border-gray-800 pt-8 flex items-center justify-center flex-wrap"
+                  className="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 pt-6 sm:pt-8 flex items-center justify-center flex-wrap"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 0.6 }}>
-                  <div className="flex items-center justify-center gap-8 opacity-60">
+                  <div className="flex items-center justify-center gap-4 sm:gap-8 opacity-60 flex-wrap">
                     <motion.div
                       className="group flex items-center gap-2"
                       whileHover={{ scale: 1.1, opacity: 1 }}

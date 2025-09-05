@@ -50,7 +50,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         });
       });
 
-      return results.slice(0, 10); 
+      return results.slice(0, 10);
     }
 
     const results: SearchResult[] = [];
@@ -89,7 +89,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
       });
     });
 
-    return results.slice(0, 10); 
+    return results.slice(0, 10);
   }, [query, flavor]);
 
   useEffect(() => {
@@ -149,7 +149,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] px-4"
+        className="fixed inset-0 z-50 flex items-start justify-center pt-[5vh] sm:pt-[10vh] px-2 sm:px-4"
         onClick={onClose}>
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
@@ -158,16 +158,16 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: -20 }}
           transition={{ type: "spring", duration: 0.4 }}
-          className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden"
+          className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden mx-2"
           onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center gap-3 p-4 border-b border-zinc-800">
-            <Search className="w-5 h-5 text-zinc-400" />
+          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-zinc-800">
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-400" />
             <Input
               ref={(input) => input?.focus()}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search components..."
-              className="flex-1 border-none bg-transparent text-white placeholder:text-zinc-400 focus:outline-none focus:ring-0"
+              className="flex-1 border-none bg-transparent text-white placeholder:text-zinc-400 focus:outline-none focus:ring-0 text-sm sm:text-base"
             />
             <Button
               variant="ghost"

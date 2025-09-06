@@ -491,6 +491,24 @@ export const componentRegistry = {
             "ts-tailwind": true,
         },
     },
+    "commons-accordian": {
+        name: "Accordion",
+        category: "commons",
+        description: "A collapsible accordion component for organizing content",
+        dependencies: [],
+        dateAdded: "2025-09-06",
+        files: {
+            component: "preview",
+            styles: "style.css",
+            demo: "demo",
+        },
+        variants: {
+            "js-css": true,
+            "js-tailwind": true,
+            "ts-css": true,
+            "ts-tailwind": true,
+        },
+    },
 };
 export const getComponentsList = () => Object.keys(componentRegistry);
 export const getComponentInfo = (name) => componentRegistry[name];

@@ -45,18 +45,33 @@ Open [http://localhost:3000](http://localhost:3000) to see the component library
 
 - Simple, Sketchy, Pulse, Rotation
 - Fill, Letter, Creep, Layers
-- Wiggle, Bubble 
+- Wiggle, Bubble
 
 ### Cards
 
 - Profile Card, Pricing Card
-- 3D Card 
+- 3D Card
 
 ### Text Effects
 
 - Flipping Text, Typing Text, Flow Text
 - Text Shadow, Pop Text
-- Split Reveal Text 
+- Split Reveal Text
+
+### Grid Layouts
+
+- 2 Column Bento Grid, 3 Column Bento Grid
+- Pinterest Grid
+
+### Carousels
+
+- Simple Carousel, Modern Carousel
+- Loop Deck Carousel
+
+### Commons
+
+- Search Bar with Hotkey, Document Upload Modal
+- **Accordion** _(NEW)_ - Collapsible accordion component
 
 ## 🛠️ CLI Usage
 
@@ -69,6 +84,9 @@ repeat-ui add button-simple
 
 # Add with specific variant
 repeat-ui add button-simple --variant ts-tailwind
+
+# Add the new accordion component
+repeat-ui add commons-accordian --variant ts-css
 
 # Install to custom directory
 repeat-ui add card-profile --output ./src/components

@@ -114,7 +114,7 @@ function filterThirdPartyImports(imports: string[]): string[] {
 }
 
 function getBasePackageName(importPath: string): string {
-  // Handle special cases like motion/react -> motion
+  // Handle special cases
   const specialMappings: Record<string, string> = {
     "motion/react": "motion",
     "framer-motion": "framer-motion",
@@ -124,11 +124,13 @@ function getBasePackageName(importPath: string): string {
     return specialMappings[importPath];
   }
 
+  // Handle scoped packages (e.g., @radix-ui/react-dropdown-menu)
   if (importPath.startsWith("@")) {
     const parts = importPath.split("/");
     return parts.length >= 2 ? `${parts[0]}/${parts[1]}` : importPath;
   }
 
+  // Handle regular packages (e.g., react-icons/fa -> react-icons)
   return importPath.split("/")[0];
 }
 

@@ -198,6 +198,11 @@ export const categories: Category[] = [
             "2025-09-04",
             "Search bar component with keyboard shortcuts (Ctrl+K) and modal support"
           ),
+          createVariant(
+            "accordian",
+            "2025-09-04",
+            "Accordion component with smooth expand/collapse animations"
+          ),
         ],
       },
     ],

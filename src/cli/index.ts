@@ -117,6 +117,12 @@ program
         options.variant
       );
 
+      console.log(
+        chalk.blue("Debug - Registry dependencies:"),
+        componentInfo.dependencies
+      );
+      console.log(chalk.blue("Debug - Analyzed dependencies:"), dependencies);
+
       if (Object.keys(files).length === 0) {
         spinner.fail(
           chalk.red(

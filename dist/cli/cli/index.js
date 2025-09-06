@@ -78,6 +78,8 @@ program
         const spinner = ora("Fetching component files...").start();
         // Fetch component files
         const { files, dependencies } = await fetchComponentFiles(selectedComponent, componentInfo, options.variant);
+        console.log(chalk.blue("Debug - Registry dependencies:"), componentInfo.dependencies);
+        console.log(chalk.blue("Debug - Analyzed dependencies:"), dependencies);
         if (Object.keys(files).length === 0) {
             spinner.fail(chalk.red("No component files found! Please check if the component exists."));
             process.exit(1);

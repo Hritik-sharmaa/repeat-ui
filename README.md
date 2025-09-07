@@ -1,6 +1,6 @@
 # Repeat UI
 
-A modern, customizable React component library with live editing and copy-paste integration. Build UIs faster with beautiful, ready-to-use components.
+A modern, customizable Next.js & React component library with Nice components and copy-paste integration. Build UIs faster with beautiful, ready-to-use components.
 
 ## ✨ Features
 

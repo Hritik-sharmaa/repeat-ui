@@ -64,6 +64,13 @@ export const categories = [
                 ],
             },
             {
+                name: "cursor",
+                variants: [
+                    createVariant("trail", "2025-09-12", "Custom cursor with trailing effect and line following cursor"),
+                    createVariant("dot", "2025-09-12", "Simple custom dot cursor with smooth following animation"),
+                ],
+            },
+            {
                 name: "commons",
                 variants: [
                     createVariant("document-upload-modal", "2025-09-04", "Document upload modal with drag and drop support"),

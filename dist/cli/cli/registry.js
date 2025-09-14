@@ -454,6 +454,43 @@ export const componentRegistry = {
             "ts-tailwind": true,
         },
     },
+    // Cursor Components
+    "cursor-dot": {
+        name: "Dot Cursor",
+        category: "cursor",
+        description: "A custom cursor with dot animation effects",
+        dependencies: [],
+        dateAdded: "2025-09-14",
+        files: {
+            component: "preview",
+            styles: "style.css",
+            demo: "demo",
+        },
+        variants: {
+            "js-css": true,
+            "js-tailwind": true,
+            "ts-css": true,
+            "ts-tailwind": true,
+        },
+    },
+    "cursor-trail": {
+        name: "Trail Cursor",
+        category: "cursor",
+        description: "A cursor with trailing particle effects",
+        dependencies: [],
+        dateAdded: "2025-09-14",
+        files: {
+            component: "preview",
+            styles: "style.css",
+            demo: "demo",
+        },
+        variants: {
+            "js-css": true,
+            "js-tailwind": true,
+            "ts-css": true,
+            "ts-tailwind": true,
+        },
+    },
     // Commons Components
     "commons-search-bar": {
         name: "Search Bar with Hotkey",

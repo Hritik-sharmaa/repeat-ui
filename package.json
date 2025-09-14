@@ -1,6 +1,6 @@
 {
   "name": "@hritik-sharmaa/repeat-ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "A collection of beautiful UI components with CLI installation",
   "keywords": [
@@ -15,11 +15,11 @@
     "type": "git",
     "url": "https://github.com/hritik-sharmaa/repeat-ui.git"
   },
-  "homepage": "https://your-website.com",
+  "homepage": "https://repeatui.vercel.app/",
   "bugs": {
     "url": "https://github.com/hritik-sharmaa/repeat-ui/issues"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "hritik sharma <hritiksharma2004@gmail.com>",
   "license": "MIT",
   "files": [
     "dist/cli/**/*",

@@ -1,0 +1,15 @@
+* {
+  cursor: none !important;
+}
+
+.dot-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  border-radius: 50%;
+  background-color: white;
+  transition: background-color 0.25s ease;
+}

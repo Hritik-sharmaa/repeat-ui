@@ -48,6 +48,9 @@ export async function fetchComponentFiles(componentKey, component, variant) {
     else if (componentKey.startsWith("carousel-")) {
         componentFolderName = componentKey.replace("carousel-", "");
     }
+    else if (componentKey.startsWith("cursor-")) {
+        componentFolderName = componentKey.replace("cursor-", "");
+    }
     else if (componentKey.startsWith("commons-")) {
         componentFolderName = componentKey.replace("commons-", "");
     }

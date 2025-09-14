@@ -51,6 +51,8 @@ export async function fetchComponentFiles(
     componentFolderName = componentKey.replace("grid-", "");
   } else if (componentKey.startsWith("carousel-")) {
     componentFolderName = componentKey.replace("carousel-", "");
+  } else if (componentKey.startsWith("cursor-")) {
+    componentFolderName = componentKey.replace("cursor-", "");
   } else if (componentKey.startsWith("commons-")) {
     componentFolderName = componentKey.replace("commons-", "");
   } else {

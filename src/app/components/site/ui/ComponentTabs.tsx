@@ -158,7 +158,9 @@ export default function ComponentTabs({
 
       <div className="rounded-lg sm:rounded-xl overflow-hidden shadow-sm dark:bg-zinc-900/20 bg-neutral-200">
         {activeTab === "preview" && (
-          <div className="relative p-4 sm:p-8 dark:bg-zinc-900/20 min-h-[300px] sm:min-h-[400px] flex items-center justify-center" data-preview-active>
+          <div
+            className="relative p-4 sm:p-8 dark:bg-zinc-900/20 min-h-[300px] sm:min-h-[400px] flex items-center justify-center"
+            data-preview-active>
             <div className="w-full max-w-full flex justify-center">
               <div key={componentKey}>{component}</div>
             </div>

@@ -78,7 +78,7 @@ const TrailCursor = ({ trailLength = 20, trailColor = "#3b82f6" }) => {
   return (
     <>
       <style jsx global>{`
-        * {
+        [data-preview-active] * {
           cursor: none !important;
         }
       `}</style>

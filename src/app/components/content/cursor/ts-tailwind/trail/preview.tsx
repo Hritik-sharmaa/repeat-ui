@@ -96,7 +96,7 @@ const TrailCursor: React.FC<CustomCursorProps> = ({
   return (
     <>
       <style jsx global>{`
-        * {
+        [data-preview-active] * {
           cursor: none !important;
         }
       `}</style>

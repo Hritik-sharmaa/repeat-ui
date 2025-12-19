@@ -41,7 +41,7 @@ const DotCursor = ({ size = 10, smoothness = 0.15 }: CursorProps) => {
   return (
     <>
       <style jsx global>{`
-        * {
+        [data-preview-active] * {
           cursor: none !important;
         }
       `}</style>

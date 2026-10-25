@@ -10,7 +10,10 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  { ignores: [".next/**", "public/r/**", "src/registry/__generated__/**", "drafts/**"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Registry components are copied into any React app, so they cannot use next/image.
+  { files: ["src/registry/**"], rules: { "@next/next/no-img-element": "off" } },
 ];
 
 export default eslintConfig;

@@ -1,34 +1,9 @@
-"use client";
-
-import React, { useState, useEffect, Suspense } from "react";
-import dynamic from "next/dynamic";
-import { Header } from "./site/navs/header";
-import Sidebar from "./site/navs/Sidebar";
-import MobileNav from "./site/navs/MobileNav";
+import { Suspense } from "react";
+import { Header } from "@/site/navs/header";
+import Sidebar from "@/site/navs/Sidebar";
+import MobileNav from "@/site/navs/MobileNav";
 
 const ComponentsPage = () => {
-  const [selectedPath] = useState<string | null>(null);
-  const [LoadedComponent, setLoadedComponent] =
-    useState<React.ComponentType | null>(null);
-
-  useEffect(() => {
-    if (!selectedPath) {
-      setLoadedComponent(null);
-      return;
-    }
-    const DynamicComponent = dynamic(
-      () => import(`./content/${selectedPath}`),
-      {
-        loading: () => (
-          <div className="text-sm text-zinc-500">Loading component...</div>
-        ),
-        ssr: false,
-      }
-    );
-
-    setLoadedComponent(() => DynamicComponent);
-  }, [selectedPath]);
-
   return (
     <div>
       <MobileNav />
@@ -45,16 +20,9 @@ const ComponentsPage = () => {
               <Sidebar />
             </aside>
             <main className="flex-1 p-4 sm:p-6 overflow-y-auto h-screen lg:ml-56">
-              <div>
-                <h1>{selectedPath?.replace("/", " ")}</h1>
-              </div>
-              {LoadedComponent ? (
-                <LoadedComponent />
-              ) : (
-                <p className="text-sm text-zinc-500">
-                  Select a component to preview it here.
-                </p>
-              )}
+              <p className="text-sm text-zinc-500">
+                Select a component to preview it here.
+              </p>
             </main>
           </div>
         </div>

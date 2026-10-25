@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "verbatimModuleSyntax": true,
+    "incremental": false
+  },
+  "include": ["next-env.d.ts", "src/registry/**/*.ts", "src/registry/**/*.tsx"],
+  "exclude": ["src/registry/__generated__"]
+}

@@ -1,70 +1,33 @@
 {
-  "name": "@hritik-sharmaa/repeat-ui",
-  "version": "0.2.1",
-  "private": false,
-  "description": "A collection of beautiful UI components with CLI installation",
-  "keywords": [
-    "react",
-    "ui",
-    "components",
-    "tailwind",
-    "typescript",
-    "cli"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hritik-sharmaa/repeat-ui.git"
-  },
-  "homepage": "https://repeatui.vercel.app/",
-  "bugs": {
-    "url": "https://github.com/hritik-sharmaa/repeat-ui/issues"
-  },
+  "name": "repeat-ui-site",
+  "private": true,
+  "description": "Website and component registry for Repeat UI. The CLI lives in cli/.",
   "author": "hritik sharma <hritiksharma2004@gmail.com>",
   "license": "MIT",
-  "files": [
-    "dist/cli/**/*",
-    "src/cli/**/*",
-    "README.md"
-  ],
-  "bin": {
-    "repeat-ui": "dist/cli/cli/index.js",
-    "rui": "dist/cli/cli/index.js"
-  },
   "scripts": {
+    "registry": "tsc -p tsconfig.registry.json --noEmit && tsx scripts/build-registry.ts",
+    "predev": "npm run registry",
     "dev": "next dev --turbo",
+    "prebuild": "npm run registry",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "build:cli": "tsc --project tsconfig.cli.json",
-    "cli:dev": "tsx src/cli/index.ts",
-    "prepublishOnly": "npm run build:cli",
-    "publish:cli": "npm publish --access public"
+    "lint": "eslint .",
+    "test": "npm run registry && npm test --prefix cli"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-slot": "^1.2.3",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.2.0",
-    "chalk": "^5.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "commander": "^11.0.0",
-    "css-loader": "^7.1.2",
-    "framer-motion": "^12.23.12",
-    "fs": "^0.0.1-security",
-    "fs-extra": "^11.1.0",
     "gsap": "^3.13.0",
-    "inquirer": "^9.2.0",
-    "lodash": "^4.17.21",
     "lucide-react": "^0.525.0",
     "motion": "^12.23.12",
     "next": "^16.1.0",
     "next-themes": "^0.4.6",
-    "node-fetch": "^3.3.0",
-    "ora": "^7.0.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-highlight": "^0.15.0",
     "react-icons": "^5.5.0",
     "react-syntax-highlighter": "^15.6.1",
     "tailwind-merge": "^3.3.1",
@@ -72,19 +35,16 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@hritik-sharmaa/repeat-ui": "^0.1.6",
     "@tailwindcss/postcss": "^4",
-    "@types/fs-extra": "^11.0.0",
-    "@types/inquirer": "^9.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/react-highlight": "^0.12.8",
     "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4",
-    "ts-node": "^10.9.2",
+    "ts-blank-space": "^0.9.0",
     "tsx": "^4.0.0",
     "typescript": "^5"
   }

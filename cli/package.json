@@ -1,0 +1,45 @@
+{
+  "name": "@hritik-sharmaa/repeat-ui",
+  "version": "0.3.0",
+  "description": "Add Repeat UI components to your React project",
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "tailwind",
+    "typescript",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hritik-sharmaa/repeat-ui.git",
+    "directory": "cli"
+  },
+  "homepage": "https://repeatui.vercel.app/",
+  "bugs": {
+    "url": "https://github.com/hritik-sharmaa/repeat-ui/issues"
+  },
+  "author": "hritik sharma <hritiksharma2004@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "repeat-ui": "index.js",
+    "rui": "index.js"
+  },
+  "files": [
+    "index.js",
+    "registry.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0",
+    "ora": "^7.0.0"
+  }
+}

@@ -1,13 +1,17 @@
 import { notFound } from "next/navigation";
-import { readFile } from "fs/promises";
-import { join } from "path";
-import ComponentTabs from "../../../components/site/ui/ComponentTabs";
-import PropTable from "../../site/ui/PropTable";
-import InstallationGuide from "../../site/ui/InstallationGuide";
-import { analyzeComponentDependencies } from "@/lib/dependencyAnalyzer";
+import ComponentTabs from "@/site/ui/ComponentTabs";
+import PropTable from "@/site/ui/PropTable";
+import InstallationGuide from "@/site/ui/InstallationGuide";
+import ScrollToTopButton from "@/site/ui/ScrollToTopButton";
 import { categories } from "@/data/categories";
 import { generateComponentMetadata } from "@/lib/faviconGenerator";
-import ScrollToTopButton from "../../site/ui/ScrollToTopButton";
+
+const FLAVORS = ["ts-tailwind", "ts-css", "js-tailwind", "js-css"];
+
+interface RegistryItem {
+  dependencies: string[];
+  files: { path: string; content: string }[];
+}
 
 export async function generateMetadata({
   params,
@@ -36,26 +40,26 @@ export default async function ComponentVariantPage({
 }) {
   const category = (await params)?.category?.toLowerCase();
   const variant = (await params)?.variant?.toLowerCase();
-
   const flavor = (await searchParams)?.flavor || "ts-tailwind";
-  const [lang, style] = flavor.split("-");
 
-  if (!category || !variant) return notFound();
+  const variantData = categories
+    .flatMap((cat) => cat.subcategories)
+    .find((sub) => sub.name.toLowerCase() === category)
+    ?.variants.find((v) => v.name.toLowerCase() === variant);
 
-  const categoryData = categories.find((cat) =>
-    cat.subcategories.some((sub) => sub.name.toLowerCase() === category)
-  );
-  const subcategoryData = categoryData?.subcategories.find(
-    (sub) => sub.name.toLowerCase() === category
-  );
-  const variantData = subcategoryData?.variants.find(
-    (v) => v.name.toLowerCase() === variant
-  );
-  const description = variantData?.description;
+  if (!category || !variant || !variantData || !FLAVORS.includes(flavor)) {
+    notFound();
+  }
 
-  const DemoModule = await import(
-    `@/app/components/content/${category}/${flavor}/${variant}/demo`
-  );
+  // Both files exist for every listed component and flavor, or scripts/build-registry.ts fails the build.
+  // shortcut: the JSON is generated when dev/build starts, so the Code tab is stale while you edit a
+  // component in dev; rerun `npm run registry` to refresh it.
+  const style = flavor.split("-")[1];
+  const DemoModule = await import(`@/registry/${category}/${variant}/${style}/demo`);
+  const item: RegistryItem = (
+    await import(`@/registry/__generated__/${flavor}/${category}-${variant}.json`)
+  ).default;
+
   const Demo = DemoModule.default;
   let propData = DemoModule.propData || DemoModule.default.propData;
 
@@ -64,83 +68,39 @@ export default async function ComponentVariantPage({
     propData = DemoModule.default?.propData || [];
   }
 
-  let sourceCode = "";
-  let fileName = "demo.tsx";
-  const extensions = lang === "ts" ? ["tsx", "ts"] : ["jsx", "js"];
+  const preview = item.files.find((f) => f.path.startsWith("preview."))!;
+  const css = item.files.find((f) => f.path.endsWith(".css"));
 
-  try {
-    for (const ext of extensions) {
-      try {
-        const filePath = join(
-          process.cwd(),
-          "src/app/components/content",
-          category,
-          flavor,
-          variant,
-          `preview.${ext}`
-        );
-        sourceCode = await readFile(filePath, "utf-8");
-        fileName = `preview.${ext}`;
-        break;
-      } catch {}
-    }
+  return (
+    <main className="p-6 max-w-7xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-6xl font-bold capitalize mb-4 font-cal-sans">
+          {variant.replace(/-/g, " ")}
+        </h1>
+        {variantData.description && (
+          <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-4">
+            {variantData.description}
+          </p>
+        )}
+      </div>
 
-    if (!sourceCode) {
-      sourceCode = "// Source code not available";
-      fileName = "preview";
-    }
-    let cssCode: string | null = null;
-    if (style === "css") {
-      try {
-        const cssPath = join(
-          process.cwd(),
-          "src/app/components/content",
-          category,
-          flavor,
-          variant,
-          "style.css"
-        );
-        cssCode = await readFile(cssPath, "utf-8");
-      } catch {
-        cssCode = "// CSS file not found";
-      }
-    }
-    const dependencies = await analyzeComponentDependencies(sourceCode);
+      <ComponentTabs
+        component={<Demo />}
+        sourceCode={preview.content}
+        fileName={preview.path}
+        cssCode={css?.content ?? null}
+      />
 
-    return (
-      <main className="p-6 max-w-7xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-6xl font-bold capitalize mb-4 font-cal-sans">
-            {variant.replace(/-/g, " ")}
-          </h1>
-          {description && (
-            <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-4">
-              {description}
-            </p>
-          )}
-        </div>
+      <InstallationGuide
+        componentName={`${category}-${variant}`}
+        variant={flavor}
+        dependencies={item.dependencies}
+      />
+      <div className="mb-28">
+        <PropTable data={propData} />
+      </div>
 
-        <ComponentTabs
-          component={<Demo />}
-          sourceCode={sourceCode}
-          fileName={fileName}
-          cssCode={cssCode}
-        />
-
-        <InstallationGuide
-          componentName={`${category}-${variant}`}
-          variant={flavor}
-          dependencies={dependencies}
-        />
-        <div className="mb-28">
-          <PropTable data={propData} />
-        </div>
-
-        <ScrollToTopButton />
-      </main>
-    );
-  } catch (err) {
-    console.error("Component not found:", err);
-    return notFound();
-  }
+      <ScrollToTopButton />
+    </main>
+  );
 }

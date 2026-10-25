@@ -9,102 +9,66 @@ A modern, customizable Next.js & React component library with Nice components an
 - 🔄 **Multiple Variants**: JavaScript/TypeScript with CSS/Tailwind options
 - 🆕 **New Component Tracking**: Automatic "NEW" tags for recently added components
 - 📱 **Responsive Design**: Components work seamlessly across all devices
-- 🎭 **Animation Ready**: Built with Framer Motion for smooth interactions
-
-## 🚀 Quick Start
-
-### Installation
-
-```bash
-# Install the CLI globally
-npm install -g @hritik-sharmaa/repeat-ui
-
-# Or use directly with npx
-npx @hritik-sharmaa/repeat-ui add button-simple
-```
-
-### Development
-
-```bash
-# Clone the repository
-git clone https://github.com/hritik-sharmaa/repeat-ui.git
-cd repeat-ui
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see the component library.
-
-## 📦 Available Components
-
-### Buttons
-
-- Simple, Sketchy, Pulse, Rotation
-- Fill, Letter, Creep, Layers
-- Wiggle, Bubble
-
-### Cards
-
-- Profile Card, Pricing Card
-- 3D Card
-
-### Text Effects
-
-- Flipping Text, Typing Text, Flow Text
-- Text Shadow, Pop Text
-- Split Reveal Text
-
-### Grid Layouts
-
-- 2 Column Bento Grid, 3 Column Bento Grid
-- Pinterest Grid
-
-### Carousels
-
-- Simple Carousel, Modern Carousel
-- Loop Deck Carousel
-
-### Commons
-
-- Search Bar with Hotkey, Document Upload Modal
-- **Accordion** _(NEW)_ - Collapsible accordion component
+- 🎭 **Animation Ready**: Built with Motion for smooth interactions
 
 ## 🛠️ CLI Usage
 
+Browse components at [repeatui.vercel.app](https://repeatui.vercel.app/), or list them:
+
 ```bash
-# List all available components
-repeat-ui list
+npx @hritik-sharmaa/repeat-ui list
 
-# Add a component to your project
-repeat-ui add button-simple
+# Adds components/button-simple/{preview.tsx,demo.tsx} and installs any packages it needs
+npx @hritik-sharmaa/repeat-ui add button-simple
 
-# Add with specific variant
-repeat-ui add button-simple --variant ts-tailwind
+# Variants: ts-tailwind (default), ts-css, js-tailwind, js-css
+npx @hritik-sharmaa/repeat-ui add card-profile-card --variant js-css
 
-# Add the new accordion component
-repeat-ui add commons-accordian --variant ts-css
+# Other options: --output src/components, --overwrite, --no-deps
+```
 
-# Install to custom directory
-repeat-ui add card-profile --output ./src/components
+Then use it: `import ButtonSimple from "@/components/button-simple/preview";`
+
+The CLI picks npm, pnpm, yarn or bun from your lockfile.
+
+## 🚀 Development
+
+```bash
+git clone https://github.com/hritik-sharmaa/repeat-ui.git
+cd repeat-ui
+npm install
+npm run dev        # http://localhost:3000
+npm test           # installs every component x variant with the CLI and checks the result
 ```
 
 ## 🏗️ Project Structure
 
 ```
 src/
-├── app/                    # Next.js app directory
-│   ├── components/         # All UI components
-│   │   ├── content/        # Component implementations
-│   │   └── site/           # Site layout components
-│   └── context/           # React contexts
-├── cli/                   # CLI tool implementation
-├── data/                  # Component metadata
-└── lib/                   # Utility functions
+├── registry/                 # THE components, one folder each
+│   └── button/simple/
+│       ├── css/              # preview.tsx, demo.tsx, style.css
+│       └── tailwind/         # preview.tsx, demo.tsx
+├── data/categories.ts        # the one list of components (name, date, description)
+├── app/                      # website routes
+├── site/                     # website UI (nav, tabs, install guide)
+└── lib/
+scripts/build-registry.ts     # checks every component and builds the registry JSON
+cli/                          # the npm package @hritik-sharmaa/repeat-ui
+drafts/                       # unfinished components, not published
 ```
+
+You write each component in TypeScript only. The JavaScript variants are generated from it.
+
+`npm run dev` and `npm run build` first run `npm run registry`, which:
+
+- type-checks every component (type imports must use `import type`, or the JS output breaks)
+- fails if a component imports `next/*` or `@/...` (those only work inside this site), imports a file that
+  doesn't exist, has a file nothing imports, or is missing from `categories.ts`
+- finds each component's npm packages from its imports
+- writes `public/r/<variant>/<name>.json` (served to the CLI) and `src/registry/__generated__/` (read by the site)
+
+While `npm run dev` is running, rerun `npm run registry` to refresh the Code tab after editing a component.
 
 ## 🤝 Contributing
 
@@ -117,23 +81,28 @@ src/
 
 ### Adding New Components
 
-When adding new components, make sure to:
+1. Create `src/registry/<category>/<name>/css/` and `.../tailwind/`, each with `preview.tsx` (the component)
+   and `demo.tsx` (default export renders it; export `propData` for the props table). The CSS one also
+   gets `style.css`, imported from `preview.tsx`.
+2. Add `createVariant("<name>", "<today's date>", "<description>")` to `src/data/categories.ts`.
+3. Run `npm run registry`. It tells you exactly what is wrong, if anything.
 
-1. Update `src/data/categories.ts` with current date
-2. Add entry to `src/cli/registry.ts`
-3. Follow the existing file structure
-4. Include all variant types (js-css, js-tailwind, ts-css, ts-tailwind)
+Use plain `<img>`, not `next/image`: components are copied into any React app.
+
+### Releasing
+
+1. Merge to `main` so Vercel deploys the site. The CLI downloads components from the site's `/r/` folder.
+2. Then publish the CLI: bump `version` in `cli/package.json`, and run `npm publish --access public` in `cli/`.
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
 
 ## 🔗 Links
 
-- [Documentation](./docs/)
-- [Component Examples](http://localhost:3000/components)
+- [Website](https://repeatui.vercel.app/)
 - [GitHub Repository](https://github.com/hritik-sharmaa/repeat-ui)
 
 ---
 
-Built with ❤️ using Next.js, TypeScript, Tailwind CSS, and Framer Motion.
+Built with ❤️ using Next.js, TypeScript, Tailwind CSS, and Motion.

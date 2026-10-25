@@ -231,17 +231,17 @@
   cursor: not-allowed;
 }
 .animate-spin {
-  animation: spin 1s linear infinite;
+  animation: rui-spin 1s linear infinite;
 }
-@keyframes spin {
+@keyframes rui-spin {
   to {
     transform: rotate(360deg);
   }
 }
 .animate-pulse {
-  animation: pulse 1s infinite;
+  animation: rui-pulse 1s infinite;
 }
-@keyframes pulse {
+@keyframes rui-pulse {
   0%,
   100% {
     opacity: 1;

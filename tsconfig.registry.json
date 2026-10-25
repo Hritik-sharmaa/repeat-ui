@@ -2,8 +2,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "verbatimModuleSyntax": true,
-    "incremental": false
+    "incremental": false,
+    // Type-check like a plain React app: no Next.js globals (styled-jsx) and no Node types (NodeJS.*).
+    "types": [],
+    "plugins": []
   },
-  "include": ["next-env.d.ts", "src/registry/**/*.ts", "src/registry/**/*.tsx"],
+  "include": ["src/registry/**/*.ts", "src/registry/**/*.tsx"],
   "exclude": ["src/registry/__generated__"]
 }

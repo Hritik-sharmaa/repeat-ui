@@ -84,7 +84,11 @@ You write each component in TypeScript only. The JavaScript variants are generat
 
 `npm run dev` and `npm run build` first run `npm run registry`, which:
 
-- type-checks every component (type imports must use `import type`, or the JS output breaks)
+- type-checks every component like a plain React app would: no Next.js globals (so no `<style jsx>`; use
+  `<style>`), no Node types (use `ReturnType<typeof setTimeout>`, not `NodeJS.Timeout`), and type imports
+  must use `import type` or the JS output breaks
+- fails on `@keyframes` names without the `rui-` prefix; keyframes are global, and names like `pulse` or `spin`
+  would override Tailwind's own animations in the user's app
 - fails if a component imports `next/*` or `@/...` (those only work inside this site), imports a file that
   doesn't exist, has a file nothing imports, or is missing from `categories.ts`
 - finds each component's npm packages from its imports

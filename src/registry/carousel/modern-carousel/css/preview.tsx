@@ -30,7 +30,7 @@ const ModernCarousel = ({
   const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -99,7 +99,7 @@ const ModernCarousel = ({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {items.map((item, idx) => {
             const isActive = idx === currentIndex;
             const isPrev =

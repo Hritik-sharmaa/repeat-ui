@@ -81,6 +81,10 @@ async function buildFlavorStyle(dir: string) {
   const used = new Set(["preview.tsx", "demo.tsx"]);
 
   for (const { path, content } of files) {
+    // Keyframes are global, so a plain name like "pulse" or "spin" would override Tailwind's own.
+    for (const [, name] of content.matchAll(/@keyframes\s+([\w-]+)/g)) {
+      if (!name.startsWith("rui-")) errors.push(`${dir}/${path}: rename @keyframes ${name} to rui-${name}`);
+    }
     if (!/\.tsx?$/.test(path)) continue;
     for (const [, spec] of content.matchAll(IMPORT_RE)) {
       if (spec.startsWith(".")) {

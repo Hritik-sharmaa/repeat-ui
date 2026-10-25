@@ -10,7 +10,7 @@ const Pulse = ({
 }: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .pulse-button-tailwind:before {
           content: "";
           position: absolute;
@@ -32,10 +32,10 @@ const Pulse = ({
         .pulse-button-tailwind:hover:before {
           width: 300px;
           height: 300px;
-          animation: pulse 1.5s infinite;
+          animation: rui-pulse 1.5s infinite;
         }
 
-        @keyframes pulse {
+        @keyframes rui-pulse {
           0%,
           100% {
             transform: translate(-50%, -50%) scale(1);

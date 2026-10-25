@@ -24,7 +24,7 @@ const LoopDeck = ({
   autoPlayInterval = 5000,
 }: LoopDeckProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {

@@ -87,7 +87,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 16px;
-  animation: fadeIn 0.2s ease;
+  animation: rui-fadeIn 0.2s ease;
 }
 
 .modal-input-wrapper {
@@ -125,7 +125,7 @@
   height: 20px;
 }
 
-@keyframes fadeIn {
+@keyframes rui-fadeIn {
   from {
     opacity: 0;
     transform: translateY(-10px);

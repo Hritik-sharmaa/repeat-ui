@@ -26,8 +26,8 @@ const Wiggle = ({
         {children}
       </button>
 
-      <style jsx>{`
-        @keyframes bounce-middle {
+      <style>{`
+        @keyframes rui-bounce-middle {
           0% {
             transform: scale(1, 1) rotate(0deg);
           }
@@ -49,7 +49,7 @@ const Wiggle = ({
         }
 
         .animate-bounce-middle {
-          animation: bounce-middle 1s ease forwards;
+          animation: rui-bounce-middle 1s ease forwards;
         }
       `}</style>
     </div>

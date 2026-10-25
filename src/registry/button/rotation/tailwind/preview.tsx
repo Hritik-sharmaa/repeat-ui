@@ -11,7 +11,7 @@ const Rotation = ({
 }: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .rotation-button {
           border: none !important;
         }
@@ -36,7 +36,7 @@ const Rotation = ({
           border-radius: 10px;
           opacity: 0;
           transition: opacity 0.3s ease;
-          animation: rotate 3s linear infinite;
+          animation: rui-rotate 3s linear infinite;
           animation-play-state: paused;
           z-index: 0;
         }
@@ -58,7 +58,7 @@ const Rotation = ({
           animation-play-state: running;
         }
 
-        @keyframes rotate {
+        @keyframes rui-rotate {
           0% {
             transform: rotate(0deg);
           }

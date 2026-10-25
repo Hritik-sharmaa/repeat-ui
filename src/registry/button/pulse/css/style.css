@@ -39,7 +39,7 @@
   .pulse-button:hover:before {
     width: 300px;
     height: 300px;
-    animation: pulse 1.5s infinite;
+    animation: rui-pulse 1.5s infinite;
   }
   
   .pulse-button:hover {
@@ -48,7 +48,7 @@
     transform: translateY(-2px);
   }
   
-  @keyframes pulse {
+  @keyframes rui-pulse {
     0%,
     100% {
       transform: translate(-50%, -50%) scale(1);

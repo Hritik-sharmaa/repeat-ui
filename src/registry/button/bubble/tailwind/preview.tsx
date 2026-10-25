@@ -33,8 +33,8 @@ const Bubble = ({
   const clearBubbles = () => setBubbles([]);
   return (
     <>
-      <style jsx global>{`
-        @keyframes rise {
+      <style>{`
+        @keyframes rui-rise {
           0% {
             transform: translateY(0) scale(1);
             opacity: 0.7;
@@ -46,7 +46,7 @@ const Bubble = ({
         }
 
         .animate-rise {
-          animation-name: rise;
+          animation-name: rui-rise;
           animation-timing-function: ease-out;
           animation-fill-mode: forwards;
         }

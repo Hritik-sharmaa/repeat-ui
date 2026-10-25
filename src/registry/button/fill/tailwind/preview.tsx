@@ -7,7 +7,7 @@ const Fill = ({
 }: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .fill-button::before {
           content: "";
           position: absolute;

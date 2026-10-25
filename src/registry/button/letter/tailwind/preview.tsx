@@ -10,8 +10,8 @@ const Letter = ({
 }: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
-      <style jsx global>{`
-        @keyframes floatUp {
+      <style>{`
+        @keyframes rui-floatUp {
           0% {
             transform: translateY(0);
           }
@@ -24,7 +24,7 @@ const Letter = ({
         }
 
         .hover-float-up:hover .letter {
-          animation: floatUp 0.6s forwards;
+          animation: rui-floatUp 0.6s forwards;
         }
       `}</style>
 

@@ -39,11 +39,11 @@
   }
   
   .fancy-button:hover .button-text {
-    animation: bounceMiddle 1s ease forwards;
+    animation: rui-bounceMiddle 1s ease forwards;
   }
   
   /* Bounce Keyframe Animation */
-  @keyframes bounceMiddle {
+  @keyframes rui-bounceMiddle {
     0% {
       transform: scale(1, 1) rotate(0deg);
     }

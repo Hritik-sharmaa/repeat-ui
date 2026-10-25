@@ -9,6 +9,7 @@ import { generateComponentMetadata } from "@/lib/faviconGenerator";
 const FLAVORS = ["ts-tailwind", "ts-css", "js-tailwind", "js-css"];
 
 interface RegistryItem {
+  shadcnName: string;
   dependencies: string[];
   files: { path: string; content: string }[];
 }
@@ -93,6 +94,7 @@ export default async function ComponentVariantPage({
 
       <InstallationGuide
         componentName={`${category}-${variant}`}
+        shadcnName={item.shadcnName}
         variant={flavor}
         dependencies={item.dependencies}
       />

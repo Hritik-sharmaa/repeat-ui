@@ -52,7 +52,7 @@ program
   .description("Add a component to your project")
   .argument("[component]", "Component name, for example button-simple")
   .option("-v, --variant <variant>", `Component variant (${FLAVORS.join(", ")})`, "ts-tailwind")
-  .option("-o, --output <dir>", "Folder for components", "components")
+  .option("-o, --output <dir>", "Folder for components (same as `shadcn add` uses)", "components/repeat-ui")
   .option("--overwrite", "Overwrite existing files")
   .option("--no-deps", "Do not install the packages the component needs")
   .action(async (componentName, options) => {

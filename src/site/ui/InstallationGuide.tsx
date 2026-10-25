@@ -12,6 +12,7 @@ interface ManualStep {
 
 interface InstallationGuideProps {
   componentName: string;
+  shadcnName: string;
   variant?: string;
   className?: string;
   dependencies?: string[];
@@ -19,6 +20,7 @@ interface InstallationGuideProps {
 
 export default function InstallationGuide({
   componentName,
+  shadcnName,
   variant = "ts-tailwind",
   className = "",
   dependencies,
@@ -27,7 +29,19 @@ export default function InstallationGuide({
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const cliCommand = `npx @hritik-sharmaa/repeat-ui add ${componentName} --variant ${variant}`;
+  // shortcut: full URL until @repeat-ui is listed in the shadcn registry directory,
+  // then switch to `npx shadcn@latest add @repeat-ui/${shadcnName}`.
+  const commands = [
+    {
+      label: "Repeat UI CLI",
+      command: `npx @hritik-sharmaa/repeat-ui add ${componentName} --variant ${variant}`,
+    },
+    {
+      label: "shadcn (needs components.json)",
+      command: `npx shadcn@latest add https://repeatui.vercel.app/r/${shadcnName}.json`,
+    },
+  ];
+  const folder = `components/repeat-ui/${componentName}`;
 
   const depNames = dependencies || [];
   const hasDependendencies = depNames.length > 0;
@@ -46,9 +60,9 @@ export default function InstallationGuide({
       : []),
     {
       title: "Copy the component code",
-      code: `// 1. Click "Go to Code" button below\n// 2. Navigate to the Code tab above\n// 3. Copy the component source code\n// 4. Save it as components/${componentName}/preview.${
+      code: `// 1. Click "Go to Code" button below\n// 2. Navigate to the Code tab above\n// 3. Copy the component source code\n// 4. Save it as ${folder}/preview.${
         variant.includes("ts") ? "tsx" : "jsx"
-      }${variant.includes("css") ? `\n//    and the CSS tab as components/${componentName}/style.css` : ""}`,
+      }${variant.includes("css") ? `\n//    and the CSS tab as ${folder}/style.css` : ""}`,
       description:
         "Navigate to the code section above to copy the component source code and save it in your components directory.",
       isCodeStep: true,
@@ -60,7 +74,7 @@ export default function InstallationGuide({
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(
           ""
-        )} from '@/components/${componentName}/preview';\n\nexport default function MyPage() {\n  return (\n    <div>\n      <${componentName
+        )} from '@/${folder}/preview';\n\nexport default function MyPage() {\n  return (\n    <div>\n      <${componentName
         .split("-")
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join("")} />\n    </div>\n  );\n}`,
@@ -166,21 +180,25 @@ export default function InstallationGuide({
               </div>
             </div>
 
-            <div className="group relative">
+            {commands.map(({ label, command }, i) => (
+            <div key={label} className="group relative mb-4 last:mb-0">
+              <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">
+                {label}
+              </p>
               <div className="flex flex-col lg:flex-row gap-3 p-4 bg-gradient-to-r from-zinc-900 to-zinc-800 dark:from-zinc-950 dark:to-zinc-900 rounded-xl border border-zinc-700 shadow-inner">
                 <code className="flex-1 text-sm font-mono text-green-400 overflow-x-auto scrollbar-none">
-                  <span className="text-zinc-500">$</span> {cliCommand}
+                  <span className="text-zinc-500">$</span> {command}
                 </code>
 
                 <button
-                  onClick={() => handleCopy(cliCommand, -1)}
+                  onClick={() => handleCopy(command, -1 - i)}
                   className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
-                    copiedStep === -1
+                    copiedStep === -1 - i
                       ? "bg-green-600 text-white shadow-lg scale-105"
                       : "bg-zinc-700 hover:bg-zinc-600 text-white hover:shadow-md hover:scale-105"
                   }`}
-                  title={copiedStep === -1 ? "Copied!" : "Copy command"}>
-                  {copiedStep === -1 ? (
+                  title={copiedStep === -1 - i ? "Copied!" : "Copy command"}>
+                  {copiedStep === -1 - i ? (
                     <>
                       <Check className="w-4 h-4" />
                       <span className="hidden sm:inline">Copied!</span>
@@ -194,6 +212,7 @@ export default function InstallationGuide({
                 </button>
               </div>
             </div>
+            ))}
           </div>
         ) : (
           <div className="p-6 lg:p-8">

@@ -8,13 +8,13 @@ npx @hritik-sharmaa/repeat-ui add button-simple
 npx @hritik-sharmaa/repeat-ui add card-profile-card --variant js-css
 ```
 
-`add` writes `components/<name>/` (`preview` is the component, `demo` shows how to use it) and installs the
+`add` writes `components/repeat-ui/<name>/` (`preview` is the component, `demo` shows how to use it) and installs the
 packages the component needs with npm, pnpm, yarn or bun, picked from your lockfile.
 
 | Option | Default | |
 | --- | --- | --- |
 | `-v, --variant` | `ts-tailwind` | `ts-tailwind`, `ts-css`, `js-tailwind` or `js-css` |
-| `-o, --output` | `components` | folder to write into |
+| `-o, --output` | `components/repeat-ui` | folder to write into (same folder `shadcn add` uses) |
 | `--overwrite` | off | replace existing files |
 | `--no-deps` | | print the install command instead of running it |
 | `--registry` | `https://repeatui.vercel.app/r` | registry URL or local folder |

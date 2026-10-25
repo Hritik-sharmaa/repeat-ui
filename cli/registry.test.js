@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "fs";
-import { mkdir, mkdtemp, writeFile } from "fs/promises";
+import { mkdtemp, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
@@ -50,13 +50,25 @@ test("unknown component gives a clear error", async () => {
 
 test("rejects registry files that would escape the component folder", async () => {
   const evil = await mkdtemp(join(tmpdir(), "rui-registry-"));
-  await mkdir(join(evil, "ts-css"));
   await writeFile(
-    join(evil, "ts-css", "button-evil.json"),
+    join(evil, "button-evil-css.json"),
     JSON.stringify({ dependencies: [], files: [{ path: "../../evil.js", content: "" }] })
   );
   const cwd = await mkdtemp(join(tmpdir(), "rui-"));
   await assert.rejects(addComponent("button-evil", { variant: "ts-css", output: "c", registry: evil, cwd }), /unsafe file name/);
+});
+
+test("registry.json follows the shadcn directory rules", () => {
+  const { items } = JSON.parse(readFileSync(join(registry, "registry.json"), "utf8"));
+  assert.equal(items.length, index.length * FLAVORS.length);
+  for (const item of items) {
+    const full = JSON.parse(readFileSync(join(registry, `${item.name}.json`), "utf8"));
+    assert.equal(full.name, item.name);
+    for (const file of item.files) {
+      assert.equal(file.content, undefined, `${item.name}: registry.json must not contain file contents`);
+      assert.match(file.target, /^@components\/repeat-ui\/[a-z0-9-]+\/[\w.-]+$/, `${item.name}: bad target`);
+    }
+  }
 });
 
 test("picks the package manager from the lockfile", async () => {

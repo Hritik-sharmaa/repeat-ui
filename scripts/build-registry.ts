@@ -1,8 +1,9 @@
 // Builds the component registry from src/registry and fails on anything that
 // would ship broken to users. Output:
-//   public/r/<flavor>/<name>.json      fetched by the CLI
-//   public/r/index.json                component list for the CLI
-//   src/registry/__generated__/...     same items, imported by the website
+//   public/r/<name>[-css|-js|-js-css].json   shadcn registry items, fetched by both CLIs
+//   public/r/registry.json                   shadcn registry index
+//   public/r/index.json                      component list for our CLI
+//   src/registry/__generated__/...           same items, imported by the website
 import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
 import { posix } from "path";
 import ts from "typescript";
@@ -70,7 +71,11 @@ async function buildFlavorStyle(dir: string) {
   }
 
   const files: RegistryFile[] = await Promise.all(
-    fileNames.map(async (f) => ({ path: f, content: await readFile(join(dir, f), "utf8") }))
+    fileNames.map(async (f) => ({
+      path: f,
+      // Same line endings for every user, whatever OS checked out the repo.
+      content: (await readFile(join(dir, f), "utf8")).replace(/\r\n/g, "\n"),
+    }))
   );
   const dependencies = new Set<string>();
   const used = new Set(["preview.tsx", "demo.tsx"]);
@@ -104,6 +109,29 @@ async function checkNoStrayFolders(known: Set<string>) {
       }
     }
   }
+}
+
+// Flat names, because the shadcn directory only accepts items at the registry root.
+// Keep in sync with cli/registry.js.
+const SUFFIX: Record<string, string> = { "ts-tailwind": "", "ts-css": "-css", "js-tailwind": "-js", "js-css": "-js-css" };
+const LABEL: Record<string, string> = { "ts-tailwind": "", "ts-css": " (CSS)", "js-tailwind": " (JS)", "js-css": " (JS, CSS)" };
+
+function toShadcnItem(item: RegistryItem) {
+  return {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: item.name + SUFFIX[item.flavor],
+    type: "registry:component",
+    title: item.title + LABEL[item.flavor],
+    description: item.description,
+    dependencies: item.dependencies,
+    files: item.files.map((f) => ({
+      path: f.path,
+      type: f.path.endsWith(".css") ? "registry:file" : "registry:component",
+      // One folder per component, or every component's preview.tsx would land on the same path.
+      target: `@components/repeat-ui/${item.name}/${f.path}`,
+      content: f.content,
+    })),
+  };
 }
 
 async function writeJson(path: string, data: unknown) {
@@ -157,10 +185,25 @@ async function main() {
 
   await rm(PUBLIC, { recursive: true, force: true });
   await rm(GENERATED, { recursive: true, force: true });
-  for (const item of items) {
-    await writeJson(join(PUBLIC, item.flavor, `${item.name}.json`), item);
-    await writeJson(join(GENERATED, item.flavor, `${item.name}.json`), item);
+  const shadcnItems = items.map(toShadcnItem);
+  for (const [i, item] of items.entries()) {
+    await writeJson(join(PUBLIC, `${shadcnItems[i].name}.json`), shadcnItems[i]);
+    await writeJson(join(GENERATED, item.flavor, `${item.name}.json`), { ...item, shadcnName: shadcnItems[i].name });
   }
+  // The registry index for the shadcn directory; it must not contain file contents.
+  await writeJson(join(PUBLIC, "registry.json"), {
+    $schema: "https://ui.shadcn.com/schema/registry.json",
+    name: "repeat-ui",
+    homepage: "https://repeatui.vercel.app",
+    items: shadcnItems.map(({ name, type, title, description, dependencies, files }) => ({
+      name,
+      type,
+      title,
+      description,
+      dependencies,
+      files: files.map(({ path, type, target }) => ({ path, type, target })),
+    })),
+  });
   const index = items
     .filter((i) => i.flavor === "ts-tailwind")
     .map(({ name, title, description, category }) => ({ name, title, description, category }));

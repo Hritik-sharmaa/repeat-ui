@@ -4,6 +4,9 @@ import { join } from "path";
 
 export const DEFAULT_REGISTRY = "https://repeatui.vercel.app/r";
 export const FLAVORS = ["ts-tailwind", "ts-css", "js-tailwind", "js-css"];
+// Registry items are shadcn-compatible and flat: button-simple, button-simple-css, ...
+// Keep in sync with scripts/build-registry.ts.
+const SUFFIX = { "ts-tailwind": "", "ts-css": "-css", "js-tailwind": "-js", "js-css": "-js-css" };
 
 const COMPONENT_NAME = /^[a-z0-9-]+$/;
 const FILE_NAME = /^[\w-]+(\.[\w-]+)+$/;
@@ -53,7 +56,7 @@ export async function addComponent(name, { variant, output, overwrite = false, r
   }
   if (!COMPONENT_NAME.test(name)) throw new Error(`Invalid component name "${name}"`);
 
-  const item = await getJson(registry, `${variant}/${name}.json`);
+  const item = await getJson(registry, `${name}${SUFFIX[variant]}.json`);
   if (!item) throw new Error(`Component "${name}" not found. Run "repeat-ui list" to see all components.`);
 
   // The registry is fetched over the network, so never let it write outside the component folder

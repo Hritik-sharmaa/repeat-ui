@@ -20,7 +20,7 @@ export default function PropTable({ data }: { data: PropDoc[] }) {
     });
 
   return (
-    <section className="mt-16">
+    <section id="props" className="mt-16 scroll-mt-20">
       <h2 className="text-2xl font-semibold tracking-tight">Props</h2>
       <div className="thin-scrollbar mt-5 overflow-x-auto rounded-2xl border border-line">
         <table className="w-full min-w-[640px] text-left text-sm">

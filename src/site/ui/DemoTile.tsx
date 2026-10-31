@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { LiveDemo } from "@/site/ui/LiveDemo";
-import { cn, trackPointer } from "@/lib/utils";
+import { categoryStyle, tintStyle } from "@/site/categoryStyle";
+import { cn, formatName, trackPointer } from "@/lib/utils";
 
 // How each category's demos fit a tile. Large components render at full size and shrink to fit
 // (and are not interactive in the tile); cursors take over the whole page, so they show text.
@@ -25,6 +26,8 @@ export function DemoTile({
   href,
   style = "tailwind",
   scale = FIT[category]?.scale,
+  showCategory = false,
+  size = "md",
   className,
 }: {
   category: string;
@@ -35,20 +38,34 @@ export function DemoTile({
   href: string;
   style?: string;
   scale?: number;
+  // A chip with the category's icon in the corner, for pages that mix categories.
+  showCategory?: boolean;
+  size?: "sm" | "md";
   className?: string;
 }) {
   const live = FIT[category]?.live !== false;
+  const { icon: Icon } = categoryStyle(category);
   const demos = variants.map((v) => <LiveDemo key={v} category={category} variant={v} style={style} />);
 
   return (
     <div
       onPointerMove={trackPointer}
+      style={tintStyle(category)}
       className={cn(
-        "group relative flex h-80 flex-col overflow-hidden rounded-3xl border border-line bg-surface transition-colors hover:border-line-strong",
+        "group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-xl hover:shadow-black/10",
+        size === "sm" ? "h-64" : "h-80",
         className
       )}>
+      <div aria-hidden className="tint-glow pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
       <div aria-hidden className="spotlight pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0 opacity-60" />
+      <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0 opacity-50" />
+
+      {showCategory && (
+        <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-line bg-bg/60 px-2.5 py-1 text-xs text-muted backdrop-blur">
+          <Icon className="size-3 text-(--tint)" />
+          {formatName(category)}
+        </span>
+      )}
 
       <div className="relative flex flex-1 items-center justify-center overflow-hidden">
         {!live ? (
@@ -65,7 +82,7 @@ export function DemoTile({
         )}
       </div>
 
-      <div className="relative flex items-center justify-between gap-3 px-5 pb-4">
+      <div className="relative flex items-center justify-between gap-3 border-t border-line bg-surface/80 px-5 py-3 backdrop-blur">
         <Link
           href={href}
           className={cn(

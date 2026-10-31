@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Segmented } from "@/site/ui/Segmented";
 import { CopyButton } from "@/site/ui/CopyButton";
+import { Command } from "@/site/ui/Command";
 
 interface InstallationGuideProps {
   componentName: string;
@@ -33,7 +34,7 @@ export default function InstallationGuide({
   };
 
   return (
-    <section className="mt-16">
+    <section id="installation" className="mt-16 scroll-mt-20">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="text-2xl font-semibold tracking-tight">Installation</h2>
         <Segmented
@@ -117,18 +118,6 @@ function Step({ title, text, children }: { title: string; text?: string; childre
       {text && <p className="mt-1 text-sm text-muted">{text}</p>}
       {children && <div className="mt-3">{children}</div>}
     </li>
-  );
-}
-
-function Command({ text }: { text: string }) {
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-line bg-surface py-1.5 pl-4 pr-1.5">
-      <code className="no-scrollbar flex-1 overflow-x-auto whitespace-nowrap font-mono text-[13px]">
-        <span className="text-subtle">$ </span>
-        {text}
-      </code>
-      <CopyButton text={text} label="Copy command" />
-    </div>
   );
 }
 

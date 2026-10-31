@@ -17,7 +17,7 @@ export default function ComponentsLayout({ children }: { children: ReactNode }) 
         </Suspense>
       </aside>
       <div className="pt-14 lg:pl-64">
-        <main className="mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-5xl px-4 pb-24 sm:px-8">{children}</main>
+        <main className="mx-auto min-h-[calc(100vh-3.5rem)] w-full max-w-6xl px-4 pb-24 sm:px-8">{children}</main>
         <Footer />
       </div>
     </>

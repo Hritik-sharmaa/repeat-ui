@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { categories, isNewComponent } from "@/data/categories";
 import { useFlavor } from "@/lib/use-flavor";
 import { formatDateForDisplay } from "@/lib/dateUtils";
+import { categoryStyle, tintStyle } from "@/site/categoryStyle";
 import { cn, formatName } from "@/lib/utils";
 
 // The component navigation, in the desktop sidebar and the mobile drawer.
@@ -34,7 +35,7 @@ export default function Sidebar({
           layoutId={`${layoutGroup}-active`}
           className="absolute inset-0 rounded-lg bg-surface-2"
           transition={{ type: "spring", stiffness: 500, damping: 40 }}>
-          <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-accent" />
+          <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-(--tint,var(--accent))" />
         </motion.span>
       )}
       <span className="relative truncate">{label}</span>
@@ -54,16 +55,18 @@ export default function Sidebar({
         .flatMap((cat) => cat.subcategories)
         .map((sub) => {
           const categoryPath = `/components/${sub.name}`;
+          const { icon: Icon } = categoryStyle(sub.name);
           return (
-            <div key={sub.name}>
+            <div key={sub.name} style={tintStyle(sub.name)}>
               <Link
                 href={`${categoryPath}?flavor=${flavor}`}
                 onClick={onNavigate}
                 className={cn(
-                  "mb-1 flex items-baseline justify-between px-3 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors hover:text-fg",
-                  pathname === categoryPath ? "text-accent" : "text-subtle"
+                  "mb-1 flex items-center gap-2 px-3 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors hover:text-fg",
+                  pathname === categoryPath ? "text-fg" : "text-subtle"
                 )}>
-                {formatName(sub.name)}
+                <Icon className="size-3.5 text-(--tint)" />
+                <span className="flex-1">{formatName(sub.name)}</span>
                 <span className="tabular-nums">{sub.variants.length}</span>
               </Link>
               {sub.variants.map((variant) => {

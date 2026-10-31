@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { tintStyle } from "@/site/categoryStyle";
 import { AnimatePresence, motion } from "motion/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { ChevronDown, Code2, Eye, Palette, RotateCcw } from "lucide-react";
+import { ChevronDown, Code2, Eye, Maximize2, Minimize2, Palette, RotateCcw } from "lucide-react";
 import { Segmented } from "@/site/ui/Segmented";
 import { CopyButton } from "@/site/ui/CopyButton";
 import { codeTheme } from "@/site/ui/codeTheme";
@@ -13,15 +15,68 @@ type Tab = "preview" | "code" | "css";
 const COLLAPSED_LINES = 24;
 
 interface ComponentTabsProps {
+  category: string;
   component: React.ReactNode;
   sourceCode: string;
   fileName: string;
   cssCode?: string | null;
 }
 
-export default function ComponentTabs({ component, sourceCode, fileName, cssCode }: ComponentTabsProps) {
+export default function ComponentTabs({ category, component, sourceCode, fileName, cssCode }: ComponentTabsProps) {
   const [tab, setTab] = useState<Tab>("preview");
   const [replay, setReplay] = useState(0);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFullscreen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [fullscreen]);
+
+  const preview = (
+    <div
+      className={cn(
+        "relative flex flex-col bg-surface",
+        fullscreen && "h-full overflow-hidden rounded-3xl border border-line-strong shadow-2xl"
+      )}>
+      <div aria-hidden className="tint-glow pointer-events-none absolute inset-0" />
+      <div className="relative flex items-center justify-between border-b border-line py-1.5 pl-5 pr-2">
+        <span className="inline-flex items-center gap-2 text-xs text-muted">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-(--tint) opacity-60" />
+            <span className="relative inline-flex size-2 rounded-full bg-(--tint)" />
+          </span>
+          Live preview
+        </span>
+        <div className="flex items-center gap-1">
+          <ToolButton label="Replay the animation" onClick={() => setReplay((n) => n + 1)}>
+            <RotateCcw className="size-4 transition-transform duration-500 group-hover:-rotate-180" />
+          </ToolButton>
+          <ToolButton label={fullscreen ? "Exit fullscreen" : "Fullscreen"} onClick={() => setFullscreen((f) => !f)}>
+            {fullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+          </ToolButton>
+        </div>
+      </div>
+      {/* Wide components scroll sideways; "safe" centring keeps their left edge reachable. */}
+      <div
+        className={cn(
+          "thin-scrollbar relative flex flex-1 items-center overflow-auto p-6 sm:p-10",
+          !fullscreen && "min-h-[420px] sm:min-h-[500px]"
+        )}>
+        <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0" />
+        <div key={replay} className="relative flex w-full justify-center-safe">
+          {component}
+        </div>
+      </div>
+    </div>
+  );
 
   const options = [
     { value: "preview" as const, label: <><Eye className="size-3.5" />Preview</> },
@@ -30,18 +85,9 @@ export default function ComponentTabs({ component, sourceCode, fileName, cssCode
   ];
 
   return (
-    <div data-component-tabs className="scroll-mt-20">
-      <div className="mb-3 flex items-center justify-between gap-3">
+    <div id="preview" data-component-tabs className="scroll-mt-20">
+      <div className="mb-3">
         <Segmented label="View" value={tab} onChange={setTab} options={options} />
-        {tab === "preview" && (
-          <button
-            type="button"
-            onClick={() => setReplay((n) => n + 1)}
-            className="group inline-flex h-8 items-center gap-1.5 rounded-full border border-line px-3 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg">
-            <RotateCcw className="size-3.5 transition-transform duration-500 group-hover:-rotate-180" />
-            Replay
-          </button>
-        )}
       </div>
 
       {/* Lets the Installation guide open the Code tab. */}
@@ -56,13 +102,20 @@ export default function ComponentTabs({ component, sourceCode, fileName, cssCode
             exit={{ opacity: 0, filter: "blur(4px)" }}
             transition={{ duration: 0.18 }}>
             {tab === "preview" ? (
-              // Wide components scroll sideways; "safe" centring keeps their left edge reachable.
-              <div className="thin-scrollbar relative flex min-h-[420px] items-center overflow-x-auto p-6 sm:min-h-[480px] sm:p-10">
-                <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0" />
-                <div key={replay} className="relative flex w-full justify-center-safe">
-                  {component}
-                </div>
-              </div>
+              fullscreen ? (
+                // Fullscreen renders on <body>: the fade on this wrapper would otherwise trap a fixed panel.
+                <>
+                  <div className="min-h-[420px] sm:min-h-[500px]" />
+                  {createPortal(
+                    <div className="fixed inset-0 z-50 bg-black/50 p-3 backdrop-blur-sm sm:p-6" style={tintStyle(category)}>
+                      {preview}
+                    </div>,
+                    document.body
+                  )}
+                </>
+              ) : (
+                preview
+              )
             ) : (
               <CodeView
                 code={tab === "css" ? cssCode ?? "" : sourceCode}
@@ -74,6 +127,19 @@ export default function ComponentTabs({ component, sourceCode, fileName, cssCode
         </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+function ToolButton({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="group grid size-8 place-items-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-fg">
+      {children}
+    </button>
   );
 }
 

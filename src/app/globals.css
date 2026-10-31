@@ -133,6 +133,13 @@ body {
   );
 }
 
+/* A soft wash of the category colour from the top: set --tint with tintStyle() from categoryStyle.ts. */
+.tint-glow {
+  background-image:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in oklab, var(--tint, var(--accent)) 18%, transparent), transparent 70%),
+    radial-gradient(60% 50% at 100% 100%, color-mix(in oklab, var(--tint, var(--accent)) 8%, transparent), transparent 70%);
+}
+
 /* Text with a light sweep across it. */
 .text-shimmer {
   background: linear-gradient(

@@ -1,30 +1,28 @@
 "use client";
+
+import { useState } from "react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { ArrowUp } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export default function ScrollToTopButton() {
+  const { scrollY } = useScroll();
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 200);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  if (!visible) return null;
+  useMotionValueEvent(scrollY, "change", (y) => setVisible(y > 600));
 
   return (
-    <button
-      onClick={scrollToTop}
-      className="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-black text-white dark:bg-white dark:text-black shadow-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer transition-colors font-bold"
-      aria-label="Go to top">
-      <ArrowUp />
-    </button>
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          type="button"
+          initial={{ opacity: 0, scale: 0.8, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 8 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Back to top"
+          className="fixed bottom-6 right-6 z-40 grid size-10 place-items-center rounded-full border border-line bg-surface/80 text-muted shadow-lg backdrop-blur transition-colors hover:text-fg">
+          <ArrowUp className="size-4" />
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 }

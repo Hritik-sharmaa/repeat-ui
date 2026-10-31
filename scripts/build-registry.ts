@@ -21,6 +21,9 @@ const STYLES = ["css", "tailwind"] as const;
 const LANGS = ["ts", "js"] as const;
 // Every React app already has these, so the CLI never installs them.
 const PROVIDED = new Set(["react", "react-dom"]);
+// A selector that starts with one of Tailwind's common utility classes, such as `.grid {` or `.flex:hover`.
+const TAILWIND_CLASS_RE =
+  /(?:^|[\s,}])\.(grid|flex|container|hidden|block|inline|contents|table|relative|absolute|fixed|sticky|static|border|rounded|shadow|truncate|italic|underline|uppercase|lowercase|capitalize|visible|invisible|transition|transform|outline|ring|blur|grow|shrink|group|peer)(?=[\s{,:.>[+~])/gm;
 // Matches `import x from "y"`, `import "y"` and `export ... from "y"`, across lines.
 const IMPORT_RE = /(?:^|[\s;])(?:import|export)\s+(?:[^'"`;]*?\sfrom\s*)?["']([^"']+)["']/g;
 
@@ -86,6 +89,12 @@ async function buildFlavorStyle(dir: string) {
     // Keyframes are global, so a plain name like "pulse" or "spin" would override Tailwind's own.
     for (const [, name] of content.matchAll(/@keyframes\s+([\w-]+)/g)) {
       if (!name.startsWith("rui-")) errors.push(`${dir}/${path}: rename @keyframes ${name} to rui-${name}`);
+    }
+    // CSS classes are global too: one named like a Tailwind utility would restyle the user's whole app.
+    if (path.endsWith(".css")) {
+      for (const [, name] of content.matchAll(TAILWIND_CLASS_RE)) {
+        errors.push(`${dir}/${path}: .${name} is a Tailwind class name; give it a name specific to this component`);
+      }
     }
     if (!/\.tsx?$/.test(path)) continue;
     for (const [, spec] of content.matchAll(IMPORT_RE)) {

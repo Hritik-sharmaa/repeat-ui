@@ -1,26 +1,19 @@
 "use client";
 
-import { Search, ChevronDown, Github } from "lucide-react";
-import { Button } from "@/site/ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/site/ui/Dropdown-menu";
-import Image from "next/image";
-import Link from "next/link";
-import ThemeToggle from "@/site/ui/ThemeToggler";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFlavor } from "@/lib/use-flavor";
-import { useSearch } from "@/app/context/search-context";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
+import { Github, Menu, Search, X } from "lucide-react";
+import { Logo } from "@/site/brand/Logo";
+import ThemeToggle from "@/site/ui/ThemeToggler";
 import { SearchModal } from "@/site/ui/SearchModal";
-import { fetchGitHubStars, formatStarCount } from "@/lib/utils";
-import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-
-gsap.registerPlugin(ScrollToPlugin);
+import { Segmented } from "@/site/ui/Segmented";
+import Sidebar from "@/site/navs/Sidebar";
+import { useSearch } from "@/app/context/search-context";
+import { useFlavor } from "@/lib/use-flavor";
+import { useGitHubStars } from "@/lib/use-github-stars";
+import { formatStarCount, GITHUB_URL } from "@/lib/utils";
 
 export function Header() {
   const router = useRouter();
@@ -28,168 +21,124 @@ export function Header() {
   const searchParams = useSearchParams();
   const flavor = useFlavor();
   const { isSearchOpen, openSearch, closeSearch } = useSearch();
-  const [starCount, setStarCount] = useState<number>(0);
-  const [isLoadingStars, setIsLoadingStars] = useState(true);
+  const stars = useGitHubStars();
+  // The page the drawer was opened on, so navigating closes it.
+  const [drawerOn, setDrawerOn] = useState<string | null>(null);
+  const drawerOpen = drawerOn === pathname;
 
   const [language, style] = flavor.split("-");
 
-  useEffect(() => {
-    const loadStars = async () => {
-      try {
-        setIsLoadingStars(true);
-        const stars = await fetchGitHubStars("hritik-sharmaa", "repeat-ui");
-        setStarCount(stars);
-      } catch (error) {
-        console.warn("Failed to load GitHub stars:", error);
-      } finally {
-        setIsLoadingStars(false);
-      }
-    };
-
-    loadStars();
-  }, []);
-
   const updateFlavor = (newLang: string, newStyle: string) => {
-    const newFlavor = `${newLang}-${newStyle}`;
-
     const params = new URLSearchParams(searchParams.toString());
-    params.set("flavor", newFlavor);
-    router.replace(`${pathname}?${params.toString()}`);
+    params.set("flavor", `${newLang}-${newStyle}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const handleAnchorClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      const target = document.querySelector(href);
-      if (target) {
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: { y: target, offsetY: 80 },
-          ease: "power2.out",
-        });
-      }
-    }
-  };
+  // No page scroll behind the open drawer.
+  useEffect(() => {
+    if (!drawerOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
+
+  const flavorControls = (
+    <>
+      <Segmented
+        size="sm"
+        label="Language"
+        value={language}
+        onChange={(lang) => updateFlavor(lang, style)}
+        options={[
+          { value: "ts", label: "TS" },
+          { value: "js", label: "JS" },
+        ]}
+      />
+      <Segmented
+        size="sm"
+        label="Styling"
+        value={style}
+        onChange={(s) => updateFlavor(language, s)}
+        options={[
+          { value: "tailwind", label: "Tailwind" },
+          { value: "css", label: "CSS" },
+        ]}
+      />
+    </>
+  );
 
   return (
     <>
-      <nav className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-5xl">
-        <div className="rounded-2xl shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-zinc-900/90 border border-zinc-200/50 dark:border-zinc-700/50 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 gap-3 sm:gap-0">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-2 sm:gap-3 transition-all duration-300 hover:opacity-80"
-              onClick={(e) => handleAnchorClick(e, "/")}>
-              <div className="relative">
-                <Image
-                  src="/Logo.png"
-                  alt="Repeat UI Logo"
-                  width={28}
-                  height={28}
-                  className="sm:w-9 sm:h-9 rounded-lg"
-                />
-              </div>
-              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
-                Repeat UI
-              </h1>
-            </Link>
-          </div>
+      <header className="fixed inset-x-0 top-0 z-40 h-14 border-b border-line bg-bg/80 backdrop-blur-xl">
+        <div className="flex h-full items-center gap-3 px-4 lg:px-5">
+          <button
+            type="button"
+            onClick={() => setDrawerOn(drawerOpen ? null : pathname)}
+            aria-label={drawerOpen ? "Close menu" : "Open menu"}
+            aria-expanded={drawerOpen}
+            className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg lg:hidden">
+            {drawerOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+          </button>
+          <Link href="/" aria-label="Repeat UI home">
+            <Logo />
+          </Link>
 
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-end">
-            <div className="hidden md:block">
-              <Button
-                variant="outline"
-                onClick={openSearch}
-                className="w-48 lg:w-64 justify-start gap-2 lg:gap-3 bg-muted/30 border-zinc-300 dark:border-zinc-600 rounded-xl px-3 lg:px-4 py-2 text-muted-foreground hover:bg-muted/50 transition-all duration-200">
-                <Search className="h-4 w-4" />
-                <span className="flex-1 text-left text-sm lg:text-base">
-                  Search components...
-                </span>
-                <kbd className="pointer-events-none inline-flex h-4 lg:h-5 select-none items-center gap-1 rounded border border-zinc-300 dark:border-zinc-600 bg-muted/50 px-1 lg:px-1.5 font-mono text-[9px] lg:text-[10px] font-medium text-muted-foreground">
-                  <span className="text-xs">⌘</span>K
-                </kbd>
-              </Button>
-            </div>
+          <button
+            type="button"
+            onClick={openSearch}
+            className="ml-4 hidden h-8 w-64 items-center gap-2 rounded-full border border-line bg-surface pl-3 pr-1 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg md:inline-flex">
+            <Search className="size-3.5" />
+            <span className="flex-1 text-left">Search components</span>
+            <kbd className="rounded-full border border-line px-2 py-0.5 font-mono text-[10px]">Ctrl K</kbd>
+          </button>
 
-            <Button
-              variant="outline"
-              size="sm"
-              className="md:hidden rounded-xl border-zinc-300 dark:border-zinc-600 px-2"
-              onClick={openSearch}>
-              <Search className="h-4 w-4" />
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1 sm:gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[60px] sm:min-w-[80px] px-2 sm:px-3">
-                  <span className="text-xs sm:text-sm">
-                    {language.toUpperCase()}
-                  </span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
-                <DropdownMenuItem
-                  onClick={() => updateFlavor("js", style)}
-                  className="rounded-lg">
-                  JavaScript
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => updateFlavor("ts", style)}
-                  className="rounded-lg">
-                  TypeScript
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1 sm:gap-2 rounded-xl border-zinc-300 dark:border-zinc-600 min-w-[70px] sm:min-w-[100px] px-2 sm:px-3">
-                  <span className="text-xs sm:text-sm">
-                    {style === "tailwind" ? "TW" : "CSS"}
-                  </span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="rounded-xl border-zinc-300 dark:border-zinc-600">
-                <DropdownMenuItem
-                  onClick={() => updateFlavor(language, "css")}
-                  className="rounded-lg">
-                  CSS
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => updateFlavor(language, "tailwind")}
-                  className="rounded-lg">
-                  Tailwind CSS
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <ThemeToggle />
-
+          <div className="ml-auto flex items-center gap-1.5">
+            <div className="hidden items-center gap-1.5 sm:flex">{flavorControls}</div>
+            <button
+              type="button"
+              onClick={openSearch}
+              aria-label="Search components"
+              className="grid size-8 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-fg md:hidden">
+              <Search className="size-4" />
+            </button>
             <a
-              href="https://github.com/hritik-sharmaa/repeat-ui"
+              href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1 sm:gap-2 hover:bg-muted/50 transition-all duration-200 font-medium border border-zinc-300 dark:border-zinc-600 rounded-xl px-2 sm:px-3 py-2 text-xs sm:text-sm">
-              <Github className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden lg:inline">Star on GitHub</span>
-              <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md text-xs font-mono min-w-[1.5rem] sm:min-w-[2rem] text-center">
-                {isLoadingStars ? "..." : formatStarCount(starCount)}
-              </span>
+              className="hidden h-8 items-center gap-1.5 rounded-full px-2.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-fg sm:inline-flex">
+              <Github className="size-4" />
+              {stars !== null && <span className="font-mono text-xs">{formatStarCount(stars)}</span>}
             </a>
+            <ThemeToggle />
           </div>
         </div>
-      </nav>
+      </header>
+
+      <AnimatePresence>
+        {drawerOpen && (
+          <>
+            <motion.div
+              aria-hidden
+              className="fixed inset-0 top-14 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setDrawerOn(null)}
+            />
+            <motion.aside
+              className="thin-scrollbar fixed bottom-0 left-0 top-14 z-30 w-[min(20rem,85vw)] overflow-y-auto border-r border-line bg-bg lg:hidden"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 40 }}>
+              <div className="flex flex-wrap gap-1.5 border-b border-line p-4 sm:hidden">{flavorControls}</div>
+              <Sidebar layoutGroup="drawer" onNavigate={() => setDrawerOn(null)} />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
       <SearchModal isOpen={isSearchOpen} onClose={closeSearch} />
     </>
   );

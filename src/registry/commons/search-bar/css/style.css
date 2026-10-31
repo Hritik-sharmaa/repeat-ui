@@ -27,7 +27,7 @@
   color: #6b7280;
 }
 
-.icon {
+.search-bar-icon {
   width: 18px;
   height: 18px;
   color: #6b7280;
@@ -120,7 +120,7 @@
   color: #4b5563;
 }
 
-.close-btn .icon {
+.close-btn .search-bar-icon {
   width: 20px;
   height: 20px;
 }

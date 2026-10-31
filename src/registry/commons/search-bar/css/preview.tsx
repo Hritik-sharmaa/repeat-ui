@@ -59,7 +59,7 @@ const SearchWithHotkey = ({
     return (
       <div className={`${className}`}>
         <div className="search-box">
-          <Search className="icon" />
+          <Search className="search-bar-icon" />
           <input
             value={query}
             onChange={handleInputChange}
@@ -76,7 +76,7 @@ const SearchWithHotkey = ({
   return (
     <div className={`${className}`}>
       <button onClick={() => setOpen(true)} className="search-button">
-        <Search className="icon" />
+        <Search className="search-bar-icon" />
         <span className="placeholder-text">{placeholder}</span>
         {enableHotkey && <kbd className="shortcut">Ctrl K</kbd>}
       </button>
@@ -85,7 +85,7 @@ const SearchWithHotkey = ({
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-input-wrapper">
-              <Search className="icon" />
+              <Search className="search-bar-icon" />
               <input
                 autoFocus
                 value={query}
@@ -96,7 +96,7 @@ const SearchWithHotkey = ({
                 className="search-input"
               />
               <button onClick={() => setOpen(false)} className="close-btn">
-                <X className="icon" />
+                <X className="search-bar-icon" />
               </button>
             </div>
           </div>

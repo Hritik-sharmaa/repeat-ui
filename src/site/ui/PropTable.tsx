@@ -1,219 +1,112 @@
 "use client";
 
-import React, { useState } from "react";
+import { Fragment, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ChevronDown } from "lucide-react";
 import type { PropDoc } from "@/registry/catalog";
+import { cn } from "@/lib/utils";
 
 export default function PropTable({ data }: { data: PropDoc[] }) {
-  const [expandedProps, setExpandedProps] = useState<Set<string>>(new Set());
-
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   if (!data || data.length === 0) return null;
-
   const hasOptions = data.some((prop) => prop.options);
 
-  const toggleExpanded = (propName: string) => {
-    const newExpanded = new Set(expandedProps);
-    if (newExpanded.has(propName)) {
-      newExpanded.delete(propName);
-    } else {
-      newExpanded.add(propName);
-    }
-    setExpandedProps(newExpanded);
-  };
+  const toggle = (name: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
 
   return (
-    <div className="w-full mt-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-3">Props Table</h2>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Configuration options and properties for this component.
-        </p>
-      </div>
-      <div className="overflow-hidden rounded-lg border-theme">
-        <div className="overflow-x-auto">
-          <table className="w-full table-theme border-collapse">
-            <thead className="table-header-theme">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-700">
-                  Prop
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-700">
-                  Type
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-700">
-                  Default
-                </th>
-                <th
-                  className={`px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider ${
-                    hasOptions
-                      ? "border-r border-zinc-200 dark:border-zinc-700"
-                      : ""
-                  }`}>
-                  Description
-                </th>
-                {hasOptions && (
-                  <th className="px-4 py-3 text-left text-xs font-semibold table-text-theme uppercase tracking-wider">
-                    Options
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
-              {data.map((prop) => (
-                <React.Fragment key={prop.name}>
-                  <tr
-                    key={prop.name}
-                    className="transition-colors table-hover-theme">
-                    <td className="px-4 py-4 border-r border-zinc-200 dark:border-zinc-700">
-                      <code className="inline-flex items-center px-2 py-1 rounded-md code-neutral-theme text-sm font-mono">
-                        {prop.name}
-                      </code>
+    <section className="mt-16">
+      <h2 className="text-2xl font-semibold tracking-tight">Props</h2>
+      <div className="thin-scrollbar mt-5 overflow-x-auto rounded-2xl border border-line">
+        <table className="w-full min-w-[640px] text-left text-sm">
+          <thead className="border-b border-line bg-surface font-mono text-[10px] uppercase tracking-[0.16em] text-subtle">
+            <tr>
+              <th className="px-4 py-3 font-normal">Prop</th>
+              <th className="px-4 py-3 font-normal">Type</th>
+              <th className="px-4 py-3 font-normal">Default</th>
+              <th className="px-4 py-3 font-normal">Description</th>
+              {hasOptions && <th className="px-4 py-3 font-normal">Options</th>}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-line">
+            {data.map((prop) => {
+              const nested = prop.properties && prop.properties.length > 0;
+              const open = expanded.has(prop.name);
+              return (
+                <Fragment key={prop.name}>
+                  <tr className="align-top">
+                    <td className="px-4 py-3.5">
+                      <code className="rounded-md bg-accent/10 px-1.5 py-0.5 font-mono text-[13px] text-accent">{prop.name}</code>
                     </td>
-                    <td className="px-4 py-4 border-r border-zinc-200 dark:border-zinc-700">
-                      {prop.properties && prop.properties.length > 0 ? (
+                    <td className="px-4 py-3.5">
+                      {nested ? (
                         <button
-                          onClick={() => toggleExpanded(prop.name)}
-                          className="inline-flex items-center px-2 py-1 rounded-md code-blue-theme text-sm font-mono hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer">
+                          type="button"
+                          onClick={() => toggle(prop.name)}
+                          aria-expanded={open}
+                          className="inline-flex items-center gap-1 font-mono text-[13px] text-muted hover:text-fg">
                           {prop.type}
-                          <svg
-                            className={`ml-2 h-3 w-3 transition-transform ${
-                              expandedProps.has(prop.name) ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
+                          <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} />
                         </button>
                       ) : (
-                        <code className="inline-flex items-center px-2 py-1 rounded-md code-blue-theme text-sm font-mono">
-                          {prop.type}
-                        </code>
+                        <code className="font-mono text-[13px] text-muted">{prop.type}</code>
                       )}
                     </td>
-                    <td className="px-4 py-4 border-r border-zinc-200 dark:border-zinc-700">
-                      {prop.default ? (
-                        <code className="inline-flex items-center px-2 py-1 rounded-md code-green-theme text-sm font-mono">
-                          {prop.default}
-                        </code>
-                      ) : (
-                        <span className="table-text-secondary-theme text-sm">
-                          —
-                        </span>
-                      )}
-                    </td>
-                    <td
-                      className={`px-4 py-4 text-sm table-text-theme leading-relaxed ${
-                        hasOptions
-                          ? "border-r border-zinc-200 dark:border-zinc-700"
-                          : ""
-                      }`}>
-                      {prop.description}
-                    </td>
+                    <td className="px-4 py-3.5 font-mono text-[13px] text-muted">{prop.default || "-"}</td>
+                    <td className="px-4 py-3.5 leading-relaxed">{prop.description}</td>
                     {hasOptions && (
-                      <td className="px-4 py-4">
-                        {prop.options ? (
-                          <code className="inline-flex items-center px-2 py-1 rounded-md code-purple-theme text-sm font-mono">
-                            {prop.options.join(" | ")}
-                          </code>
-                        ) : (
-                          <span className="table-text-secondary-theme text-sm">
-                            —
-                          </span>
-                        )}
+                      <td className="px-4 py-3.5 font-mono text-[13px] text-muted">
+                        {prop.options ? prop.options.join(" | ") : "-"}
                       </td>
                     )}
                   </tr>
-                  {prop.properties &&
-                    prop.properties.length > 0 &&
-                    expandedProps.has(prop.name) && (
-                      <tr key={`${prop.name}-nested`}>
-                        <td
-                          colSpan={hasOptions ? 5 : 4}
-                          className="px-4 py-4 bg-zinc-50 dark:bg-zinc-800/50">
-                          <div className="ml-4">
-                            <h4 className="text-sm font-semibold mb-3 text-zinc-700 dark:text-zinc-300">
-                              {prop.type} Properties:
-                            </h4>
-                            <div className="overflow-x-auto">
-                              <table className="w-full border border-zinc-200 dark:border-zinc-700 rounded-md">
-                                <thead className="bg-zinc-100 dark:bg-zinc-700">
-                                  <tr>
-                                    <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-600">
-                                      Property
-                                    </th>
-                                    <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-600">
-                                      Type
-                                    </th>
-                                    <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-600">
-                                      Required
-                                    </th>
-                                    <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider border-r border-zinc-200 dark:border-zinc-600">
-                                      Default
-                                    </th>
-                                    <th className="px-3 py-2 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">
-                                      Description
-                                    </th>
-                                  </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-600">
-                                  {prop.properties.map((nestedProp) => (
-                                    <tr
-                                      key={nestedProp.name}
-                                      className="bg-white dark:bg-zinc-800">
-                                      <td className="px-3 py-2 border-r border-zinc-200 dark:border-zinc-600">
-                                        <code className="inline-flex items-center px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-mono">
-                                          {nestedProp.name}
-                                        </code>
-                                      </td>
-                                      <td className="px-3 py-2 border-r border-zinc-200 dark:border-zinc-600">
-                                        <code className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-mono">
-                                          {nestedProp.type}
-                                        </code>
-                                      </td>
-                                      <td className="px-3 py-2 border-r border-zinc-200 dark:border-zinc-600">
-                                        <span
-                                          className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
-                                            !nestedProp.optional
-                                              ? "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
-                                              : "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
-                                          }`}>
-                                          {!nestedProp.optional ? "Yes" : "No"}
-                                        </span>
-                                      </td>
-                                      <td className="px-3 py-2 border-r border-zinc-200 dark:border-zinc-600">
-                                        {nestedProp.default ? (
-                                          <code className="inline-flex items-center px-2 py-1 rounded-md bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-mono">
-                                            {nestedProp.default}
-                                          </code>
-                                        ) : (
-                                          <span className="text-zinc-500 dark:text-zinc-400 text-xs">
-                                            —
-                                          </span>
-                                        )}
-                                      </td>
-                                      <td className="px-3 py-2 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                                        {nestedProp.description}
-                                      </td>
-                                    </tr>
+                  {nested && (
+                    <tr>
+                      <td colSpan={hasOptions ? 5 : 4} className="p-0">
+                        <AnimatePresence initial={false}>
+                          {open && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden">
+                              <div className="border-t border-line bg-surface px-4 py-3">
+                                <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-subtle">
+                                  {prop.type} fields
+                                </p>
+                                <dl className="divide-y divide-line">
+                                  {prop.properties!.map((field) => (
+                                    <div key={field.name} className="grid gap-1 py-2 sm:grid-cols-[10rem_10rem_1fr]">
+                                      <dt className="font-mono text-[13px]">
+                                        {field.name}
+                                        {field.optional && <span className="text-subtle">?</span>}
+                                      </dt>
+                                      <dd className="font-mono text-[13px] text-muted">
+                                        {field.type}
+                                        {field.default ? ` = ${field.default}` : ""}
+                                      </dd>
+                                      <dd className="text-muted">{field.description}</dd>
+                                    </div>
                                   ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                                </dl>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-    </div>
+    </section>
   );
 }

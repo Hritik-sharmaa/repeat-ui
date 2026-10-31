@@ -5,7 +5,7 @@ const Card3DDemo = () => {
   return (
     <Card3D
       companyName="Repeat UI"
-      logo="/Logo.png"
+      logo="/logo-tile.svg"
       avatar="/snow.png"
       userName="Jon Snow"
       userRole="He knows NOTHING!"

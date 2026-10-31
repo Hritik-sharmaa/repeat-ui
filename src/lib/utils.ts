@@ -46,3 +46,15 @@ export function formatStarCount(count: number): string {
   }
   return count.toString();
 }
+
+export const GITHUB_URL = "https://github.com/Hritik-sharmaa/repeat-ui";
+
+// Feeds the pointer position to `.spotlight` backgrounds as --x / --y.
+export function trackPointer(e: React.PointerEvent<HTMLElement>) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+}
+
+export const formatName = (name: string) =>
+  name.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());

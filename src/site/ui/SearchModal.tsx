@@ -1,22 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { Search, X, ChevronRight, Folder, FileCode } from "lucide-react";
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { motion, AnimatePresence } from "motion/react";
-import { categories } from "@/data/categories";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
+import { ArrowRight, CornerDownLeft, FileCode2, Folder, Search } from "lucide-react";
+import { allComponents, categories } from "@/data/categories";
 import { useFlavor } from "@/lib/use-flavor";
+import { cn, formatName } from "@/lib/utils";
 
 interface SearchResult {
   type: "component" | "category";
   title: string;
   subtitle: string;
   href: string;
-  icon: React.ReactNode;
-  category?: string;
-  variant?: string;
 }
 
 interface SearchModalProps {
@@ -35,66 +31,29 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const flavor = useFlavor();
 
-  const searchResults = useMemo(() => {
-    if (!query.trim()) {
-      const results: SearchResult[] = [];
-
-      categories.forEach((category) => {
-        category.subcategories.forEach((subcategory) => {
-          subcategory.variants.slice(0, 3).forEach((variant) => {
-            results.push({
-              type: "component",
-              title: variant.name.replace(/-/g, " "),
-              subtitle: subcategory.name,
-              href: `/components/${subcategory.name.toLowerCase()}/${variant.name.toLowerCase()}?flavor=${flavor}`,
-              icon: <FileCode className="w-4 h-4" />,
-              category: subcategory.name.toLowerCase(),
-              variant: variant.name.toLowerCase(),
-            });
-          });
-        });
-      });
-
-      return results.slice(0, 10);
-    }
-
-    const results: SearchResult[] = [];
-    const lowerQuery = query.toLowerCase();
-
-    categories.forEach((category) => {
-      category.subcategories.forEach((subcategory) => {
-        if (subcategory.name.toLowerCase().includes(lowerQuery)) {
-          results.push({
-            type: "category",
-            title: subcategory.name,
-            subtitle: `${subcategory.variants.length} components`,
-            href: `/components/${subcategory.name.toLowerCase()}?flavor=${flavor}`,
-            icon: <Folder className="w-4 h-4" />,
-            category: subcategory.name.toLowerCase(),
-          });
-        }
-
-        subcategory.variants.forEach((variant) => {
-          const variantName = variant.name.replace(/-/g, " ");
-          if (
-            variantName.toLowerCase().includes(lowerQuery) ||
-            variant.name.toLowerCase().includes(lowerQuery)
-          ) {
-            results.push({
-              type: "component",
-              title: variantName,
-              subtitle: subcategory.name,
-              href: `/components/${subcategory.name.toLowerCase()}/${variant.name.toLowerCase()}?flavor=${flavor}`,
-              icon: <FileCode className="w-4 h-4" />,
-              category: subcategory.name.toLowerCase(),
-              variant: variant.name.toLowerCase(),
-            });
-          }
-        });
-      });
+  const results = useMemo<SearchResult[]>(() => {
+    const q = query.trim().toLowerCase();
+    const component = (c: (typeof allComponents)[number]): SearchResult => ({
+      type: "component",
+      title: formatName(c.name),
+      subtitle: c.description || formatName(c.category),
+      href: `/components/${c.category}/${c.name}?flavor=${flavor}`,
     });
+    if (!q) return allComponents.slice(-8).reverse().map(component);
 
-    return results.slice(0, 10);
+    const matchingCategories = categories
+      .flatMap((c) => c.subcategories)
+      .filter((sub) => sub.name.replace(/-/g, " ").includes(q))
+      .map<SearchResult>((sub) => ({
+        type: "category",
+        title: formatName(sub.name),
+        subtitle: `${sub.variants.length} components`,
+        href: `/components/${sub.name}?flavor=${flavor}`,
+      }));
+    const matchingComponents = allComponents
+      .filter((c) => `${c.name} ${c.category} ${c.description}`.replace(/-/g, " ").toLowerCase().includes(q))
+      .map(component);
+    return [...matchingCategories, ...matchingComponents].slice(0, 10);
   }, [query, flavor]);
 
   useEffect(() => {
@@ -102,9 +61,7 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
-          setSelectedIndex((prev) =>
-            prev < searchResults.length - 1 ? prev + 1 : prev
-          );
+          setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
           break;
         case "ArrowUp":
           e.preventDefault();
@@ -112,8 +69,8 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
           break;
         case "Enter":
           e.preventDefault();
-          if (searchResults[selectedIndex]) {
-            router.push(searchResults[selectedIndex].href);
+          if (results[selectedIndex]) {
+            router.push(results[selectedIndex].href);
             onClose();
           }
           break;
@@ -126,136 +83,100 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [searchResults, selectedIndex, router, onClose]);
+  }, [results, selectedIndex, router, onClose]);
 
-  const handleResultClick = (href: string) => {
+  const open = (href: string) => {
     router.push(href);
     onClose();
   };
 
   return (
-    <AnimatePresence>
+    <div className="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-[12vh]" onClick={onClose}>
       <motion.div
+        aria-hidden
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-start justify-center pt-[5vh] sm:pt-[10vh] px-2 sm:px-4"
-        onClick={onClose}>
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      />
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search components"
+        initial={{ opacity: 0, scale: 0.96, y: -12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+        className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-line-strong bg-surface shadow-2xl shadow-black/30"
+        onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center gap-3 border-b border-line px-4">
+          <Search className="size-4 text-muted" />
+          <input
+            ref={(input) => input?.focus()}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
+            }}
+            placeholder="Search components..."
+            className="h-14 flex-1 bg-transparent text-[15px] outline-none placeholder:text-subtle"
+          />
+          <kbd className="rounded-md border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted">Esc</kbd>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: -20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: -20 }}
-          transition={{ type: "spring", duration: 0.4 }}
-          className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden mx-2"
-          onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-zinc-800">
-            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-400" />
-            <Input
-              ref={(input) => input?.focus()}
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setSelectedIndex(0);
-              }}
-              placeholder="Search components..."
-              className="flex-1 border-none bg-transparent text-white placeholder:text-zinc-400 focus:outline-none focus:ring-0 text-sm sm:text-base"
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0 text-zinc-400 hover:text-white">
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
+        <div className="thin-scrollbar max-h-[min(60vh,420px)] overflow-y-auto p-2">
+          {results.length === 0 ? (
+            <p className="px-4 py-12 text-center text-sm text-muted">
+              Nothing matches &ldquo;{query}&rdquo;. Try &ldquo;button&rdquo; or &ldquo;text&rdquo;.
+            </p>
+          ) : (
+            <>
+              <p className="px-3 pb-1 pt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-subtle">
+                {query.trim() ? "Results" : "Newest"}
+              </p>
+              {results.map((result, index) => {
+                const Icon = result.type === "category" ? Folder : FileCode2;
+                const active = index === selectedIndex;
+                return (
+                  <button
+                    key={result.href}
+                    type="button"
+                    onMouseMove={() => setSelectedIndex(index)}
+                    onClick={() => open(result.href)}
+                    className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left">
+                    {active && (
+                      <motion.span
+                        layoutId="search-active"
+                        className="absolute inset-0 rounded-xl bg-surface-2"
+                        transition={{ type: "spring", stiffness: 600, damping: 40 }}
+                      />
+                    )}
+                    <span
+                      className={cn(
+                        "relative grid size-8 shrink-0 place-items-center rounded-lg border border-line",
+                        active ? "text-accent" : "text-muted"
+                      )}>
+                      <Icon className="size-4" />
+                    </span>
+                    <span className="relative min-w-0 flex-1">
+                      <span className="block text-sm font-medium">{result.title}</span>
+                      <span className="block truncate text-xs text-muted">{result.subtitle}</span>
+                    </span>
+                    {active && <ArrowRight className="relative size-4 text-muted" />}
+                  </button>
+                );
+              })}
+            </>
+          )}
+        </div>
 
-          <div className="max-h-96 overflow-y-auto">
-            {searchResults.length === 0 ? (
-              <div className="p-8 text-center text-zinc-400">
-                <Search className="w-12 h-12 mx-auto mb-4 text-zinc-600" />
-                <p className="text-lg mb-2">No components found</p>
-                <p className="text-sm">
-                  Try searching for &quot;button&quot;, &quot;card&quot;, or
-                  &quot;text&quot;
-                </p>
-              </div>
-            ) : (
-              <div className="p-2">
-                {!query.trim() && (
-                  <div className="px-3 py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider">
-                    Browse Components
-                  </div>
-                )}
-                {query.trim() && (
-                  <div className="px-3 py-2 text-xs font-medium text-zinc-500 uppercase tracking-wider">
-                    Search Results
-                  </div>
-                )}
-                {searchResults.map((result, index) => (
-                  <motion.div
-                    key={`${result.type}-${result.title}-${index}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.02 }}
-                    className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                      index === selectedIndex
-                        ? "bg-white/10 border border-white/20"
-                        : "hover:bg-white/5"
-                    }`}
-                    onClick={() => handleResultClick(result.href)}>
-                    <div
-                      className={`p-2 rounded-md ${
-                        result.type === "category"
-                          ? "bg-blue-500/20 text-blue-400"
-                          : "bg-green-500/20 text-green-400"
-                      }`}>
-                      {result.icon}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="text-white font-medium capitalize">
-                        {result.title}
-                      </div>
-                      <div className="text-sm text-zinc-400 capitalize">
-                        {result.subtitle}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-zinc-500">
-                      <ChevronRight className="w-4 h-4" />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between p-3 border-t border-zinc-800 text-xs text-zinc-500">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-zinc-800 rounded text-zinc-400">
-                  ↑↓
-                </kbd>
-                <span>Navigate</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-zinc-800 rounded text-zinc-400">
-                  ↵
-                </kbd>
-                <span>Select</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <kbd className="px-2 py-1 bg-zinc-800 rounded text-zinc-400">
-                  Esc
-                </kbd>
-                <span>Close</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        <div className="flex items-center gap-4 border-t border-line px-4 py-2.5 text-xs text-muted">
+          <span className="inline-flex items-center gap-1.5">
+            <kbd className="rounded border border-line px-1 font-mono">↑↓</kbd> Navigate
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <kbd className="rounded border border-line px-1"><CornerDownLeft className="size-3" /></kbd> Open
+          </span>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </div>
   );
 }

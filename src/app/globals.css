@@ -2,390 +2,175 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Design tokens. Light is the base; .dark (set by next-themes) overrides. Use them through the
+   Tailwind colours below: bg-bg, bg-surface, text-fg, text-muted, border-line, text-accent, ... */
 :root {
-  /* Light theme variables */
-  --background: #fafafa;
-  --foreground: #030712;
-  --secondary-text: #333333;
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f4f4f3;
+  --fg: #0c0a09;
+  --muted: #57534e;
+  --subtle: #a8a29e;
+  --line: rgb(12 10 9 / 0.08);
+  --line-strong: rgb(12 10 9 / 0.16);
   --accent: #fa5f1b;
-  --border-color: rgba(0, 0, 0, 0.7);
+  --accent-fg: #ffffff;
+  --glow: rgb(250 95 27 / 0.14);
 
-  --sidebar-inactive-text: #9c9c9c;
-  --sidebar-hover-text: #ffffff;
-  --sidebar-hover-bg: rgba(180, 180, 180, 0.3);
-  --sidebar-active-text: #ffffff;
-  --accent-10: rgba(250, 95, 27, 0.1);
+  /* Syntax colours, used by src/site/ui/codeTheme.ts. */
+  --code-keyword: #c2410c;
+  --code-string: #15803d;
+  --code-fn: #7c3aed;
+  --code-tag: #0369a1;
+  --code-attr: #b45309;
+  --code-number: #be185d;
+  --code-comment: #a8a29e;
+  --code-punct: #78716c;
+}
 
-  /* Table specific variables */
-  --table-background: #ffffff;
-  --table-header-bg: #eeeeee;
-  --table-border: #e5e7eb;
-  --table-text: #374151;
-  --table-text-secondary: #6b7280;
-  --code-bg-neutral: #f3f4f6;
-  --code-bg-blue: #dbeafe;
-  --code-bg-green: #dcfce7;
-  --code-bg-purple: #e9d5ff;
-  --code-text-neutral: #111827;
-  --code-text-blue: #1e40af;
-  --code-text-green: #166534;
-  --code-text-purple: #7c3aed;
+.dark {
+  --bg: #09090b;
+  --surface: #111113;
+  --surface-2: #18181b;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --subtle: #52525b;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --accent: #ff6a2b;
+  --accent-fg: #ffffff;
+  --glow: rgb(255 106 43 / 0.16);
 
-  /* Component tabs variables */
-  --tab-bg: #ffffff;
-  --tab-bg-hover: #f9fafb;
-  --tab-text: #374151;
-  --tab-border: #e5e7eb;
-  --tab-border-hover: #d1d5db;
-  --tab-active-bg: #2563eb;
-  --tab-active-text: #ffffff;
-  --tab-content-bg: #ffffff;
-  --tab-preview-bg: #f9fafb;
-  --tab-preview-gradient: rgba(249, 250, 251, 0.3);
-  --code-header-bg: #111827;
-  --code-header-gradient: #1f2937;
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --code-keyword: #ff8a4c;
+  --code-string: #86efac;
+  --code-fn: #c4b5fd;
+  --code-tag: #7dd3fc;
+  --code-attr: #fcd34d;
+  --code-number: #f9a8d4;
+  --code-comment: #52525b;
+  --code-punct: #71717a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-secondary: var(--secondary-text);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
-  --color-border: var(--border-color);
-  --color-table-bg: var(--table-background);
-  --color-table-header: var(--table-header-bg);
-  --color-table-border: var(--table-border);
-  --color-table-text: var(--table-text);
-  --color-table-text-secondary: var(--table-text-secondary);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-cal-sans: var(--font-cal-Sans);
-  --font-family-cal-sans: var(--font-cal-Sans);
+  --color-accent-fg: var(--accent-fg);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
 }
 
-/* Dark theme overrides: note the selector! */
-.dark {
-  --background: bg-gray-950;
-  --foreground: bg-neutral-50
-  --secondary-text: #cccccc;
-  --accent: #fa5f1b;
-  --border-color: rgba(255, 255, 255, 0.2);
+@keyframes marquee {
+  to {
+    transform: translateX(calc(-50% - var(--marquee-gap, 1rem) / 2));
+  }
+}
 
-  /* Dark table variables */
-  --table-background: #161616;
-  --table-header-bg: #292929;
-  --table-border: #374151;
-  --table-text: #d1d5db;
-  --table-text-secondary: #9ca3af;
-  --code-bg-neutral: #374151;
-  --code-bg-blue: #1e3a8a;
-  --code-bg-green: #14532d;
-  --code-bg-purple: #581c87;
-  --code-text-neutral: #f9fafb;
-  --code-text-blue: #93c5fd;
-  --code-text-green: #86efac;
-  --code-text-purple: #c4b5fd;
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
 
-  /* Dark component tabs variables */
-  --tab-bg: #1f2937;
-  --tab-bg-hover: #374151;
-  --tab-text: #d1d5db;
-  --tab-border: #374151;
-  --tab-border-hover: #4b5563;
-  --tab-active-bg: #ffffff;
-  --tab-active-text: #ffffff;
-  --tab-content-bg: #1b222e;
-  --tab-preview-bg: #111827;
-  --tab-preview-gradient: rgba(17, 24, 39, 0.3);
-  --code-header-bg: #151c27;
-  --code-header-gradient: #111827;
+html {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--fg);
+  font-feature-settings: "ss01", "cv11";
 }
 
-.heading-font {
-  font-family: var(--font-cal-sans);
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
 }
 
-/* Borders using CSS variable */
-.border-theme {
-  border-color: var(--border-color);
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-/* Table theme classes */
-.table-theme {
-  background-color: var(--table-background);
-  border-color: var(--table-border);
+/* Faint square grid, for hero and preview canvases. Fade it with .fade-edges. */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-.table-header-theme {
-  background-color: var(--table-header-bg);
+.bg-dots {
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-.table-hover-theme:hover {
-  background-color: var(--table-hover);
+.fade-edges {
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
 }
 
-.table-text-theme {
-  color: var(--table-text);
-}
-
-.table-text-secondary-theme {
-  color: var(--table-text-secondary);
-}
-
-.code-neutral-theme {
-  background-color: var(--code-bg-neutral);
-  color: var(--code-text-neutral);
-}
-
-.code-blue-theme {
-  background-color: var(--code-bg-blue);
-  color: var(--code-text-blue);
-}
-
-.code-green-theme {
-  background-color: var(--code-bg-green);
-  color: var(--code-text-green);
-}
-
-.code-purple-theme {
-  background-color: var(--code-bg-purple);
-  color: var(--code-text-purple);
-}
-
-/* Component Tabs theme classes */
-.tab-theme {
-  background-color: var(--tab-bg);
-  color: var(--tab-text);
-  border-color: var(--tab-border);
-}
-
-.tab-theme:hover {
-  background-color: var(--tab-bg-hover);
-  border-color: var(--tab-border-hover);
-}
-
-.tab-active-theme {
-  background-color: var(--tab-active-bg);
-  color: var(--tab-active-text);
-  border-color: var(--tab-active-bg);
-}
-
-.tab-active-theme:hover {
-  background-color: var(--tab-active-bg);
-  opacity: 0.9;
-}
-
-.tab-content-theme {
-  background-color: var(--tab-content-bg);
-  border-color: var(--tab-border);
-}
-
-.tab-preview-theme {
-  background: linear-gradient(
-    to bottom right,
-    var(--tab-preview-gradient),
-    var(--tab-preview-bg)
+/* A soft accent glow that follows the pointer: set --x / --y with trackPointer() from lib/utils. */
+.spotlight {
+  background-image: radial-gradient(
+    420px circle at var(--x, 50%) var(--y, -200px),
+    var(--glow),
+    transparent 60%
   );
 }
 
-.code-header-theme {
+/* Text with a light sweep across it. */
+.text-shimmer {
   background: linear-gradient(
-    to right,
-    var(--code-header-bg),
-    var(--code-header-gradient)
-  );
-}
-
-.sidebar-link {
-  @apply flex items-center py-2 px-3 text-sm transition-all duration-200 border-l-2;
-}
-
-.sidebar-link-active {
-  font-weight: 500;
-  background-color: var(--accent-10);
-  border-left-color: var(--accent);
-}
-
-.sidebar-link-inactive {
-  border-left-color: transparent;
-}
-
-.sidebar-link-inactive:hover {
-  background-color: var(--sidebar-hover-bg);
+      110deg,
+      var(--muted) 35%,
+      var(--fg) 50%,
+      var(--muted) 65%
+    )
+    0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-shimmer);
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-/* Custom scrollbar styles - Only thumb, no track */
-.custom-scrollbar {
+.thin-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.6) transparent;
+  scrollbar-color: var(--line-strong) transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+/* Theme switch: ThemeToggler animates a circle reveal over these snapshots. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  border: none;
-}
-
-.custom-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.6);
-  border-radius: 6px;
-  border: none;
-  box-shadow: none;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(156, 163, 175, 0.9);
-}
-
-/* Dark theme scrollbar */
-.dark .custom-scrollbar {
-  scrollbar-color: rgba(75, 85, 99, 0.8) transparent;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  border: none;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(75, 85, 99, 0.8);
-  border-radius: 6px;
-  border: none;
-  box-shadow: none;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(75, 85, 99, 1);
-}
-
-/* Font utility classes */
-
-/* Mobile viewport handling */
-@media (max-width: 640px) {
-  body {
-    font-size: 0.9rem;
+/* Only the site's own decoration. The component demos keep their motion: it is what they show. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .text-shimmer {
+    animation: none;
   }
-  
-  /* Prevent horizontal scroll on mobile */
-  html, body {
-    overflow-x: hidden;
-  }
-  
-  /* Better mobile text readability */
-  p, span, div {
-    word-wrap: break-word;
-    hyphens: auto;
-  }
-}
-
-/* Tablet viewport adjustments */
-@media (min-width: 641px) and (max-width: 1024px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-/* Desktop viewport adjustments */
-@media (min-width: 1025px) {
-  .container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-/* Focus states for better accessibility */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* Installation Guide Enhancements */
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-
-.scale-98 {
-  transform: scale(0.98);
-}
-
-.backdrop-blur-sm {
-  backdrop-filter: blur(4px);
-}
-
-/* Smooth gradient animations */
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
-}
-
-/* Enhanced hover effects for installation guide */
-.installation-step:hover .step-number {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.installation-code:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Pulse animation for status indicators */
-@keyframes status-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
-}
-
-.animate-status-pulse {
-  animation: status-pulse 2s ease-in-out infinite;
 }

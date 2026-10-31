@@ -25,3 +25,8 @@ export const isNewComponent = (dateAdded: string): boolean => {
 export const categories: Category[] = [
   { name: "Components", subcategories: catalog as Subcategory[] },
 ];
+
+// Every component in sidebar order, with its category.
+export const allComponents = categories
+  .flatMap((c) => c.subcategories)
+  .flatMap((sub) => sub.variants.map((v) => ({ ...v, category: sub.name })));

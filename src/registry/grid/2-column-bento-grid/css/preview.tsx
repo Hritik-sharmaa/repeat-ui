@@ -56,9 +56,9 @@ const Column2Grid = ({
   };
 
   return (
-    <div className="container">
+    <div className="bento-container">
       <motion.div
-        className="container"
+        className="bento-container"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -66,7 +66,7 @@ const Column2Grid = ({
           duration: 0.5,
           ease: "easeOut",
         }}>
-        <div className="grid">
+        <div className="bento-grid">
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}

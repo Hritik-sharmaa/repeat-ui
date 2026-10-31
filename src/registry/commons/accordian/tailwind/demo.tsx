@@ -1,22 +1,5 @@
 import Accordian from "./preview";
 
-const propData = [
-  {
-    name: "items",
-    type: "AccordionItem[]",
-    default: "[]",
-    description:
-      "Array of accordion items with id, title, and content properties.",
-  },
-  {
-    name: "allowMultiple",
-    type: "boolean",
-    default: "false",
-    description:
-      "Whether to allow multiple accordion items to be open simultaneously.",
-  },
-];
-
 const accordionItems = [
   {
     id: 1,
@@ -55,4 +38,3 @@ const AccordianDemo = () => {
 };
 
 export default AccordianDemo;
-export { propData };

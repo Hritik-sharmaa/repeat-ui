@@ -22,10 +22,8 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
   const openSearch = useCallback(() => setIsSearchOpen(true), []);
   const closeSearch = useCallback(() => setIsSearchOpen(false), []);
-  const toggleSearch = useCallback(
-    () => setIsSearchOpen(!isSearchOpen),
-    [isSearchOpen]
-  );
+  // Stable, so the Ctrl+K listener below is attached once.
+  const toggleSearch = useCallback(() => setIsSearchOpen((open) => !open), []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

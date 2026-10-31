@@ -1,27 +1,5 @@
 import LoopDeck from "./preview";
 
-const propData = [
-  {
-    name: "items",
-    type: "CarouselItem[]",
-    default: "-",
-    description:
-      "Array of carousel items to display. Each item should have id, title, subtitle, image, description, and color (which is optional) properties.",
-  },
-  {
-    name: "autoPlayInterval",
-    type: "number",
-    default: "5000",
-    description: "Time in milliseconds between automatic slide transitions",
-  },
-  {
-    name: "className",
-    type: "string",
-    default: '""',
-    description: "Additional CSS classes to apply to the carousel container",
-  },
-];
-
 const carouselItems = [
   {
     id: 1,
@@ -68,4 +46,3 @@ const CarouselDemo = () => {
 };
 
 export default CarouselDemo;
-export { propData };

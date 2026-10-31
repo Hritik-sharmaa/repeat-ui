@@ -1,21 +1,6 @@
 import React from "react";
 import CustomCursor from "./preview";
 
-const propData = [
-  {
-    name: "trailLength",
-    type: "number",
-    default: "10",
-    description: "Number of trail points to display.",
-  },
-  {
-    name: "trailColor",
-    type: "string",
-    default: "blue-500",
-    description: "Color of the trail effect.",
-  },
-];
-
 const TrailCursorDemo = () => {
   return (
     <div>
@@ -25,5 +10,4 @@ const TrailCursorDemo = () => {
   );
 };
 
-export { propData };
 export default TrailCursorDemo;

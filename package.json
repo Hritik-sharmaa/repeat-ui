@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "npm run registry && npm test --prefix cli"
+    "test": "npm run registry && npm test --prefix cli",
+    "new": "tsx scripts/new-component.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.15",
@@ -34,14 +35,13 @@
     "three": "^0.178.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
-    "eslint-config-next": "15.3.4",
+    "eslint-config-next": "^16.4.3",
     "prettier": "^3.9.10",
     "tailwindcss": "^4",
     "ts-blank-space": "^0.9.0",

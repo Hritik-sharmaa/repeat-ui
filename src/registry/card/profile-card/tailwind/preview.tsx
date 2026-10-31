@@ -13,6 +13,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
+  className = "",
   image,
   name,
   verified = false,
@@ -21,7 +22,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   onFollow,
 }) => {
   return (
-    <div className="w-[300px] rounded-[40px] overflow-hidden shadow-lg bg-white transition-all duration-300 ease-in-out text-black p-2.5 hover:-translate-y-0.5">
+    <div className={`w-[300px] rounded-[40px] overflow-hidden shadow-lg bg-white transition-all duration-300 ease-in-out text-black p-2.5 hover:-translate-y-0.5 ${className}`}>
       <img
         src={image}
         alt={name}

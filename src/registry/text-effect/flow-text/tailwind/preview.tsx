@@ -24,6 +24,8 @@ const FlatText: FC<FlatTextProps> = ({
 
   const offsetRef = useRef(0);
   const dragRef = useRef(false);
+  // dragRef is for the animation loop; this re-renders for the cursor.
+  const [isDragging, setIsDragging] = useState(false);
   const lastXRef = useRef(0);
   const velRef = useRef(0);
   const dirRef = useRef(direction);
@@ -83,6 +85,7 @@ const FlatText: FC<FlatTextProps> = ({
   const onPointerDown = (e: PointerEvent) => {
     if (!interactive) return;
     dragRef.current = true;
+    setIsDragging(true);
     lastXRef.current = e.clientX;
     velRef.current = 0;
   };
@@ -101,6 +104,7 @@ const FlatText: FC<FlatTextProps> = ({
   const endDrag = () => {
     if (!interactive) return;
     dragRef.current = false;
+    setIsDragging(false);
     dirRef.current = velRef.current > 0 ? "right" : "left";
   };
 
@@ -108,7 +112,7 @@ const FlatText: FC<FlatTextProps> = ({
     <div
       className={`overflow-hidden w-full flex items-center ${className ?? ""}`}
       style={{
-        cursor: interactive ? (dragRef.current ? "grabbing" : "grab") : "auto",
+        cursor: interactive ? (isDragging ? "grabbing" : "grab") : "auto",
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}

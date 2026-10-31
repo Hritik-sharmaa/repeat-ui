@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
+import { useIsClient } from "@/lib/use-is-client";
 
 interface ThemeAnimationContextType {
   isAnimating: boolean;
@@ -28,7 +29,7 @@ export function useThemeAnimation() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = React.useState(false);
+  const mounted = useIsClient();
   const [isAnimating, setIsAnimating] = React.useState(false);
   const [animationPosition, setAnimationPosition] = React.useState({
     x: 0,
@@ -37,10 +38,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [animationType, setAnimationType] = React.useState<
     "expand" | "contract"
   >("contract");
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const triggerAnimation = React.useCallback(
     (position: { x: number; y: number }, currentTheme: string) => {

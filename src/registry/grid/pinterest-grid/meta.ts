@@ -1,0 +1,102 @@
+import type { ComponentMeta } from "../../catalog";
+
+export default {
+  description: "Photo gallery grid with lightbox effect",
+  dateAdded: "2025-08-14",
+  tier: "free",
+  version: "1.0.0",
+  props: [
+    {
+      name: "items",
+      type: "PinterestItem[]",
+      default: "[]",
+      description: "Array of items to display in the Pinterest grid",
+      properties: [
+        {
+          name: "id",
+          type: "string",
+          optional: false,
+          default: "unique-id",
+          description: "Unique identifier for the item",
+        },
+        {
+          name: "src",
+          type: "string",
+          optional: false,
+          default: "https://example.com/image.jpg",
+          description: "Image URL to display",
+        },
+        {
+          name: "alt",
+          type: "string",
+          optional: true,
+          default: "Image description",
+          description: "Alternative text for the image",
+        },
+        {
+          name: "title",
+          type: "string",
+          optional: true,
+          default: "Image Title",
+          description: "Title displayed on hover overlay",
+        },
+        {
+          name: "description",
+          type: "string",
+          optional: true,
+          default: "Image description text",
+          description: "Description text displayed on hover overlay",
+        },
+        {
+          name: "author",
+          type: "string",
+          optional: true,
+          default: "Author Name",
+          description: "Author name displayed on hover overlay",
+        },
+        {
+          name: "tags",
+          type: "string[]",
+          optional: true,
+          default: "[]",
+          description: "Array of tags associated with the item",
+        },
+        {
+          name: "width",
+          type: "number",
+          optional: true,
+          default: "400",
+          description: "Image width in pixels",
+        },
+        {
+          name: "height",
+          type: "number",
+          optional: true,
+          default: "300",
+          description: "Image height in pixels",
+        },
+      ],
+    },
+    {
+      name: "columns",
+      type: "number",
+      default: "4",
+      description: "Number of columns in the grid layout",
+      properties: [],
+    },
+    {
+      name: "gap",
+      type: "number",
+      default: "16",
+      description: "Gap between grid items in pixels",
+      properties: [],
+    },
+    {
+      name: "onItemClick",
+      type: "(item: PinterestItem) => void",
+      default: "undefined",
+      description: "Callback function triggered when an item is clicked",
+      properties: [],
+    },
+  ],
+} satisfies ComponentMeta;

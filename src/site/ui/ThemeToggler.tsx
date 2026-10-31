@@ -4,18 +4,15 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/site/ui/Button";
 import { useThemeAnimation } from "@/app/context/theme-provider";
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
+import { useIsClient } from "@/lib/use-is-client";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const { triggerAnimation } = useThemeAnimation();
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleThemeChange = () => {
     if (buttonRef.current) {

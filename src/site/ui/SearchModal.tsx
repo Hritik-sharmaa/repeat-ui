@@ -7,7 +7,7 @@ import { Input } from "./Input";
 import { motion, AnimatePresence } from "motion/react";
 import { categories } from "@/data/categories";
 import { useRouter } from "next/navigation";
-import { useVariant } from "@/app/context/code-context";
+import { useFlavor } from "@/lib/use-flavor";
 
 interface SearchResult {
   type: "component" | "category";
@@ -24,11 +24,16 @@ interface SearchModalProps {
   onClose: () => void;
 }
 
+// Mounted only while open, so the query and selection start fresh every time.
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  return isOpen ? <SearchDialog onClose={onClose} /> : null;
+}
+
+function SearchDialog({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
-  const { flavor } = useVariant();
+  const flavor = useFlavor();
 
   const searchResults = useMemo(() => {
     if (!query.trim()) {
@@ -63,7 +68,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             type: "category",
             title: subcategory.name,
             subtitle: `${subcategory.variants.length} components`,
-            href: `/components/${subcategory.name.toLowerCase()}`,
+            href: `/components/${subcategory.name.toLowerCase()}?flavor=${flavor}`,
             icon: <Folder className="w-4 h-4" />,
             category: subcategory.name.toLowerCase(),
           });
@@ -94,8 +99,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
@@ -123,25 +126,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, searchResults, selectedIndex, router, onClose]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setQuery("");
-      setSelectedIndex(0);
-    }
-  }, [isOpen]);
+  }, [searchResults, selectedIndex, router, onClose]);
 
   const handleResultClick = (href: string) => {
     router.push(href);
     onClose();
   };
-
-  if (!isOpen) return null;
 
   return (
     <AnimatePresence>
@@ -165,7 +155,10 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <Input
               ref={(input) => input?.focus()}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setSelectedIndex(0);
+              }}
               placeholder="Search components..."
               className="flex-1 border-none bg-transparent text-white placeholder:text-zinc-400 focus:outline-none focus:ring-0 text-sm sm:text-base"
             />

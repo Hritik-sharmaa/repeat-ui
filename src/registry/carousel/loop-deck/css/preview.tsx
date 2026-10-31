@@ -80,7 +80,8 @@ const LoopDeck = ({
             } else {
               const distance = Math.abs(idx - currentIndex);
               translateY = distance * 4;
-              translateX = (Math.random() - 0.5) * 10;
+              // A fixed scatter per card from -5 to 5px, so cards keep their place across renders.
+              translateX = ((idx * 7) % 11) - 5;
               scale = 1 - distance * 0.02;
               opacity = Math.max(0.1, 0.5 - distance * 0.1);
             }

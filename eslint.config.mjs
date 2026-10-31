@@ -1,19 +1,11 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  { ignores: [".next/**", "public/r/**", "src/registry/__generated__/**", "drafts/**"] },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default defineConfig([
+  globalIgnores([".next/**", "next-env.d.ts", "public/r/**", "src/registry/__generated__/**", "drafts/**"]),
+  ...nextVitals,
+  ...nextTs,
   // Registry components are copied into any React app, so they cannot use next/image.
   { files: ["src/registry/**"], rules: { "@next/next/no-img-element": "off" } },
-];
-
-export default eslintConfig;
+]);

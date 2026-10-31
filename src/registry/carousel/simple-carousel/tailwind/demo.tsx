@@ -1,58 +1,5 @@
 import SimpleCarousel, { type CarouselItem } from "./preview";
 
-const propData = [
-  {
-    name: "items",
-    type: "CarouselItem[]",
-    default: "-",
-    description:
-      "Array of carousel items to display. Each item should have id, title, subtitle, image, description, and color (which is optional) properties.",
-  },
-  {
-    name: "autoPlay",
-    type: "boolean",
-    default: "true",
-    description:
-      "Whether the carousel should automatically advance to the next slide",
-  },
-  {
-    name: "autoPlayInterval",
-    type: "number",
-    default: "5000",
-    description: "Time in milliseconds between automatic slide transitions",
-  },
-  {
-    name: "showControls",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show navigation arrows and play/pause button",
-  },
-  {
-    name: "showProgress",
-    type: "boolean",
-    default: "true",
-    description: "Whether to display the progress bar at the bottom",
-  },
-  {
-    name: "showThumbnails",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show thumbnail previews at the bottom",
-  },
-  {
-    name: "showIndicators",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show slide indicator dots at the bottom",
-  },
-  {
-    name: "className",
-    type: "string",
-    default: '""',
-    description: "Additional CSS classes to apply to the carousel container",
-  },
-];
-
 const carouselItems: CarouselItem[] = [
   {
     id: 1,
@@ -107,4 +54,3 @@ const CarouselDemo = () => {
 };
 
 export default CarouselDemo;
-export { propData };

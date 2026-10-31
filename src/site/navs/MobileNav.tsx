@@ -11,17 +11,20 @@ function formatName(name: string) {
   return name.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 import { useSearch } from "@/app/context/search-context";
-import { useVariant } from "@/app/context/code-context";
+import { useFlavor } from "@/lib/use-flavor";
 import ThemeToggle from "@/site/ui/ThemeToggler";
 
 export default function MobileNav() {
-  const [isOpen, setIsOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set()
   );
   const pathname = usePathname();
+  // The page the menu was opened on, so navigating to another page closes it.
+  const [openedOn, setOpenedOn] = useState<string | null>(null);
+  const isOpen = openedOn === pathname;
+  const setIsOpen = (open: boolean) => setOpenedOn(open ? pathname : null);
   const { openSearch } = useSearch();
-  const { flavor } = useVariant();
+  const flavor = useFlavor();
 
   const toggleCategory = (categoryName: string) => {
     const newExpanded = new Set(expandedCategories);
@@ -32,11 +35,6 @@ export default function MobileNav() {
     }
     setExpandedCategories(newExpanded);
   };
-
-  // Close mobile nav when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -128,7 +126,7 @@ export default function MobileNav() {
                           <li key={sub.name} className="space-y-1">
                             <div className="flex items-center">
                               <Link
-                                href={categoryPath}
+                                href={`${categoryPath}?flavor=${flavor}`}
                                 className={`flex-1 block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                                   isActive
                                     ? "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"

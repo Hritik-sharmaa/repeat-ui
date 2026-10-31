@@ -13,7 +13,7 @@ import Link from "next/link";
 import ThemeToggle from "@/site/ui/ThemeToggler";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useVariant } from "@/app/context/code-context";
+import { useFlavor } from "@/lib/use-flavor";
 import { useSearch } from "@/app/context/search-context";
 import { SearchModal } from "@/site/ui/SearchModal";
 import { fetchGitHubStars, formatStarCount } from "@/lib/utils";
@@ -26,19 +26,12 @@ export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { flavor, setFlavor } = useVariant();
+  const flavor = useFlavor();
   const { isSearchOpen, openSearch, closeSearch } = useSearch();
   const [starCount, setStarCount] = useState<number>(0);
   const [isLoadingStars, setIsLoadingStars] = useState(true);
 
   const [language, style] = flavor.split("-");
-
-  useEffect(() => {
-    const queryFlavor = searchParams.get("flavor");
-    if (queryFlavor && queryFlavor !== flavor) {
-      setFlavor(queryFlavor);
-    }
-  }, [searchParams, flavor, setFlavor]);
 
   useEffect(() => {
     const loadStars = async () => {
@@ -58,7 +51,6 @@ export function Header() {
 
   const updateFlavor = (newLang: string, newStyle: string) => {
     const newFlavor = `${newLang}-${newStyle}`;
-    setFlavor(newFlavor);
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("flavor", newFlavor);

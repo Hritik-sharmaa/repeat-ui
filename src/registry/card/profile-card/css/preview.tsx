@@ -4,7 +4,7 @@ import { BsPlus } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
 
 interface ProfileCardProps {
-  className: string;
+  className?: string;
   image: string;
   name: string;
   verified?: boolean;
@@ -14,6 +14,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
+  className = "",
   image,
   name,
   verified = false,
@@ -22,7 +23,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   onFollow,
 }) => {
   return (
-    <div className="profile-card">
+    <div className={`profile-card ${className}`}>
       <img
         src={image}
         alt={name}

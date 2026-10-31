@@ -28,20 +28,17 @@ const TypingText: React.FC<TypingTextProps> = ({
   onComplete,
   onDeleteComplete,
 }) => {
-  const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const displayedText = text.slice(0, currentIndex);
+
   useEffect(() => {
-    if (delay > 0) {
-      const delayTimer = setTimeout(() => {
-        setIsTyping(true);
-      }, delay);
-      return () => clearTimeout(delayTimer);
-    } else {
+    const delayTimer = setTimeout(() => {
       setIsTyping(true);
-    }
+    }, delay);
+    return () => clearTimeout(delayTimer);
   }, [delay]);
 
   useEffect(() => {
@@ -49,7 +46,6 @@ const TypingText: React.FC<TypingTextProps> = ({
 
     if (currentIndex < text.length) {
       const timer = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[currentIndex]);
         setCurrentIndex((prev) => prev + 1);
       }, speed);
 
@@ -79,20 +75,18 @@ const TypingText: React.FC<TypingTextProps> = ({
   useEffect(() => {
     if (!isDeleting) return;
 
-    if (currentIndex > 0) {
-      const timer = setTimeout(() => {
-        setDisplayedText((prev) => prev.slice(0, -1));
-        setCurrentIndex((prev) => prev - 1);
-      }, deleteSpeed);
-
-      return () => clearTimeout(timer);
-    } else {
-      setIsDeleting(false);
-
-      if (onDeleteComplete) {
-        onDeleteComplete();
+    const timer = setTimeout(() => {
+      const next = Math.max(currentIndex - 1, 0);
+      setCurrentIndex(next);
+      if (next === 0) {
+        setIsDeleting(false);
+        if (onDeleteComplete) {
+          onDeleteComplete();
+        }
       }
-    }
+    }, deleteSpeed);
+
+    return () => clearTimeout(timer);
   }, [currentIndex, isDeleting, deleteSpeed, onDeleteComplete]);
 
   return (

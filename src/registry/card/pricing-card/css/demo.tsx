@@ -2,45 +2,6 @@ import React from "react";
 import PricingCard from "./preview";
 import "./style.css";
 
-const propData = [
-  {
-    name: "plan",
-    type: "string",
-    default: "-",
-    description: "Got 3 type of plan Basic | Premium | Enterprise",
-  },
-  {
-    name: "price",
-    type: "number | string",
-    default: "-",
-    description: "Price of the plan",
-  },
-  {
-    name: "billing",
-    type: "string",
-    default: "-",
-    description: "Description of the plan",
-  },
-  {
-    name: "features",
-    type: "string[]",
-    default: "-",
-    description: "Array of string to diaply the features of each card",
-  },
-  {
-    name: "buttonText",
-    type: "string",
-    default: "-",
-    description: "Text for the button",
-  },
-  {
-    name: "isPopular",
-    type: "boolean",
-    default: "-",
-    description: "Boolean value for the popular badge",
-  },
-];
-
 const PricingCardDemo = () => {
   const features = [
     "Advance data analysis",
@@ -77,5 +38,4 @@ const PricingCardDemo = () => {
   );
 };
 
-export { propData };
 export default PricingCardDemo;

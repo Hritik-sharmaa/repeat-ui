@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { categories, isNewComponent } from "@/data/categories";
-import { useVariant } from "@/app/context/code-context";
+import { useFlavor } from "@/lib/use-flavor";
 import { motion } from "motion/react";
 import { formatDateForDisplay } from "@/lib/dateUtils";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +18,7 @@ function formatName(name: string) {
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { flavor } = useVariant();
+  const flavor = useFlavor();
   const [isScrollable, setIsScrollable] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const asideRef = useRef<HTMLDivElement>(null);
@@ -90,11 +90,11 @@ export default function Sidebar() {
               {cat.subcategories.map((sub, subIndex) => (
                 <li key={sub.name} className="relative group font-cal-sans">
                   <Link
-                    href={`/components/${sub.name.toLowerCase()}`}
+                    href={`/components/${sub.name.toLowerCase()}?flavor=${flavor}`}
                     onClick={(e) =>
                       handleAnchorClick(
                         e,
-                        `/components/${sub.name.toLowerCase()}`
+                        `/components/${sub.name.toLowerCase()}?flavor=${flavor}`
                       )
                     }>
                     <motion.div

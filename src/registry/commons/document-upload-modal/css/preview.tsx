@@ -336,3 +336,5 @@ export function DocumentUploadModal({
     </>
   );
 }
+
+export default DocumentUploadModal;

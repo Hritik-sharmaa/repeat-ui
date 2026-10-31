@@ -4,6 +4,8 @@ import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
 
 const Fill = ({
   children,
+  className = "",
+  ...rest
 }: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
   return (
     <>
@@ -26,7 +28,9 @@ const Fill = ({
         }
       `}</style>
 
-      <button className="relative bg-transparent border-2 border-[#ff7675] text-[#ff7675] px-9 py-3 text-base font-semibold rounded-full cursor-pointer overflow-hidden transition-all duration-300 ease-in-out uppercase tracking-wider fill-button hover:text-white hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(255,118,117,0.3)]">
+      <button
+        className={`relative bg-transparent border-2 border-[#ff7675] text-[#ff7675] px-9 py-3 text-base font-semibold rounded-full cursor-pointer overflow-hidden transition-all duration-300 ease-in-out uppercase tracking-wider fill-button hover:text-white hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(255,118,117,0.3)] ${className}`}
+        {...rest}>
         <span className="relative z-10">{children}</span>
       </button>
     </>

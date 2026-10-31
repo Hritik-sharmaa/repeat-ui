@@ -68,53 +68,27 @@ npm test           # installs every component x variant with the CLI and checks 
 ```
 src/
 ├── registry/                 # THE components, one folder each
+│   ├── catalog.ts            # category order, and the shape of meta.ts
 │   └── button/simple/
+│       ├── meta.ts           # description, date, props table
 │       ├── css/              # preview.tsx, demo.tsx, style.css
 │       └── tailwind/         # preview.tsx, demo.tsx
-├── data/categories.ts        # the one list of components (name, date, description)
 ├── app/                      # website routes
 ├── site/                     # website UI (nav, tabs, install guide)
 └── lib/
 scripts/build-registry.ts     # checks every component and builds the registry JSON
+scripts/new-component.ts      # npm run new <category> <name>
 cli/                          # the npm package @hritik-sharmaa/repeat-ui
 drafts/                       # unfinished components, not published
 ```
 
-You write each component in TypeScript only. The JavaScript variants are generated from it.
-
-`npm run dev` and `npm run build` first run `npm run registry`, which:
-
-- type-checks every component like a plain React app would: no Next.js globals (so no `<style jsx>`; use
-  `<style>`), no Node types (use `ReturnType<typeof setTimeout>`, not `NodeJS.Timeout`), and type imports
-  must use `import type` or the JS output breaks
-- fails on `@keyframes` names without the `rui-` prefix; keyframes are global, and names like `pulse` or `spin`
-  would override Tailwind's own animations in the user's app
-- fails if a component imports `next/*` or `@/...` (those only work inside this site), imports a file that
-  doesn't exist, has a file nothing imports, or is missing from `categories.ts`
-- finds each component's npm packages from its imports
-- writes `public/r/<item>.json` and `public/r/registry.json` (shadcn registry format, served to both CLIs)
-  and `src/registry/__generated__/` (read by the site)
-
-While `npm run dev` is running, rerun `npm run registry` to refresh the Code tab after editing a component.
+`npm run dev` and `npm run build` first run `npm run registry`, which checks every component and writes
+`public/r/` (shadcn registry format, served to both CLIs) and `src/registry/__generated__/` (read by the site).
+The website's component list comes from the `meta.ts` files; there is no list to edit by hand.
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-component`)
-3. Add your component with proper date tracking
-4. Commit your changes (`git commit -m 'Add amazing component'`)
-5. Push to the branch (`git push origin feature/amazing-component`)
-6. Open a Pull Request
-
-### Adding New Components
-
-1. Create `src/registry/<category>/<name>/css/` and `.../tailwind/`, each with `preview.tsx` (the component)
-   and `demo.tsx` (default export renders it; export `propData` for the props table). The CSS one also
-   gets `style.css`, imported from `preview.tsx`.
-2. Add `createVariant("<name>", "<today's date>", "<description>")` to `src/data/categories.ts`.
-3. Run `npm run registry`. It tells you exactly what is wrong, if anything.
-
-Use plain `<img>`, not `next/image`: components are copied into any React app.
+New components are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md): `npm run new <category> <name>` sets one up.
 
 ### Releasing
 

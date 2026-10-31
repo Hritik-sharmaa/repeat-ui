@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
-import { useVariant } from "@/app/context/code-context";
+import { useFlavor } from "@/lib/use-flavor";
 import { categories } from "@/data/categories";
 
 // Buttons are small enough to preview live in a card; bigger components (and cursors,
@@ -11,7 +11,7 @@ const LIVE_PREVIEW = new Set(["button"]);
 
 export default function CategoryGalleryPage() {
   const { category } = useParams<{ category: string }>();
-  const { flavor } = useVariant();
+  const flavor = useFlavor();
   const subcategory = categories
     .flatMap((cat) => cat.subcategories)
     .find((sub) => sub.name.toLowerCase() === category);

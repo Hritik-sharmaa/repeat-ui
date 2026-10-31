@@ -3,13 +3,15 @@
 //   public/r/<name>[-css|-js|-js-css].json   shadcn registry items, fetched by both CLIs
 //   public/r/registry.json                   shadcn registry index
 //   public/r/index.json                      component list for our CLI
-//   src/registry/__generated__/...           same items, imported by the website
+//   src/registry/__generated__/<flavor>/...  same items, imported by the website
+//   src/registry/__generated__/catalog.json  every component's metadata, for the website's navigation
 import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
-import { posix } from "path";
+import { posix, resolve } from "path";
+import { pathToFileURL } from "url";
 import ts from "typescript";
 import { blankSourceFile } from "ts-blank-space";
 import * as prettier from "prettier";
-import { categories } from "../src/data/categories";
+import { CATEGORIES, type ComponentMeta } from "../src/registry/catalog";
 
 const { dirname, join } = posix;
 const SRC = "src/registry";
@@ -104,12 +106,97 @@ async function buildFlavorStyle(dir: string) {
   return { files, dependencies: [...dependencies].sort() };
 }
 
-async function checkNoStrayFolders(known: Set<string>) {
-  for (const category of await readdir(SRC)) {
-    if (category === "__generated__") continue;
-    for (const variant of await readdir(join(SRC, category))) {
-      if (!known.has(`${category}/${variant}`)) {
-        errors.push(`${SRC}/${category}/${variant}: folder is not listed in src/data/categories.ts`);
+interface Component {
+  category: string;
+  name: string;
+  meta: ComponentMeta;
+}
+
+// Every folder under src/registry/<category>/ is a component: meta.ts plus a css/ and a tailwind/ folder.
+async function findComponents() {
+  const components: Component[] = [];
+  for (const entry of await readdir(SRC, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name === "__generated__") continue;
+    const category = entry.name;
+    if (!(CATEGORIES as readonly string[]).includes(category)) {
+      errors.push(`${SRC}/${category}: add "${category}" to CATEGORIES in ${SRC}/catalog.ts`);
+      continue;
+    }
+    for (const name of await readdir(join(SRC, category))) {
+      const dir = join(SRC, category, name);
+      const entries = await readdir(dir).catch(() => null);
+      if (!entries) {
+        errors.push(`${dir}: expected a component folder`);
+        continue;
+      }
+      for (const e of entries) {
+        if (e !== "meta.ts" && !(STYLES as readonly string[]).includes(e)) errors.push(`${dir}/${e}: unexpected file`);
+      }
+      if (!entries.includes("meta.ts")) {
+        errors.push(`${dir}: missing meta.ts`);
+        continue;
+      }
+      const meta: ComponentMeta = (await import(pathToFileURL(resolve(dir, "meta.ts")).href)).default;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.dateAdded) || isNaN(Date.parse(meta.dateAdded))) {
+        errors.push(`${dir}/meta.ts: dateAdded must be a YYYY-MM-DD date`);
+      }
+      components.push({ category, name, meta });
+    }
+  }
+  const order = (c: Component) => CATEGORIES.indexOf(c.category as (typeof CATEGORIES)[number]);
+  return components.sort(
+    (a, b) => order(a) - order(b) || a.meta.dateAdded.localeCompare(b.meta.dateAdded) || a.name.localeCompare(b.name)
+  );
+}
+
+// The props a component accepts: `all` includes inherited ones such as HTML attributes,
+// `own` only those declared in the registry's own code.
+function readProps(program: ts.Program, file: string) {
+  const checker = program.getTypeChecker();
+  const sf = program.getSourceFile(file);
+  const source = sf && checker.getSymbolAtLocation(sf);
+  let component = source && checker.tryGetMemberInModuleExports("default", source);
+  if (!sf || !component) return null;
+  if (component.flags & ts.SymbolFlags.Alias) component = checker.getAliasedSymbol(component);
+  const signature = checker.getTypeOfSymbolAtLocation(component, sf).getCallSignatures()[0];
+  if (!signature) return null;
+  const all = new Set<string>();
+  const own = new Set<string>();
+  const param = signature.parameters[0];
+  if (param) {
+    const type = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(param, sf));
+    for (const prop of checker.getPropertiesOfType(type)) {
+      all.add(prop.name);
+      if (prop.declarations?.some((d) => !d.getSourceFile().fileName.includes("/node_modules/"))) own.add(prop.name);
+    }
+  }
+  return { all, own };
+}
+
+// The props table on the website comes from meta.ts, so it must match what preview.tsx accepts.
+function checkPropDocs(components: Component[]) {
+  const files = components.flatMap((c) => STYLES.map((style) => resolve(SRC, c.category, c.name, style, "preview.tsx")));
+  const config = ts.getParsedCommandLineOfConfigFile("tsconfig.registry.json", {}, {
+    ...ts.sys,
+    onUnRecoverableConfigFileDiagnostic: (d) => {
+      throw new Error(ts.flattenDiagnosticMessageText(d.messageText, "\n"));
+    },
+  });
+  const program = ts.createProgram(files, config!.options);
+  for (const c of components) {
+    const documented = new Set(c.meta.props.map((p) => p.name));
+    for (const style of STYLES) {
+      const where = join(SRC, c.category, c.name, style, "preview.tsx");
+      const props = readProps(program, resolve(where));
+      if (!props) {
+        errors.push(`${where}: default export is not a component`);
+        continue;
+      }
+      for (const name of documented) {
+        if (!props.all.has(name)) errors.push(`${where}: meta.ts documents prop "${name}", which this component does not accept`);
+      }
+      for (const name of props.own) {
+        if (!documented.has(name)) errors.push(`${where}: prop "${name}" is not documented in meta.ts`);
       }
     }
   }
@@ -145,42 +232,39 @@ async function writeJson(path: string, data: unknown) {
 
 async function main() {
   const items: RegistryItem[] = [];
-  const known = new Set<string>();
+  const components = await findComponents();
 
-  for (const sub of categories.flatMap((c) => c.subcategories)) {
-    const category = sub.name.toLowerCase();
-    for (const variant of sub.variants) {
-      known.add(`${category}/${variant.name}`);
-      const name = `${category}-${variant.name}`;
-      for (const style of STYLES) {
-        const dir = join(SRC, category, variant.name, style);
-        const built = await buildFlavorStyle(dir);
-        if (!built) continue;
-        for (const lang of LANGS) {
-          const files =
-            lang === "ts"
-              ? built.files
-              : await Promise.all(
-                  built.files.map(async (f) =>
-                    /\.tsx?$/.test(f.path)
-                      ? { path: f.path.replace(/\.ts(x?)$/, ".js$1"), content: await toJs(f.content, `${dir}/${f.path}`) }
-                      : f
-                  )
-                );
-          items.push({
-            name,
-            title: title(variant.name),
-            description: variant.description ?? "",
-            category,
-            flavor: `${lang}-${style}`,
-            dependencies: built.dependencies,
-            files,
-          });
-        }
+  for (const { category, name: variant, meta } of components) {
+    const name = `${category}-${variant}`;
+    for (const style of STYLES) {
+      const dir = join(SRC, category, variant, style);
+      const built = await buildFlavorStyle(dir);
+      if (!built) continue;
+      for (const lang of LANGS) {
+        const files =
+          lang === "ts"
+            ? built.files
+            : await Promise.all(
+                built.files.map(async (f) =>
+                  /\.tsx?$/.test(f.path)
+                    ? { path: f.path.replace(/\.ts(x?)$/, ".js$1"), content: await toJs(f.content, `${dir}/${f.path}`) }
+                    : f
+                )
+              );
+        items.push({
+          name,
+          title: title(variant),
+          description: meta.description,
+          category,
+          flavor: `${lang}-${style}`,
+          dependencies: built.dependencies,
+          files,
+        });
       }
     }
   }
-  await checkNoStrayFolders(known);
+  // Only once every folder is complete, or the type checker reports missing files instead.
+  if (!errors.length) checkPropDocs(components);
 
   if (errors.length) {
     console.error(`Registry has ${errors.length} problem(s):\n- ${errors.join("\n- ")}`);
@@ -212,6 +296,16 @@ async function main() {
     .filter((i) => i.flavor === "ts-tailwind")
     .map(({ name, title, description, category }) => ({ name, title, description, category }));
   await writeJson(join(PUBLIC, "index.json"), index);
+  // Without props, which only the component's own page needs: this ships in the website's navigation.
+  await writeJson(
+    join(GENERATED, "catalog.json"),
+    CATEGORIES.map((category) => ({
+      name: category,
+      variants: components
+        .filter((c) => c.category === category)
+        .map(({ name, meta: { description, dateAdded, tier, version } }) => ({ name, description, dateAdded, tier, version })),
+    })).filter((c) => c.variants.length)
+  );
   console.log(`Registry built: ${index.length} components, ${items.length} items.`);
 }
 

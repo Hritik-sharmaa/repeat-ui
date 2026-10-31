@@ -1,25 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import type { PropDoc } from "@/registry/catalog";
 
-type PropData = {
-  name: string;
-  type: string;
-  default: string;
-  description: string;
-  options?: string[];
-  properties?: NestedProperty[];
-};
-
-type NestedProperty = {
-  name: string;
-  type: string;
-  optional: boolean;
-  default?: string;
-  description: string;
-};
-
-export default function PropTable({ data }: { data: PropData[] }) {
+export default function PropTable({ data }: { data: PropDoc[] }) {
   const [expandedProps, setExpandedProps] = useState<Set<string>>(new Set());
 
   if (!data || data.length === 0) return null;

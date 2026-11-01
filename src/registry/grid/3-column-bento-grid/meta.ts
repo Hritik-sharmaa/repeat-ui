@@ -4,7 +4,7 @@ export default {
   description: "Masonry style grid with variable item heights",
   dateAdded: "2025-08-14",
   tier: "free",
-  version: "1.0.0",
+  version: "2.0.0",
   props: [
     {
       name: "maximizeCard",
@@ -23,8 +23,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Find your next favorite read. Explore curated recommendations tailored to your taste.",
+          default: "Find your next favorite read. Explore curated recommendations tailored to your taste.",
           description: "Detailed description text shown below the heading",
         },
         {
@@ -32,8 +31,7 @@ export default {
           type: "string",
           optional: true,
           default: "Book illustration URL",
-          description:
-            "Large illustration/image URL displayed in the center of the card",
+          description: "Large illustration/image URL displayed in the center of the card",
         },
         {
           name: "backgroundColor",
@@ -61,8 +59,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Organize your reading list, track progress, & set reading goals.",
+          default: "Organize your reading list, track progress, & set reading goals.",
           description: "Card description text",
         },
         {
@@ -98,8 +95,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Set annual reading targets or challenge yourself with new genres.",
+          default: "Set annual reading targets or challenge yourself with new genres.",
           description: "Card description text",
         },
         {
@@ -134,8 +130,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Join reading communities & discover books through discussions.",
+          default: "Join reading communities & discover books through discussions.",
           description: "Card description text",
         },
         {
@@ -170,8 +165,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Personalized reading plan that fits your schedule and interests.",
+          default: "Personalized reading plan that fits your schedule and interests.",
           description: "Card description text",
         },
         {
@@ -179,8 +173,7 @@ export default {
           type: "string",
           optional: true,
           default: "Strategy illustration URL",
-          description:
-            "Illustration/image URL displayed at bottom-right of card",
+          description: "Illustration/image URL displayed at bottom-right of card",
         },
         {
           name: "backgroundColor",
@@ -208,8 +201,7 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default:
-            "Discover great books. Compare reviews and start reading instantly.",
+          default: "Discover great books. Compare reviews and start reading instantly.",
           description: "Card description text",
         },
         {
@@ -217,8 +209,7 @@ export default {
           type: "string",
           optional: true,
           default: "Comparison interface illustration URL",
-          description:
-            "Illustration/image URL displayed at bottom-right of card",
+          description: "Illustration/image URL displayed at bottom-right of card",
         },
         {
           name: "backgroundColor",
@@ -228,6 +219,52 @@ export default {
           description: "Background color class for the card",
         },
       ],
+    },
+    {
+      name: "gap",
+      type: "number",
+      default: "16",
+      description: "Space between cards, in pixels.",
+    },
+    {
+      name: "radius",
+      type: "number",
+      default: "24",
+      description: "Card corner radius in pixels.",
+    },
+    {
+      name: "hoverScale",
+      type: "number",
+      default: "1.02",
+      description: "How much a card grows on hover.",
+    },
+  ],
+  controls: [
+    {
+      prop: "gap",
+      type: "number",
+      default: 16,
+      min: 0,
+      max: 40,
+      unit: "px",
+    },
+    {
+      prop: "radius",
+      type: "number",
+      default: 24,
+      min: 0,
+      max: 48,
+      unit: "px",
+    },
+    {
+      prop: "hoverScale",
+      label: "Hover scale",
+      type: "number",
+      default: 1.02,
+      min: 1,
+      max: 1.1,
+      step: 0.01,
+      unit: "×",
     },
   ],
 } satisfies ComponentMeta;

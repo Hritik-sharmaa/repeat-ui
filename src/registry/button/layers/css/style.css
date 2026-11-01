@@ -1,62 +1,67 @@
-.button-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .layer {
-    position: absolute;
-    width: 160px;
-    height: 60px;
-    border: 3px solid black;
-    border-radius: 9999px;
-    transition: all 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
-  
-  .layer.layer-3 {
-    background-color: #3b82f6; /* blue-500 */
-    top: 8px;
-    left: 8px;
-    z-index: 0;
-  }
-  
-  .layer.layer-2 {
-    background-color: #2dd4bf; /* teal-400 */
-    top: 4px;
-    left: 4px;
-    z-index: 1;
-  }
-  
-  .layers-button {
-    position: relative;
-    width: 160px;
-    height: 60px;
-    background-color: #facc15; /* yellow-400 */
-    border: 3px solid black;
-    border-radius: 9999px;
-    z-index: 2;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    font-weight: bold;
-  }
-  
-  .button-container:hover .layers-button {
-    transform: translate(-4px, -4px);
-  }
-  
-  .button-container:hover .layer-2,
-  .button-container:hover .layer-3 {
-    opacity: 1;
-  }
-  
-  .button-container:hover .layer-2 {
-    top: 6px;
-    left: 6px;
-  }
-  
-  .button-container:hover .layer-3 {
-    top: 12px;
-    left: 12px;
-  }
-  
+.rui-layers {
+  position: relative;
+  display: inline-flex;
+}
+
+.rui-layers-sheet {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--rui-ink);
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.3s,
+    opacity 0.3s;
+}
+
+.rui-layers-back {
+  background: var(--rui-back);
+}
+
+.rui-layers-middle {
+  background: var(--rui-middle);
+}
+
+.rui-layers-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--rui-fg);
+  background: var(--rui-bg);
+  border: 2px solid var(--rui-ink);
+  border-radius: 999px;
+  transition: transform 0.3s;
+}
+
+.rui-layers:hover .rui-layers-sheet {
+  opacity: 1;
+}
+
+.rui-layers:hover .rui-layers-back {
+  transform: translate(12px, 12px);
+}
+
+.rui-layers:hover .rui-layers-middle {
+  transform: translate(6px, 6px);
+}
+
+.rui-layers:hover .rui-layers-button {
+  transform: translate(-4px, -4px);
+}
+
+.rui-layers .rui-layers-button:active {
+  transform: none;
+}
+
+.rui-layers-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

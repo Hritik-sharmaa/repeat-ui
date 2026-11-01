@@ -1,8 +1,8 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import PopText from "./preview";
 
-const PopTextDemo = () => {
-  return <PopText maintext="Jon Snow" subText="King in the North" />;
-};
+const PopTextDemo = (props: ComponentProps<typeof PopText>) => <PopText {...props} />;
 
 export default PopTextDemo;

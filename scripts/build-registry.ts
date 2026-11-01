@@ -149,6 +149,14 @@ async function findComponents() {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.dateAdded) || isNaN(Date.parse(meta.dateAdded))) {
         errors.push(`${dir}/meta.ts: dateAdded must be a YYYY-MM-DD date`);
       }
+      for (const control of meta.controls ?? []) {
+        if (!meta.props.some((p) => p.name === control.prop)) {
+          errors.push(`${dir}/meta.ts: control "${control.prop}" is not a documented prop`);
+        }
+        if (control.type === "select" && !control.options.includes(control.default)) {
+          errors.push(`${dir}/meta.ts: control "${control.prop}" defaults to "${control.default}", which is not one of its options`);
+        }
+      }
       components.push({ category, name, meta });
     }
   }

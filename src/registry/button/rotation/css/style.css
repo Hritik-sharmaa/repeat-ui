@@ -1,74 +1,68 @@
-.rotation-button {
-    position: relative;
-    background-color: #1f2937; 
-    color: white;
-    padding: 8px 16px; 
-    border-radius: 8px; 
-    font-size: 18px; 
-    font-weight: 600; 
-    cursor: pointer;
-    transition: all 300ms ease; 
-    overflow: hidden;
-    transform: translateY(0);
-    border: none !important;
+.rui-rotation {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  overflow: hidden;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--rui-fg);
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+/* The spinning gradient: a square larger than the button, so its corners never show. */
+.rui-rotation::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -2;
+  width: max(200%, 200px);
+  aspect-ratio: 1;
+  background: var(--rui-gradient);
+  opacity: 0;
+  animation: rui-rotate var(--rui-speed) linear infinite paused;
+  transition: opacity 0.3s;
+}
+
+/* The face, inset by the border width so only a ring of gradient shows. */
+.rui-rotation::after {
+  content: "";
+  position: absolute;
+  inset: var(--rui-border);
+  z-index: -1;
+  background: var(--rui-bg);
+  border-radius: var(--rui-inner);
+}
+
+.rui-rotation:hover {
+  transform: translateY(-2px);
+}
+
+.rui-rotation:hover::before,
+.rui-rotation-on::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+.rui-rotation:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes rui-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
-  
-  .rotation-button:before {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: conic-gradient(
-      from 0deg,
-      transparent,
-      #00ff88,
-      #00ccff,
-      #ff00ff,
-      #ffaa00,
-      #00ff88,
-      transparent
-    );
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    animation: rui-rotate 3s linear infinite;
-    animation-play-state: paused;
-    z-index: 0;
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
-  
-  .rotation-button:after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    background: #1f2937; 
-    border-radius: 6px;
-    z-index: 1;
-  }
-  
-  .rotation-button:hover {
-    transform: translateY(-2px); 
-  }
-  
-  .rotation-button:hover:before {
-    opacity: 1;
-    animation-play-state: running;
-  }
-  
-  .rotation-button span {
-    position: relative;
-    z-index: 10; 
-  }
-  
-  @keyframes rui-rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+}

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./style.css";
 
 export interface LoopDeckItem {
@@ -12,150 +11,126 @@ export interface LoopDeckItem {
   description: string;
 }
 
-interface LoopDeckProps {
+export interface LoopDeckProps {
   items: LoopDeckItem[];
-  className?: string;
+  autoPlay?: boolean;
   autoPlayInterval?: number;
+  accentColor?: string;
+  cardWidth?: number;
+  cardHeight?: number;
+  spread?: number;
+  tilt?: number;
+  showCounter?: boolean;
+  className?: string;
 }
 
+const Chevron = ({ dir }: { dir: "left" | "right" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden>
+    <path d={dir === "left" ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+  </svg>
+);
+
+// A stack of cards: the current one lifts to the front, its neighbours fan out to either side.
 const LoopDeck = ({
   items,
+  autoPlay = true,
+  autoPlayInterval = 3000,
+  accentColor = "#60a5fa",
+  cardWidth = 320,
+  cardHeight = 420,
+  spread = 48,
+  tilt = 8,
+  showCounter = true,
   className = "",
-  autoPlayInterval = 5000,
 }: LoopDeckProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [hovered, setHovered] = useState(false);
+  const count = items.length;
+  const go = (step: number) => setCurrent((i) => (i + step + count) % count);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % items.length);
-    }, autoPlayInterval);
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [currentIndex, items.length, autoPlayInterval]);
+    if (!autoPlay || hovered) return;
+    const timer = setTimeout(() => setCurrent((i) => (i + 1) % count), autoPlayInterval);
+    return () => clearTimeout(timer);
+  }, [current, autoPlay, hovered, autoPlayInterval, count]);
 
-  const goToSlide = (idx: number) => setCurrentIndex(idx);
-  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % items.length);
-  const prevSlide = () =>
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  const navButton = "rui-deck-nav";
 
   return (
-    <div className={`loop-deck ${className}`}>
-      <div className="loop-deck__container">
-        <div className="loop-deck__deck">
+    <div className={`rui-deck ${className}`} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <div className="rui-deck-stage" style={{ height: cardHeight + 60 }}>
+        <div className="rui-deck-pile" style={{ width: cardWidth, height: cardHeight }}>
           {items.map((item, idx) => {
-            const isActive = idx === currentIndex;
-            const isPrev =
-              idx === (currentIndex - 1 + items.length) % items.length;
-            const isNext = idx === (currentIndex + 1) % items.length;
-            const isVisible = isActive || isPrev || isNext;
-
-            let zIndex = items.length - Math.abs(idx - currentIndex);
-            let translateY = 0;
-            let translateX = 0;
-            let scale = 1;
-            let rotate = 0;
-            let opacity = 0.3;
-
-            if (isActive) {
-              zIndex = items.length + 1;
-              translateY = -20;
-              scale = 1.05;
-              opacity = 1;
-            } else if (isPrev) {
-              zIndex = items.length;
-              translateX = -40;
-              translateY = 10;
-              rotate = -8;
-              scale = 0.95;
-              opacity = 0.7;
-            } else if (isNext) {
-              zIndex = items.length;
-              translateX = 40;
-              translateY = 10;
-              rotate = 8;
-              scale = 0.95;
-              opacity = 0.7;
-            } else {
-              const distance = Math.abs(idx - currentIndex);
-              translateY = distance * 4;
-              // A fixed scatter per card from -5 to 5px, so cards keep their place across renders.
-              translateX = ((idx * 7) % 11) - 5;
-              scale = 1 - distance * 0.02;
-              opacity = Math.max(0.1, 0.5 - distance * 0.1);
-            }
-
+            // Signed distance from the current card, the short way round the loop.
+            let rel = (idx - current + count) % count;
+            if (rel > count / 2) rel -= count;
+            const near = Math.abs(rel) <= 1;
+            const active = rel === 0;
             return (
               <div
                 key={item.id}
-                className={`loop-deck__card ${
-                  isActive ? "loop-deck__card--active" : ""
-                }`}
+                onClick={() => setCurrent(idx)}
+                className="rui-deck-card"
                 style={{
-                  zIndex,
-                  transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg)`,
-                  opacity: isVisible ? opacity : 0,
-                  pointerEvents: isActive ? "auto" : "none",
-                }}
-                onClick={() => goToSlide(idx)}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="loop-deck__card-image"
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                />
-                <div className="loop-deck__card-gradient" />
-
-                {isActive && (
-                  <div className="loop-deck__card-content">
-                    <div className="loop-deck__card-content-box">
-                      <h2 className="loop-deck__card-title">{item.title}</h2>
-                      <p className="loop-deck__card-subtitle">
-                        {item.subtitle}
-                      </p>
-                      <p className="loop-deck__card-description">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="loop-deck__card-number">
-                  <span className="loop-deck__card-number-text">{idx + 1}</span>
+                  zIndex: count - Math.abs(rel),
+                  opacity: active ? 1 : near ? 0.75 : 0,
+                  pointerEvents: near ? "auto" : "none",
+                  transform: active
+                    ? "translateY(-16px) scale(1.04)"
+                    : `translateX(${near ? rel * spread : 0}px) translateY(${near ? 10 : 18}px) rotate(${near ? rel * tilt : 0}deg) scale(${near ? 0.94 : 0.88})`,
+                  boxShadow: active ? `0 0 0 3px ${accentColor}, 0 30px 60px -20px rgba(0,0,0,0.6)` : undefined,
+                }}>
+                <img src={item.image} alt={item.title} className="rui-deck-image" />
+                <div className="rui-deck-shade" />
+                <span className="rui-deck-number">{idx + 1}</span>
+                <div className={`rui-deck-content ${active ? "rui-deck-content-active" : ""}`}>
+                  <h2 className="rui-deck-title">{item.title}</h2>
+                  <p className="rui-deck-subtitle" style={{ color: accentColor }}>
+                    {item.subtitle}
+                  </p>
+                  <p className="rui-deck-description">{item.description}</p>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <button
-          onClick={prevSlide}
-          className="loop-deck__nav-button loop-deck__nav-button--prev">
-          <ChevronLeft className="loop-deck__nav-icon" />
+        <button type="button" aria-label="Previous card" onClick={() => go(-1)} className={`${navButton} rui-deck-prev`}>
+          <Chevron dir="left" />
         </button>
-        <button
-          onClick={nextSlide}
-          className="loop-deck__nav-button loop-deck__nav-button--next">
-          <ChevronRight className="loop-deck__nav-icon" />
+        <button type="button" aria-label="Next card" onClick={() => go(1)} className={`${navButton} rui-deck-next`}>
+          <Chevron dir="right" />
         </button>
 
-        <div className="loop-deck__counter">
-          <span className="loop-deck__counter-text">
-            {currentIndex + 1} / {items.length}
+        {showCounter && (
+          <span className="rui-deck-counter">
+            {current + 1} / {count}
           </span>
-        </div>
+        )}
       </div>
 
-      <div className="loop-deck__indicators">
-        {items.map((_, idx) => (
+      <div className="rui-deck-dots">
+        {items.map((item, idx) => (
           <button
-            key={idx}
-            onClick={() => goToSlide(idx)}
-            className={`loop-deck__indicator ${
-              idx === currentIndex ? "loop-deck__indicator--active" : ""
-            }`}
+            key={item.id}
+            type="button"
+            onClick={() => setCurrent(idx)}
             aria-label={`Go to card ${idx + 1}`}
+            className="rui-deck-dot"
+            style={{
+              width: idx === current ? 28 : 10,
+              background: idx === current ? accentColor : "rgba(255,255,255,0.3)",
+              boxShadow: idx === current ? `0 0 14px ${accentColor}` : undefined,
+            }}
           />
         ))}
       </div>

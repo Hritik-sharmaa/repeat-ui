@@ -1,9 +1,12 @@
+"use client";
+
+import type { ComponentProps } from "react";
 import BentoGrid from "./preview";
 
-const BentoGridDemo = () => {
+const BentoGridDemo = (props: Partial<ComponentProps<typeof BentoGrid>>) => {
   return (
     <main className="">
-        <BentoGrid />
+      <BentoGrid {...props} />
     </main>
   );
 };

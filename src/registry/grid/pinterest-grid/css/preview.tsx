@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import "./style.css";
@@ -17,6 +18,8 @@ interface PinterestItem {
 }
 
 interface PinterestGridProps {
+  radius?: number;
+  hoverScale?: number;
   items?: PinterestItem[];
   columns?: number;
   gap?: number;
@@ -30,8 +33,7 @@ const PinterestGrid = ({
       src: "https://images.unsplash.com/photo-1616262373426-18bfa28bafab?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Dragon sculpture on building",
       title: "Dragon on building",
-      description:
-        "Architectural dragon sculpture mounted on a building facade",
+      description: "Architectural dragon sculpture mounted on a building facade",
       author: "Alex Chen",
     },
     {
@@ -39,16 +41,14 @@ const PinterestGrid = ({
       src: "https://plus.unsplash.com/premium_photo-1675620963970-41055a7d6cfc?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Ocean water waves",
       title: "Ocean water",
-      description:
-        "Clear blue ocean water with gentle waves and natural movement",
+      description: "Clear blue ocean water with gentle waves and natural movement",
     },
     {
       id: "3",
       src: "https://images.unsplash.com/photo-1542128047-9b51cb9b931d?q=80&w=1499&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Vintage camera rolls",
       title: "Camera rolls",
-      description:
-        "Collection of vintage film camera rolls and photography equipment",
+      description: "Collection of vintage film camera rolls and photography equipment",
       author: "Sarah Johnson",
     },
 
@@ -57,16 +57,14 @@ const PinterestGrid = ({
       src: "https://plus.unsplash.com/premium_vector-1746288322059-bddfbcf3a8f7?q=80&w=740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Llama in desert landscape",
       title: "Llama in the Desert",
-      description:
-        "Cute llama standing in a desert environment with sand dunes",
+      description: "Cute llama standing in a desert environment with sand dunes",
     },
     {
       id: "5",
       src: "https://images.unsplash.com/photo-1457195740896-7f345efef228?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Ocean waves crashing",
       title: "Ocean Waves",
-      description:
-        "Powerful ocean waves crashing with white foam and blue water",
+      description: "Powerful ocean waves crashing with white foam and blue water",
     },
     {
       id: "6",
@@ -80,8 +78,7 @@ const PinterestGrid = ({
       src: "https://images.unsplash.com/photo-1492362764835-5733512e3ddc?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Girl smoking cigarette",
       title: "Smoking girl",
-      description:
-        "Portrait of a girl smoking a cigarette in artistic lighting",
+      description: "Portrait of a girl smoking a cigarette in artistic lighting",
       author: "Marcus Rodriguez",
     },
     {
@@ -96,8 +93,7 @@ const PinterestGrid = ({
       src: "https://plus.unsplash.com/premium_vector-1746416995848-7fb8a141686f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Spider artwork illustration",
       title: "Spider Art",
-      description:
-        "Artistic illustration or design featuring spider motifs and patterns",
+      description: "Artistic illustration or design featuring spider motifs and patterns",
     },
     {
       id: "10",
@@ -110,7 +106,11 @@ const PinterestGrid = ({
   columns = 4,
   gap = 16,
   onItemClick,
+  radius = 24,
+  hoverScale = 1.02,
 }: PinterestGridProps) => {
+  // Layout knobs, read by the cards through CSS variables.
+  const vars = { "--rui-gap": `${gap}px`, "--rui-radius": `${radius}px` } as CSSProperties;
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
@@ -137,17 +137,12 @@ const PinterestGrid = ({
 
   const distributeItems = () => {
     const columnHeights = new Array(columns).fill(0);
-    const columnItems: PinterestItem[][] = new Array(columns)
-      .fill(null)
-      .map(() => []);
+    const columnItems: PinterestItem[][] = new Array(columns).fill(null).map(() => []);
 
     items.forEach((item) => {
-      const shortestColumnIndex = columnHeights.indexOf(
-        Math.min(...columnHeights)
-      );
+      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
       columnItems[shortestColumnIndex].push(item);
-      columnHeights[shortestColumnIndex] +=
-        ((item.height || 300) / (item.width || 400)) * 400 + 100;
+      columnHeights[shortestColumnIndex] += ((item.height || 300) / (item.width || 400)) * 400 + 100;
     });
 
     return columnItems;
@@ -156,38 +151,30 @@ const PinterestGrid = ({
   const columnItems = distributeItems();
 
   return (
-    <div className="pinterest-wrapper">
-      <motion.div
-        className="pinterest-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible">
-        <div className="pinterest-grid" style={{ gap: `${gap}px` }}>
+    <div className="rui-pin-pinterest-wrapper" style={vars}>
+      <motion.div className="rui-pin-pinterest-container" variants={containerVariants} initial="hidden" animate="visible">
+        <div className="rui-pin-pinterest-grid" style={{ gap: `${gap}px` }}>
           {columnItems.map((column, columnIndex) => (
-            <div key={columnIndex} className="pinterest-column">
+            <div key={columnIndex} className="rui-pin-pinterest-column" style={{ gap }}>
               {column.map((item) => (
                 <motion.div
                   key={item.id}
                   variants={itemVariants}
                   whileHover={{
-                    scale: 1.02,
+                    scale: hoverScale,
                     y: -5,
                     transition: { duration: 0.2 },
                   }}
-                  className="pinterest-item"
+                  className="rui-pin-pinterest-item"
                   onMouseEnter={() => setHoveredItem(item.id)}
                   onMouseLeave={() => setHoveredItem(null)}
                   onClick={() => onItemClick?.(item)}>
-                  <div className="pinterest-card">
+                  <div className="rui-pin-pinterest-card">
                     {imageErrors.has(item.id) ? (
-                      <div
-                        className="pinterest-error-placeholder"
-                        style={{ height: `${item.height || 300}px` }}>
-                        <div className="pinterest-error-content">
-                          <div className="pinterest-error-icon">🖼️</div>
-                          <p className="pinterest-error-text">
-                            Image not available
-                          </p>
+                      <div className="rui-pin-pinterest-error-placeholder" style={{ height: `${item.height || 300}px` }}>
+                        <div className="rui-pin-pinterest-error-content">
+                          <div className="rui-pin-pinterest-error-icon">🖼️</div>
+                          <p className="rui-pin-pinterest-error-text">Image not available</p>
                         </div>
                       </div>
                     ) : (
@@ -196,7 +183,7 @@ const PinterestGrid = ({
                         alt={item.alt || "Pinterest image"}
                         width={item.width || 400}
                         height={item.height || 300}
-                        className="pinterest-image"
+                        className="rui-pin-pinterest-image"
                         onError={() => {
                           setImageErrors((prev) => new Set(prev).add(item.id));
                         }}
@@ -204,28 +191,16 @@ const PinterestGrid = ({
                     )}
 
                     <div
-                      className={`pinterest-overlay ${
-                        hoveredItem === item.id
-                          ? "pinterest-overlay-visible"
-                          : ""
+                      className={`rui-pin-pinterest-overlay ${
+                        hoveredItem === item.id ? "rui-pin-pinterest-overlay-visible" : ""
                       }`}>
                       <div
-                        className={`pinterest-content ${
-                          hoveredItem === item.id
-                            ? "pinterest-content-visible"
-                            : ""
+                        className={`rui-pin-pinterest-content ${
+                          hoveredItem === item.id ? "rui-pin-pinterest-content-visible" : ""
                         }`}>
-                        {item.title && (
-                          <h3 className="pinterest-title">{item.title}</h3>
-                        )}
-                        {item.description && (
-                          <p className="pinterest-description">
-                            {item.description}
-                          </p>
-                        )}
-                        {item.author && (
-                          <p className="pinterest-author">by {item.author}</p>
-                        )}
+                        {item.title && <h3 className="rui-pin-pinterest-title">{item.title}</h3>}
+                        {item.description && <p className="rui-pin-pinterest-description">{item.description}</p>}
+                        {item.author && <p className="rui-pin-pinterest-author">by {item.author}</p>}
                       </div>
                     </div>
                   </div>

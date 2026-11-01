@@ -4,7 +4,7 @@ export default {
   description: "Photo gallery grid with lightbox effect",
   dateAdded: "2025-08-14",
   tier: "free",
-  version: "1.0.0",
+  version: "2.0.0",
   props: [
     {
       name: "items",
@@ -98,5 +98,53 @@ export default {
       description: "Callback function triggered when an item is clicked",
       properties: [],
     },
+    {
+      name: "radius",
+      type: "number",
+      default: "24",
+      description: "Card corner radius in pixels.",
+    },
+    {
+      name: "hoverScale",
+      type: "number",
+      default: "1.02",
+      description: "How much a card grows on hover.",
+    },
   ],
+  controls: [
+    {
+      prop: "columns",
+      type: "number",
+      default: 4,
+      min: 1,
+      max: 6,
+    },
+    {
+      prop: "gap",
+      type: "number",
+      default: 16,
+      min: 0,
+      max: 40,
+      unit: "px",
+    },
+    {
+      prop: "radius",
+      type: "number",
+      default: 24,
+      min: 0,
+      max: 48,
+      unit: "px",
+    },
+    {
+      prop: "hoverScale",
+      label: "Hover scale",
+      type: "number",
+      default: 1.02,
+      min: 1,
+      max: 1.1,
+      step: 0.01,
+      unit: "×",
+    },
+  ],
+  usage: ["items={items}"],
 } satisfies ComponentMeta;

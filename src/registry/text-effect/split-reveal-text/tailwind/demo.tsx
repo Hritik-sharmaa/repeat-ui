@@ -1,8 +1,8 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import SplitRevealText from "./preview";
 
-const SplitRevealTextDemo = () => {
-  return <SplitRevealText outerText="Hello" innerText="This is Text." />;
-};
+const SplitRevealTextDemo = (props: ComponentProps<typeof SplitRevealText>) => <SplitRevealText {...props} />;
 
 export default SplitRevealTextDemo;

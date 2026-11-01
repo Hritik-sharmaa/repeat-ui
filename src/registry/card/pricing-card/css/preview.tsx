@@ -1,56 +1,66 @@
 import "./style.css";
+import type { CSSProperties } from "react";
 
-interface PricingCardProps {
-  plan: string;
-  price: number | string;
-  billing: string;
+export interface PricingCardProps {
+  plan?: string;
+  price?: number | string;
+  currency?: string;
+  billing?: string;
   features?: string[];
-  buttonText: string;
+  buttonText?: string;
   isPopular?: boolean;
+  accentColor?: string;
+  onSelect?: () => void;
+  className?: string;
 }
 
-const PricingCard: React.FC<PricingCardProps> = ({
-  plan,
-  price,
-  billing,
-  features = [],
-  buttonText,
+// A pricing tier. `isPopular` outlines it in the accent colour and fills its button.
+const PricingCard = ({
+  plan = "Premium",
+  price = 120,
+  currency = "$",
+  billing = "Per user/month, billed monthly",
+  features = ["Advanced data analysis", "Priority support", "Unlimited storage"],
+  buttonText = "Get started",
   isPopular = false,
-}) => {
-  const planClass = plan.toLowerCase();
-
+  accentColor = "#3b82f6",
+  onSelect,
+  className = "",
+}: PricingCardProps) => {
   return (
-    <div className={`pricing-card ${planClass}`}>
-      <div className="card-header">
-        <div className="plan-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="white"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-zap-icon lucide-zap"
-          >
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
-          </svg>
+    <div
+      className={`rui-pricing ${isPopular ? "rui-pricing-popular" : ""} ${className}`}
+      style={{ "--rui-accent": accentColor } as CSSProperties}>
+      <div className="rui-pricing-head">
+        <div className="rui-pricing-title">
+          <span className="rui-pricing-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+            </svg>
+          </span>
+          <h3>{plan}</h3>
         </div>
-        <h3>{plan}</h3>
-        {isPopular && <span className="popular-badge">Most Popular</span>}
+        {isPopular && <span className="rui-pricing-badge">Popular</span>}
       </div>
-      <div className="price">${price}</div>
-      <p className="billing">{billing}</p>
-      <div className="features">
-        {features.map((feature, index) => (
-          <div key={index} className="feature-item">
-            <span className="check">✔</span> {feature}
-          </div>
+
+      <p className="rui-pricing-price">
+        {currency}
+        {price}
+      </p>
+      <p className="rui-pricing-billing">{billing}</p>
+
+      <ul className="rui-pricing-features">
+        {features.map((feature) => (
+          <li key={feature}>
+            <span className="rui-pricing-check">✓</span>
+            {feature}
+          </li>
         ))}
-      </div>
-      <button className="upgrade-btn">{buttonText}</button>
+      </ul>
+
+      <button type="button" onClick={onSelect} className="rui-pricing-button">
+        {buttonText}
+      </button>
     </div>
   );
 };

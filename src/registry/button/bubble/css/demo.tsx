@@ -1,9 +1,9 @@
-import React from "react";
-import Bubble from "./preview";
-import "./style.css";
+"use client";
 
-const BubbleBtnDemo = () => {
-  return <Bubble className="bubble-button">Hover me!</Bubble>;
-};
+import type { ComponentProps } from "react";
+import Bubble from "./preview";
+
+// Any prop passes straight through to the button.
+const BubbleBtnDemo = (props: ComponentProps<typeof Bubble>) => <Bubble {...props}>{props.children ?? "Hover me!"}</Bubble>;
 
 export default BubbleBtnDemo;

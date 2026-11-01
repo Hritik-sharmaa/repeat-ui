@@ -1,32 +1,39 @@
-"use client";
-import { useState } from "react";
-
-const TextShadow = ({ text, className }: { text: string; className?: string }) => {
-  const [hover, setHover] = useState(false);
-
-  return (
-    <div className={`flex items-center justify-center ${className}`}>
-      <h2
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        className={`uppercase font-bold text-[calc(2rem+5vw)] transition-all duration-300`}
-        style={{
-          color: "#f6aca2",
-          textShadow: hover
-            ? `
-              3px 3px 0 #f49b90,
-              6px 6px 0 #f28b7d,
-              9px 9px 0 #f07a6a,
-              12px 12px 0 #ee6352
-            `
-            : "none",
-          transform: hover ? "translate(-12px, -12px)" : "translate(0,0)",
-        }}
-      >
-        {text}
-      </h2>
-    </div>
-  );
+export interface TextShadowProps {
+  text?: string;
+  color?: string;
+  shadowColor?: string;
+  depth?: number;
+  step?: number;
+  fontSize?: number;
+  className?: string;
 }
+
+// On hover the word lifts off the page, leaving a stack of shadows that blend towards `shadowColor`.
+const TextShadow = ({
+  text = "Hover me",
+  color = "#f6aca2",
+  shadowColor = "#ee6352",
+  depth = 4,
+  step = 3,
+  fontSize = 72,
+  className = "",
+}: TextShadowProps) => {
+  const shadow = Array.from({ length: depth }, (_, i) => {
+    const offset = (i + 1) * step;
+    return `${offset}px ${offset}px 0 color-mix(in srgb, ${color}, ${shadowColor} ${((i + 1) / depth) * 100}%)`;
+  }).join(", ");
+  return (
+    <h2
+      className={`m-0 cursor-default font-bold uppercase leading-none transition-all duration-300 hover:[text-shadow:var(--rui-shadow)] hover:[transform:translate(var(--rui-lift),var(--rui-lift))] ${className}`}
+      style={{
+        color,
+        fontSize: `min(${fontSize}px, 16vw)`,
+        ["--rui-shadow" as string]: shadow,
+        ["--rui-lift" as string]: `${-depth * step}px`,
+      }}>
+      {text}
+    </h2>
+  );
+};
 
 export default TextShadow;

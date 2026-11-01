@@ -2,65 +2,78 @@
 
 import { useState } from "react";
 import "./style.css";
-import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
+import type { ButtonHTMLAttributes, CSSProperties } from "react";
 
-type Bubble = {
-  id: number;
-  left: number;
-  size: number;
-  duration: number;
-  color: string;
+// Shared by every Repeat UI button, so they line up side by side.
+const SIZES = {
+  sm: { height: 36, paddingInline: 16, fontSize: 14 },
+  md: { height: 44, paddingInline: 22, fontSize: 15 },
+  lg: { height: 52, paddingInline: 28, fontSize: 17 },
 };
 
+type Bubble = { id: number; left: number; size: number; duration: number; color: string };
+
+export interface BubbleProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: keyof typeof SIZES;
+  color?: string;
+  textColor?: string;
+  count?: number;
+  rainbow?: boolean;
+  bubbleColor?: string;
+}
+
+// Hovering blows a handful of bubbles up out of the button.
 const Bubble = ({
   children,
-  onClick,
+  size = "md",
+  color = "#2563eb",
+  textColor = "#ffffff",
+  count = 10,
+  rainbow = true,
+  bubbleColor = "#60a5fa",
   className = "",
+  style,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
+}: BubbleProps) => {
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
-  const createBubbles = () => {
-    const newBubbles = Array.from({ length: 10 }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      size: 10 + Math.random() * 20,
-      duration: 2 + Math.random() * 2,
-      color: `hsl(${Math.random() * 360}, 70%, 60%)`,
-    }));
-    setBubbles(newBubbles);
-  };
+  const blow = () =>
+    setBubbles(
+      Array.from({ length: count }, (_, id) => ({
+        id,
+        left: Math.random() * 100,
+        size: 8 + Math.random() * 16,
+        duration: 1.6 + Math.random() * 1.6,
+        color: rainbow ? `hsl(${Math.random() * 360}, 80%, 65%)` : bubbleColor,
+      })),
+    );
 
-  const clearBubbles = () => {
-    setBubbles([]);
-  };
   return (
-    <div
-      className="bubble-button-container"
-      onMouseEnter={createBubbles}
-      onMouseLeave={clearBubbles}>
+    <span className="rui-bubble-wrap" onMouseEnter={blow} onMouseLeave={() => setBubbles([])}>
       <button
-        className={`bubble-button ${className}`}
-        onClick={onClick}
+        type="button"
+        className={`rui-bubble ${className}`}
+        style={{ ...SIZES[size], ...({ "--rui-bg": color, "--rui-fg": textColor } as CSSProperties), ...style }}
         {...rest}>
-        <span>{children}</span>
+        {children}
       </button>
-      <div className="bubble-area">
-        {bubbles.map((bubble) => (
+      <span aria-hidden className="rui-bubble-area">
+        {bubbles.map((b) => (
           <span
-            key={bubble.id}
-            className="bubble"
+            key={b.id}
+            className="rui-bubble-dot"
             style={{
-              left: `${bubble.left}%`,
-              width: `${bubble.size}px`,
-              height: `${bubble.size}px`,
-              animationDuration: `${bubble.duration}s`,
-              backgroundColor: bubble.color,
-            }}></span>
+              left: `${b.left}%`,
+              width: b.size,
+              height: b.size,
+              background: b.color,
+              animationDuration: `${b.duration}s`,
+            }}
+          />
         ))}
-      </div>
-    </div>
+      </span>
+    </span>
   );
-}
+};
 
 export default Bubble;

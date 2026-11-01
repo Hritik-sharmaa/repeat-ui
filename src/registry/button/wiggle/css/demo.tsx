@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import Wiggle from "./preview";
 
-const WiggleBtnDemo = () => {
-  return <Wiggle>Wiggle me!</Wiggle>;
-};
+// Any prop passes straight through to the button.
+const WiggleBtnDemo = (props: ComponentProps<typeof Wiggle>) => <Wiggle {...props}>{props.children ?? "Wiggle me!"}</Wiggle>;
 
 export default WiggleBtnDemo;

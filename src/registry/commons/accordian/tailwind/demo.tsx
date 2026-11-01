@@ -1,3 +1,6 @@
+"use client";
+
+import type { ComponentProps } from "react";
 import Accordian from "./preview";
 
 const accordionItems = [
@@ -27,14 +30,10 @@ const accordionItems = [
   },
 ];
 
-const AccordianDemo = () => {
-  return (
-    <main className="w-full max-w-4xl mx-auto px-4">
-      <div className="w-full">
-        <Accordian items={accordionItems} />
-      </div>
-    </main>
-  );
-};
+const AccordianDemo = (props: Partial<ComponentProps<typeof Accordian>>) => (
+  <div style={{ width: "100%", maxWidth: 896, margin: "0 auto", padding: "0 16px" }}>
+    <Accordian items={accordionItems} {...props} />
+  </div>
+);
 
 export default AccordianDemo;

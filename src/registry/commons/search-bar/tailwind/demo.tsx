@@ -1,13 +1,8 @@
+"use client";
+
+import type { ComponentProps } from "react";
 import SearchWithHotkey from "./preview";
 
-const SearchbarDemo = () => {
-  return (
-    <main className=" p-8 flex items-center justify-center">
-      <div className="space-y-8 w-full">
-        <SearchWithHotkey />
-      </div>
-    </main>
-  );
-};
+const SearchbarDemo = (props: ComponentProps<typeof SearchWithHotkey>) => <SearchWithHotkey {...props} />;
 
 export default SearchbarDemo;

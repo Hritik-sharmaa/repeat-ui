@@ -1,81 +1,72 @@
-"use client";
+import type { ButtonHTMLAttributes, CSSProperties } from "react";
 
-import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
+// Shared by every Repeat UI button, so they line up side by side.
+const SIZES = {
+  sm: { height: 36, paddingInline: 16, fontSize: 14 },
+  md: { height: 44, paddingInline: 22, fontSize: 15 },
+  lg: { height: 52, paddingInline: 28, fontSize: 17 },
+};
 
+export interface RotationProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: keyof typeof SIZES;
+  colors?: string[];
+  background?: string;
+  textColor?: string;
+  speed?: number;
+  borderWidth?: number;
+  alwaysOn?: boolean;
+}
+
+// A gradient border that spins around the button on hover, or all the time with `alwaysOn`.
 const Rotation = ({
   children,
-  onClick,
+  size = "md",
+  colors = ["#00ff88", "#00ccff", "#ff00ff", "#ffaa00"],
+  background = "#1f2937",
+  textColor = "#ffffff",
+  speed = 3,
+  borderWidth = 2,
+  alwaysOn = false,
   className = "",
-  disabled = false,
+  style,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
+}: RotationProps) => {
+  const gradient = `conic-gradient(from 0deg, transparent, ${colors.join(", ")}, ${colors[0]}, transparent)`;
   return (
     <>
       <style>{`
-        .rotation-button {
-          border: none !important;
-        }
-
-        .rotation-button:before {
-          content: "";
-          position: absolute;
-          top: -2px;
-          left: -2px;
-          right: -2px;
-          bottom: -2px;
-          background: conic-gradient(
-            from 0deg,
-            transparent,
-            #00ff88,
-            #00ccff,
-            #ff00ff,
-            #ffaa00,
-            #00ff88,
-            transparent
-          );
-          border-radius: 10px;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          animation: rui-rotate 3s linear infinite;
-          animation-play-state: paused;
-          z-index: 0;
-        }
-
-        .rotation-button:after {
-          content: "";
-          position: absolute;
-          top: 2px;
-          left: 2px;
-          right: 2px;
-          bottom: 2px;
-          background: #1f2937; /* Same as bg-gray-800 */
-          border-radius: 6px;
-          z-index: 1;
-        }
-
-        .rotation-button:hover:before {
-          opacity: 1;
-          animation-play-state: running;
-        }
-
         @keyframes rui-rotate {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
         }
       `}</style>
-
       <button
-        className={`rotation-button relative bg-gray-800 text-white px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer transition-all duration-300 overflow-hidden hover:-translate-y-0.5 ${className}`}
-        onClick={onClick}
-        disabled={disabled}
+        type="button"
+        className={`group relative isolate inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-[10px] font-semibold leading-none transition-transform duration-300 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-50 ${className}`}
+        style={{ ...SIZES[size], background: "rgba(255,255,255,0.12)", color: textColor, ...style }}
         {...rest}>
-        <span className="relative z-10">{children}</span>
+        <span
+          aria-hidden
+          className={`absolute left-1/2 top-1/2 -z-20 aspect-square w-[max(200%,200px)] animate-[rui-rotate_3s_linear_infinite] transition-opacity duration-300 ${
+            alwaysOn
+              ? "opacity-100"
+              : "opacity-0 [animation-play-state:paused] group-hover:opacity-100 group-hover:[animation-play-state:running]"
+          }`}
+          style={{ background: gradient, animationDuration: `${speed}s` }}
+        />
+        <span
+          aria-hidden
+          className="absolute -z-10 rounded-[var(--rui-inner)]"
+          style={{
+            inset: borderWidth,
+            background,
+            ...({ "--rui-inner": `${Math.max(10 - borderWidth, 2)}px` } as CSSProperties),
+          }}
+        />
+        {children}
       </button>
     </>
   );
-}
+};
+
 export default Rotation;

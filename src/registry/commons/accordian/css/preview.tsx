@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import "./style.css";
 
 type AccordionItem = {
@@ -9,65 +10,75 @@ type AccordionItem = {
   content: string;
 };
 
-type AccordionProps = {
+export type AccordionProps = {
   items: AccordionItem[];
   allowMultiple?: boolean;
+  defaultOpen?: (string | number)[];
+  variant?: "bordered" | "separated";
+  icon?: "chevron" | "plus";
+  accentColor?: string;
+  radius?: number;
+  className?: string;
 };
 
-const Accordion = ({ items, allowMultiple = false }: AccordionProps) => {
-  const [openItems, setOpenItems] = useState<(string | number)[]>([]);
+// Questions that open to reveal their answers, one at a time or several with `allowMultiple`.
+const Accordion = ({
+  items,
+  allowMultiple = false,
+  defaultOpen = [],
+  variant = "bordered",
+  icon = "chevron",
+  accentColor = "#f97316",
+  radius = 16,
+  className = "",
+}: AccordionProps) => {
+  const [openItems, setOpenItems] = useState(defaultOpen);
+  const toggle = (id: string | number) =>
+    setOpenItems((open) => (open.includes(id) ? open.filter((o) => o !== id) : allowMultiple ? [...open, id] : [id]));
 
-  const toggleItem = (id: string | number) => {
-    if (allowMultiple) {
-      setOpenItems((prev) =>
-        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-      );
-    } else {
-      setOpenItems((prev) => (prev.includes(id) ? [] : [id]));
-    }
-  };
+  const separated = variant === "separated";
 
   return (
-    <div className="accordion-container">
+    <div
+      className={`rui-acc ${separated ? "rui-acc-separated" : "rui-acc-bordered"} ${className}`}
+      style={separated ? undefined : { borderRadius: radius }}>
       {items.map((item, index) => {
         const isOpen = openItems.includes(item.id);
-        const isLast = index === items.length - 1;
         return (
           <div
             key={item.id}
-            className={`accordion-item ${
-              !isLast ? "accordion-item--with-border" : ""
-            }`}>
-            <button
-              onClick={() => toggleItem(item.id)}
-              className="accordion-header">
-              <span className="accordion-title">{item.title}</span>
-              <div
-                className={`accordion-chevron ${
-                  isOpen ? "accordion-chevron--rotated" : ""
-                }`}>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round">
-                  <polyline points="6,9 12,15 18,9"></polyline>
-                </svg>
-              </div>
+            className={separated ? "rui-acc-card" : index > 0 ? "rui-acc-divider" : ""}
+            style={separated ? { borderRadius: radius, borderColor: isOpen ? accentColor : undefined } : undefined}>
+            <button type="button" aria-expanded={isOpen} onClick={() => toggle(item.id)} className="rui-acc-trigger">
+              <span className="rui-acc-title" style={{ color: isOpen ? accentColor : undefined }}>
+                {item.title}
+              </span>
+              <motion.svg
+                viewBox="0 0 24 24"
+                className="rui-acc-icon"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                aria-hidden
+                animate={{ rotate: isOpen ? (icon === "plus" ? 45 : 180) : 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                style={{ color: isOpen ? accentColor : undefined }}>
+                <path d={icon === "plus" ? "M12 5v14M5 12h14" : "m6 9 6 6 6-6"} />
+              </motion.svg>
             </button>
-
-            <div
-              className={`accordion-content ${
-                isOpen ? "accordion-content--open" : ""
-              }`}>
-              <div className="accordion-content-inner">
-                <div className="accordion-text">{item.content}</div>
-              </div>
-            </div>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="rui-acc-panel">
+                  <p className="rui-acc-content">{item.content}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         );
       })}

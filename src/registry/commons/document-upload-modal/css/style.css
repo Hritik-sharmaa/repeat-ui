@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  background: #2563eb;
+  background: var(--rui-accent);
   padding: 0 1.25rem;
   font-size: 1rem;
   font-weight: 600;
@@ -20,7 +20,7 @@
   transform: scale(1.05);
 }
 .document-upload-btn:focus {
-  box-shadow: 0 0 0 2px #2563eb44;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rui-accent) 27%, transparent);
 }
 
 .document-modal-overlay {
@@ -88,11 +88,11 @@
   transition: all 0.2s;
 }
 .document-dropzone:hover {
-  border-color: #2563eb;
+  border-color: var(--rui-accent);
   background: #eff6ff;
 }
 .document-dropzone.dragging {
-  border-color: #2563eb;
+  border-color: var(--rui-accent);
   background: #dbeafe;
   transform: scale(1.02);
 }
@@ -104,7 +104,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 9999px;
-  background: #2563eb22;
+  background: color-mix(in srgb, var(--rui-accent) 13%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,8 +155,8 @@
 }
 .document-input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px #2563eb44;
+  border-color: var(--rui-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rui-accent) 27%, transparent);
 }
 .document-input.error {
   border-color: #ef4444;
@@ -196,7 +196,7 @@
   outline: none;
 }
 .document-cancel-btn:focus {
-  box-shadow: 0 0 0 2px #2563eb44;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rui-accent) 27%, transparent);
 }
 .document-cancel-btn:disabled {
   opacity: 0.5;
@@ -220,28 +220,28 @@
   cursor: pointer;
 }
 .document-upload-action-btn:hover {
-  background: #2563eb;
+  background: var(--rui-accent);
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
 }
 .document-upload-action-btn:focus {
-  box-shadow: 0 0 0 2px #2563eb44;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--rui-accent) 27%, transparent);
 }
 .document-upload-action-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.animate-spin {
-  animation: rui-spin 1s linear infinite;
+.rui-upload-spin {
+  animation: rui-upload-spin 1s linear infinite;
 }
-@keyframes rui-spin {
+@keyframes rui-upload-spin {
   to {
     transform: rotate(360deg);
   }
 }
-.animate-pulse {
-  animation: rui-pulse 1s infinite;
+.rui-upload-pulse {
+  animation: rui-upload-pulse 1s infinite;
 }
-@keyframes rui-pulse {
+@keyframes rui-upload-pulse {
   0%,
   100% {
     opacity: 1;

@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import Pulse from "./preview";
 
-const PulseBtnDemo = () => {
-  return <Pulse>Pulse</Pulse>;
-};
+// Any prop passes straight through to the button.
+const PulseBtnDemo = (props: ComponentProps<typeof Pulse>) => <Pulse {...props}>{props.children ?? "Pulse"}</Pulse>;
 
 export default PulseBtnDemo;

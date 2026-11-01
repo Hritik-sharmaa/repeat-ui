@@ -1,20 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { Search, X } from "lucide-react";
 
-type SearchWithHotkeyProps = {
+export type SearchWithHotkeyProps = {
   placeholder?: string;
   className?: string;
   enableHotkey?: boolean;
   enableModal?: boolean;
+  hotkey?: string;
+  width?: number;
+  radius?: number;
+  accentColor?: string;
   onSearch?: (query: string) => void;
 };
 
+// A search field. With `enableModal` it is a button that opens a search dialog, also on Ctrl/⌘ + hotkey.
 const SearchWithHotkey = ({
   placeholder = "Search...",
   enableHotkey = true,
   enableModal = true,
+  hotkey = "k",
+  width = 300,
+  radius = 12,
+  accentColor = "#f97316",
   className = "",
   onSearch,
 }: SearchWithHotkeyProps) => {
@@ -23,91 +32,89 @@ const SearchWithHotkey = ({
 
   useEffect(() => {
     if (!enableHotkey || !enableModal) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === hotkey.toLowerCase()) {
         e.preventDefault();
-        setOpen((prev) => !prev);
+        setOpen((o) => !o);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [enableHotkey, enableModal]);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [enableHotkey, enableModal, hotkey]);
 
-  const handleSearch = (searchQuery: string) => {
-    if (onSearch) {
-      onSearch(searchQuery);
-    }
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    if (!enableModal) onSearch?.(e.target.value);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    if (!enableModal) {
-      handleSearch(value);
-    }
+  const onInputKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && enableModal) onSearch?.(query);
+    if (e.key === "Escape") setOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && enableModal) {
-      handleSearch(query);
-    }
-  };
+  const shortcut = enableHotkey && (
+    <kbd className="ml-auto rounded bg-neutral-200 px-2 py-1 font-sans text-xs text-neutral-500">Ctrl {hotkey.toUpperCase()}</kbd>
+  );
 
   if (!enableModal) {
     return (
-      <div className={`${className}`}>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition w-[300px]">
-          <Search className="w-4 h-4 text-gray-500" />
-          <input
-            value={query}
-            onChange={handleInputChange}
-            type="text"
-            placeholder={placeholder}
-            className="w-full outline-none border-none bg-transparent text-gray-700"
-          />
-          {enableHotkey && (
-            <kbd className="px-2 py-1 text-xs text-gray-500 bg-gray-200 rounded">
-              Ctrl K
-            </kbd>
-          )}
-        </div>
-      </div>
+      <label
+        className={`flex cursor-text items-center gap-2 border-2 border-transparent bg-neutral-100 px-4 py-2 transition focus-within:border-[var(--rui-accent)] hover:bg-neutral-200 ${className}`}
+        style={{ width, borderRadius: radius, ["--rui-accent" as string]: accentColor }}>
+        <Search className="size-4 shrink-0 text-neutral-500" />
+        <input
+          value={query}
+          onChange={onChange}
+          type="text"
+          placeholder={placeholder}
+          className="w-full border-none bg-transparent text-neutral-700 outline-none"
+        />
+        {shortcut}
+      </label>
     );
   }
 
   return (
-    <div className={` ${className}`}>
+    <div className={className}>
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition w-[300px]">
-        <Search className="w-4 h-4 text-gray-500" />
-        <span className="text-gray-600">{placeholder}</span>
-        {enableHotkey && (
-          <kbd className="ml-auto px-2 py-1 text-xs text-gray-500 bg-gray-200 rounded">
-            Ctrl K
-          </kbd>
-        )}
+        className="flex cursor-pointer items-center gap-2 bg-neutral-100 px-4 py-2 text-left transition hover:bg-neutral-200"
+        style={{ width, borderRadius: radius }}>
+        <Search className="size-4 shrink-0 text-neutral-500" />
+        <span className="text-neutral-600">{placeholder}</span>
+        {shortcut}
       </button>
 
       {open && (
-        <div className="fixed inset-0 bg-black/40 flex items-start justify-center p-4 z-50">
-          <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-4">
-            <div className="flex items-center gap-2 border rounded-xl px-3 py-2">
-              <Search className="w-5 h-5 text-gray-500" />
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-[15vh] backdrop-blur-sm"
+          onClick={() => setOpen(false)}>
+          <div
+            role="dialog"
+            aria-label="Search"
+            className="w-full max-w-lg bg-white p-4 shadow-2xl"
+            style={{ borderRadius: radius + 4 }}
+            onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex items-center gap-2 border-2 px-3 py-2"
+              style={{ borderColor: accentColor, borderRadius: radius }}>
+              <Search className="size-5 shrink-0 text-neutral-500" />
               <input
                 autoFocus
                 value={query}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
+                onChange={onChange}
+                onKeyDown={onInputKeyDown}
                 type="text"
                 placeholder={placeholder}
-                className="w-full outline-none border-none bg-transparent text-gray-700"
+                className="w-full border-none bg-transparent text-neutral-700 outline-none"
               />
               <button
+                type="button"
+                aria-label="Close"
                 onClick={() => setOpen(false)}
-                className="px-2 text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
+                className="cursor-pointer px-1 text-neutral-400 hover:text-neutral-600">
+                <X className="size-5" />
               </button>
             </div>
           </div>

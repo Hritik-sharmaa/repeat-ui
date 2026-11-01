@@ -1,17 +1,26 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type CSSProperties } from "react";
 
 const ACCEPTED_DOC_TYPES = ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt";
-const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 
 type DocumentUploadModalProps = {
   buttonText?: string;
+  title?: string;
+  description?: string;
+  accept?: string;
+  maxSizeMB?: number;
+  accentColor?: string;
   className?: string;
 };
 
 export function DocumentUploadModal({
   buttonText = "Upload document",
+  title = "Upload Document",
+  description = "Choose a document to upload. Supported formats include PDF, Word, PowerPoint, Excel, and text files.",
+  accept = ACCEPTED_DOC_TYPES,
+  maxSizeMB = 10,
+  accentColor = "#2563eb",
   className,
 }: DocumentUploadModalProps) {
   const [open, setOpen] = useState(false);
@@ -21,6 +30,7 @@ export function DocumentUploadModal({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const vars = { "--rui-accent": accentColor } as CSSProperties;
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -45,11 +55,9 @@ export function DocumentUploadModal({
 
   function validateFile(f: File): string {
     const ext = "." + (f.name.split(".").pop()?.toLowerCase() ?? "");
-    const allowed = ACCEPTED_DOC_TYPES.replace(/\s/g, "").split(",");
-    if (!allowed.includes(ext))
-      return "Unsupported file type. Please upload a document file.";
-    if (f.size > MAX_SIZE_BYTES)
-      return "File is too large. Maximum size is 10MB.";
+    const allowed = accept.replace(/\s/g, "").split(",");
+    if (!allowed.includes(ext)) return "Unsupported file type. Please upload a document file.";
+    if (f.size > maxSizeMB * 1024 * 1024) return `File is too large. Maximum size is ${maxSizeMB}MB.`;
     return "";
   }
 
@@ -118,7 +126,8 @@ export function DocumentUploadModal({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Open document upload modal"
-        className={`inline-flex h-10 items-center justify-center rounded-lg bg-blue-600 px-5 text-base font-semibold text-white shadow-md cursor-pointer transition-all duration-150 hover:scale-105 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-primary/60 ${className}`}>
+        style={vars}
+        className={`inline-flex h-10 items-center justify-center rounded-lg bg-[var(--rui-accent)] px-5 text-base font-semibold text-white shadow-md cursor-pointer transition-all duration-150 hover:scale-105 hover:brightness-90 focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)]/60 ${className}`}>
         {buttonText}
       </button>
 
@@ -126,6 +135,7 @@ export function DocumentUploadModal({
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           role="dialog"
+          style={vars}
           aria-modal="true"
           aria-labelledby="upload-doc-title"
           aria-describedby="upload-doc-description">
@@ -145,16 +155,11 @@ export function DocumentUploadModal({
             className={`relative z-10 w-full max-w-lg rounded-xl border bg-white text-black p-8 shadow-2xl focus:outline-none flex flex-col max-h-[90vh] overflow-y-auto`}
             onClick={(e) => e.stopPropagation()}>
             <div className="mb-6">
-              <h2
-                id="upload-doc-title"
-                className="text-2xl font-bold mb-2">
-                Upload Document
+              <h2 id="upload-doc-title" className="text-2xl font-bold mb-2">
+                {title}
               </h2>
-              <p
-                id="upload-doc-description"
-                className="leading-relaxed">
-                Choose a document to upload. Supported formats include PDF,
-                Word, PowerPoint, Excel, and text files up to 10MB.
+              <p id="upload-doc-description" className="leading-relaxed">
+                {description} Up to {maxSizeMB}MB.
               </p>
             </div>
 
@@ -164,41 +169,25 @@ export function DocumentUploadModal({
                 tabIndex={0}
                 onClick={() => inputRef.current?.click()}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    inputRef.current?.click();
+                  if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
                 }}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
-                className={`rounded-lg border-2 border-dashed p-8 text-center cursor-pointer select-none transition-all duration-200 hover:border-primary hover:bg-primary/5 ${
-                  isDragging
-                    ? "border-primary bg-primary/10 scale-[1.02]"
-                    : "border-muted-foreground/30"
+                className={`rounded-lg border-2 border-dashed p-8 text-center cursor-pointer select-none transition-all duration-200 hover:border-[var(--rui-accent)] hover:bg-[var(--rui-accent)]/5 ${
+                  isDragging ? "border-[var(--rui-accent)] bg-[var(--rui-accent)]/10 scale-[1.02]" : "border-muted-foreground/30"
                 } ${file && "border-green-500 bg-green-50/50"}`}
                 aria-label="Choose a file or drag and drop to upload">
                 <div className="flex flex-col items-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-[var(--rui-accent)]/10 flex items-center justify-center">
                     {isUploading ? (
-                      <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full"></div>
+                      <div className="animate-spin w-6 h-6 border-2 border-[var(--rui-accent)] border-t-transparent rounded-full"></div>
                     ) : uploadComplete ? (
-                      <svg
-                        className="w-6 h-6 text-green-600 animate-pulse"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
+                      <svg className="w-6 h-6 text-green-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      <svg
-                        className="w-6 h-6 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 text-[var(--rui-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -214,30 +203,26 @@ export function DocumentUploadModal({
                       {isUploading
                         ? "Uploading..."
                         : uploadComplete
-                        ? "Upload Complete!"
-                        : file
-                        ? "File Selected"
-                        : "Drop your file here"}
+                          ? "Upload Complete!"
+                          : file
+                            ? "File Selected"
+                            : "Drop your file here"}
                     </p>
                     <p className="text-sm text-black">
                       {isUploading
                         ? "Please wait while your file is being uploaded"
                         : uploadComplete
-                        ? "Your document has been successfully uploaded"
-                        : file
-                        ? "Click to change file"
-                        : "or click to browse"}
+                          ? "Your document has been successfully uploaded"
+                          : file
+                            ? "Click to change file"
+                            : "or click to browse"}
                     </p>
                   </div>
 
                   {file && !isUploading && !uploadComplete && (
                     <div className="mt-3 p-3 rounded-lg border">
-                      <p className="text-sm font-medium ">
-                        {file.name}
-                      </p>
-                      <p className="text-xs mt-1">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
+                      <p className="text-sm font-medium ">{file.name}</p>
+                      <p className="text-xs mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                     </div>
                   )}
                 </div>
@@ -245,50 +230,38 @@ export function DocumentUploadModal({
 
               {!isUploading && !uploadComplete && (
                 <div className="space-y-2">
-                  <label
-                    htmlFor="doc-file"
-                    className="block text-sm font-medium">
+                  <label htmlFor="doc-file" className="block text-sm font-medium">
                     Choose File
                   </label>
                   <input
                     ref={inputRef}
                     id="doc-file"
                     type="file"
-                    accept={ACCEPTED_DOC_TYPES}
+                    accept={accept}
                     onChange={onInputChange}
                     aria-invalid={!!error}
-                    aria-describedby={
-                      error ? "doc-file-error" : "doc-file-help"
-                    }
-                    className={`block w-full cursor-pointer rounded-lg border px-3 py-2.5 text-sm transition-colors file:mr-3 file:rounded-md file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:cursor-pointer hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-                      error && "border-destructive"
+                    aria-describedby={error ? "doc-file-error" : "doc-file-help"}
+                    className={`block w-full cursor-pointer rounded-lg border px-3 py-2.5 text-sm transition-colors file:mr-3 file:rounded-md file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:cursor-pointer hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 ${
+                      error && "border-red-600"
                     }`}
                   />
 
                   {error ? (
                     <div className="flex items-start space-x-2 mt-2">
-                      <svg
-                        className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
                           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
                           clipRule="evenodd"
                         />
                       </svg>
-                      <p
-                        id="doc-file-error"
-                        className="text-sm text-destructive">
+                      <p id="doc-file-error" className="text-sm text-red-600">
                         {error}
                       </p>
                     </div>
                   ) : (
-                    <p
-                      id="doc-file-help"
-                      className="text-xs mt-2">
-                      Supported formats: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX,
-                      TXT (Max 10MB)
+                    <p id="doc-file-help" className="text-xs mt-2">
+                      Supported formats: {accept.replace(/\./g, "").toUpperCase().split(",").join(", ")} (Max {maxSizeMB}MB)
                     </p>
                   )}
                 </div>
@@ -307,7 +280,7 @@ export function DocumentUploadModal({
                   setUploadComplete(false);
                 }}
                 disabled={isUploading}
-                className={`inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium bg-neutral-200 transition-colors focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-300`}>
+                className={`inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium bg-neutral-200 transition-colors focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-300`}>
                 Cancel
               </button>
 
@@ -316,7 +289,7 @@ export function DocumentUploadModal({
                   type="button"
                   onClick={onUpload}
                   disabled={!file || !!error || isUploading}
-                  className={`inline-flex h-10 items-center justify-center rounded-lg px-6 text-sm font-medium bg-zinc-900 text-white shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer disabled:hover:bg-primary disabled:hover:shadow-sm`}>
+                  className={`inline-flex h-10 items-center justify-center rounded-lg px-6 text-sm font-medium bg-zinc-900 text-white shadow-sm transition-all duration-200 hover:bg-[var(--rui-accent)]/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer disabled:hover:bg-[var(--rui-accent)] disabled:hover:shadow-sm`}>
                   {isUploading ? (
                     <>
                       <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>

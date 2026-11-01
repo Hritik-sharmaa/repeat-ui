@@ -1,13 +1,8 @@
+"use client";
+
+import type { ComponentProps } from "react";
 import { DocumentUploadModal } from "./preview";
 
-const DocumentUploadModalDemo = () => {
-  return (
-    <main className=" p-8 flex items-center justify-center">
-      <div className="space-y-8 w-full">
-        <DocumentUploadModal />
-      </div>
-    </main>
-  );
-};
+const DocumentUploadModalDemo = (props: ComponentProps<typeof DocumentUploadModal>) => <DocumentUploadModal {...props} />;
 
 export default DocumentUploadModalDemo;

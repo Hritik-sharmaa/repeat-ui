@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { cloneElement, isValidElement, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { tintStyle } from "@/site/categoryStyle";
 import { AnimatePresence, motion } from "motion/react";
@@ -9,6 +9,8 @@ import { ChevronDown, Code2, Eye, Maximize2, Minimize2, Palette, RotateCcw } fro
 import { Segmented } from "@/site/ui/Segmented";
 import { CopyButton } from "@/site/ui/CopyButton";
 import { codeTheme } from "@/site/ui/codeTheme";
+import { Customize, controlDefaults, usageCode, type ControlValue } from "@/site/ui/Customize";
+import type { Control } from "@/registry/catalog";
 import { cn } from "@/lib/utils";
 
 type Tab = "preview" | "code" | "css";
@@ -20,10 +22,25 @@ interface ComponentTabsProps {
   sourceCode: string;
   fileName: string;
   cssCode?: string | null;
+  // The Customize panel's knobs, and how the usage snippet names and imports the component.
+  controls?: Control[];
+  usage?: { name: string; importPath: string; required?: string[] };
 }
 
-export default function ComponentTabs({ category, component, sourceCode, fileName, cssCode }: ComponentTabsProps) {
+export default function ComponentTabs({
+  category,
+  component,
+  sourceCode,
+  fileName,
+  cssCode,
+  controls = [],
+  usage,
+}: ComponentTabsProps) {
   const [tab, setTab] = useState<Tab>("preview");
+  const [values, setValues] = useState(() => controlDefaults(controls));
+  const setValue = (prop: string, value: ControlValue) => setValues((v) => ({ ...v, [prop]: value }));
+  // The demo is a client component, so its element can take the visitor's props here.
+  const customized = controls.length && isValidElement(component) ? cloneElement(component, values) : component;
   const [replay, setReplay] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [speed, setSpeed] = useState("1");
@@ -111,9 +128,18 @@ export default function ComponentTabs({ category, component, sourceCode, fileNam
         )}>
         <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0" />
         <div key={replay} className="relative flex w-full justify-center-safe">
-          {component}
+          {customized}
         </div>
       </div>
+      {controls.length > 0 && !fullscreen && (
+        <Customize
+          controls={controls}
+          values={values}
+          onChange={setValue}
+          onReset={() => setValues(controlDefaults(controls))}
+          usage={usageCode(usage?.name ?? "Component", usage?.importPath ?? "", controls, values, usage?.required)}
+        />
+      )}
     </div>
   );
 

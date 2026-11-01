@@ -1,61 +1,60 @@
-"use client";
+import type { ButtonHTMLAttributes, CSSProperties } from "react";
 
-import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
+// Shared by every Repeat UI button, so they line up side by side.
+const SIZES = {
+  sm: { height: 36, paddingInline: 16, fontSize: 14 },
+  md: { height: 44, paddingInline: 22, fontSize: 15 },
+  lg: { height: 52, paddingInline: 28, fontSize: 17 },
+};
 
+export interface PulseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: keyof typeof SIZES;
+  color?: string;
+  background?: string;
+  textColor?: string;
+  speed?: number;
+}
+
+// A dark button that glows on hover, with light pulsing out from its centre.
 const Pulse = ({
   children,
-  onClick,
+  size = "md",
+  color = "#00ff88",
+  background = "#18181b",
+  textColor = "#fafafa",
+  speed = 1.5,
   className = "",
+  style,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
+}: PulseProps) => {
   return (
     <>
       <style>{`
-        .pulse-button-tailwind:before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          background: radial-gradient(
-            circle,
-            rgba(0, 255, 136, 0.6) 0%,
-            transparent 70%
-          );
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          transition: all 0.6s ease;
-          z-index: 1;
-        }
-
-        .pulse-button-tailwind:hover:before {
-          width: 300px;
-          height: 300px;
-          animation: rui-pulse 1.5s infinite;
-        }
-
         @keyframes rui-pulse {
-          0%,
-          100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.6;
-          }
-          50% {
-            transform: translate(-50%, -50%) scale(1.2);
-            opacity: 0.3;
-          }
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+          50% { transform: translate(-50%, -50%) scale(1.25); opacity: 0.25; }
         }
       `}</style>
-
       <button
-        className={`pulse-button-tailwind relative bg-zinc-900 text-white border border-zinc-700 px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer transition-all duration-300 ml-5 overflow-hidden hover:border-green-400 hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] hover:-translate-y-0.5 ${className}`}
-        onClick={onClick}
+        type="button"
+        className={`group relative isolate inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-[10px] border border-white/10 font-semibold leading-none transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--rui-glow)] hover:shadow-[0_0_24px_-4px_var(--rui-glow)] disabled:pointer-events-none disabled:opacity-50 ${className}`}
+        style={{
+          ...SIZES[size],
+          background,
+          color: textColor,
+          ...({ "--rui-glow": color } as CSSProperties),
+          ...style,
+        }}
         {...rest}>
-        <span className="relative z-10">{children}</span>
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-1/2 -z-10 aspect-square w-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--rui-glow)_0%,transparent_70%)] opacity-60 transition-[width] duration-500 group-hover:w-[160%] group-hover:animate-[rui-pulse_1.5s_ease-in-out_infinite]"
+          style={{ animationDuration: `${speed}s` }}
+        />
+        {children}
       </button>
     </>
   );
-}
+};
 
 export default Pulse;

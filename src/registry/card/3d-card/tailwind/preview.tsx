@@ -1,96 +1,90 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, type PointerEvent } from "react";
 
-interface Card3DProps {
+export interface Card3DProps {
   companyName?: string;
   logo?: string;
   userName?: string;
   userRole?: string;
   avatar?: string;
+  maxTilt?: number;
+  colorFrom?: string;
+  colorTo?: string;
+  textColor?: string;
+  shiftHue?: boolean;
+  glare?: boolean;
+  className?: string;
 }
 
-const Card3D: React.FC<Card3DProps> = ({
-  companyName,
-  logo = "www.repeatui.com",
-  userName,
-  userRole,
-  avatar = "https://i.pravatar.cc/150?img=3",
-}) => {
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0 });
-  const [background, setBackground] = useState(
-    "linear-gradient(135deg, #ff6ec7, #4facfe)"
-  );
+// A badge that tilts towards the pointer, with its layers floating at different depths.
+const Card3D = ({
+  companyName = "Repeat UI",
+  logo,
+  userName = "Your name",
+  userRole = "Your role",
+  avatar,
+  maxTilt = 15,
+  colorFrom = "#ff6ec7",
+  colorTo = "#4facfe",
+  textColor = "#111827",
+  shiftHue = true,
+  glare = true,
+  className = "",
+}: Card3DProps) => {
+  // Where the pointer is over the card, from 0 to 1 on each axis; null when it is elsewhere.
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
 
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPointer({ x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height });
+  };
 
-    const onMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 30;
-      const y = (e.clientY / window.innerHeight - 0.5) * -30;
-
-      setTransform({ rotateX: y, rotateY: x });
-
-      const percentX = (e.clientX / window.innerWidth) * 360;
-      const percentY = (e.clientY / window.innerHeight) * 120 + 240;
-      setBackground(`linear-gradient(135deg,
-        hsl(${percentX}, 80%, 70%),
-        hsl(${percentY}, 80%, 60%))`);
-    };
-
-    const onMouseLeave = () => {
-      setTransform({ rotateX: 0, rotateY: 0 });
-      setBackground("linear-gradient(135deg, #ff6ec7, #4facfe)");
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseleave", onMouseLeave);
-
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseleave", onMouseLeave);
-    };
-  }, []);
+  const rotateX = pointer ? (0.5 - pointer.y) * 2 * maxTilt : 0;
+  const rotateY = pointer ? (pointer.x - 0.5) * 2 * maxTilt : 0;
+  const background =
+    pointer && shiftHue
+      ? `linear-gradient(135deg, hsl(${pointer.x * 360} 80% 72%), hsl(${240 + pointer.y * 120} 80% 64%))`
+      : `linear-gradient(135deg, ${colorFrom}, ${colorTo})`;
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className={`[perspective:1000px] ${className}`}>
       <div
-        className="w-[290px] h-[380px] rounded-3xl p-5 text-center text-white"
+        onPointerMove={onPointerMove}
+        onPointerLeave={() => setPointer(null)}
+        className="relative flex h-[380px] w-[290px] flex-col items-center rounded-3xl p-6 text-center shadow-2xl [transform-style:preserve-3d]"
         style={{
-          perspective: "1000px",
+          color: textColor,
+          background,
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transition: pointer ? "transform 0.1s ease-out, background 0.2s" : "transform 0.6s ease, background 0.6s",
         }}>
-        <div
-          ref={cardRef}
-          className="w-full h-full rounded-3xl p-5 text-center"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg)`,
-            background: background,
-            transition: "transform 0.1s ease-out, background 0.2s ease-out",
-          }}>
-          <div className="flex items-center justify-center gap-2">
-            <img
-              src={logo}
-              alt="Company Logo"
-              className="w-10 h-10 object-contain rounded"
-              width={10}
-              height={10}
-            />
-            <h2 className="text-xl font-bold text-gray-800">{companyName}</h2>
-          </div>
-          <div className="my-5 flex items-center justify-center">
-            <img src={avatar} alt="User Avatar" width={150} height={150} />
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold text-black drop-shadow-lg">
-              {userName}
-            </h3>
-            <p className="text-black text-sm font-medium">{userRole}</p>
-          </div>
+        <div className="flex items-center gap-2 [transform:translateZ(30px)]">
+          {logo && <img src={logo} alt="" className="size-8 rounded-md object-contain" />}
+          <span className="text-lg font-bold">{companyName}</span>
         </div>
+        <div className="my-auto [transform:translateZ(60px)]">
+          {avatar ? (
+            <img src={avatar} alt={userName} className="size-40 object-contain drop-shadow-xl" />
+          ) : (
+            <span className="grid size-28 place-items-center rounded-full bg-white/40 text-4xl font-bold">
+              {userName.charAt(0)}
+            </span>
+          )}
+        </div>
+        <div className="[transform:translateZ(40px)]">
+          <h3 className="text-2xl font-bold">{userName}</h3>
+          <p className="mt-1 text-sm font-medium opacity-75">{userRole}</p>
+        </div>
+        {glare && pointer && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-3xl"
+            style={{
+              background: `radial-gradient(circle at ${pointer.x * 100}% ${pointer.y * 100}%, rgba(255,255,255,0.4), transparent 55%)`,
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
+"use client";
+
+import type { ComponentProps } from "react";
 import BentoGrid from "./preview";
 
-const BentoGridDemo = () => {
+const BentoGridDemo = (props: Partial<ComponentProps<typeof BentoGrid>>) => {
   const jonSnowData = {
     mainCard: {
       title: "Jon Snow",
@@ -56,7 +59,7 @@ const BentoGridDemo = () => {
   return (
     <main className="p-8 flex items-center justify-center">
       <div className="">
-        <BentoGrid {...jonSnowData} />
+        <BentoGrid {...jonSnowData} {...props} />
       </div>
     </main>
   );

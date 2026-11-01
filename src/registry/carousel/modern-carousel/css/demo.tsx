@@ -1,53 +1,39 @@
-import ModernCarousel from "./preview";
-import "./style.css"
+"use client";
 
-const carouselItems = [
+import type { ComponentProps } from "react";
+import ModernCarousel from "./preview";
+
+const items = [
   {
     id: 1,
     title: "Mountain Vista",
     subtitle: "Nature's Majesty",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600",
     description: "Breathtaking mountain landscapes that inspire wanderlust",
   },
   {
     id: 2,
     title: "Ocean Waves",
     subtitle: "Coastal Beauty",
-    image:
-      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600",
     description: "The rhythmic dance of waves against pristine shores",
   },
   {
     id: 3,
     title: "Forest Path",
     subtitle: "Woodland Serenity",
-    image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600",
     description: "Peaceful trails through ancient woodland sanctuaries",
   },
   {
     id: 4,
     title: "Desert Dunes",
     subtitle: "Golden Horizons",
-    image:
-      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&h=600",
     description: "Endless golden sands sculpted by desert winds",
   },
 ];
 
-const CarouselDemo = () => {
-  return (
-    <main className="modern-carousel-root">
-      <div className="">
-        <ModernCarousel
-          items={carouselItems}
-          autoPlay={true}
-          autoPlayInterval={4000}
-        />
-      </div>
-    </main>
-  );
-};
+const ModernCarouselDemo = (props: Partial<ComponentProps<typeof ModernCarousel>>) => <ModernCarousel items={items} {...props} />;
 
-export default CarouselDemo;
+export default ModernCarouselDemo;

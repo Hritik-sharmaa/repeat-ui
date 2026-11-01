@@ -1,8 +1,8 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import TextShadow from "./preview";
 
-const TextShadowDemo = () => {
-  return <TextShadow text="Hover Me!!!" />;
-};
+const TextShadowDemo = (props: ComponentProps<typeof TextShadow>) => <TextShadow {...props} />;
 
 export default TextShadowDemo;

@@ -1,21 +1,21 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import FlowText from "./preview";
 
-const FlowTextDemo = () => {
-  return (
-    <div className="flex items-center flex-col gap-8 py-8">
-      <FlowText
-        text="Welcome to our amazing platform! Experience the future of web development."
-        className="bg-blue-400 p-3 transform rotate-12"
-        speed={10}
-        separator="✨"
-      />
-      <FlowText
-        text="Welcome to our amazing platform! Experience the future of web development."
-        className="bg-pink-400 p-3 transform -rotate-12"
-      />
-    </div>
-  );
-};
+// Two ribbons crossing, running opposite ways.
+const FlowTextDemo = ({ rotate = 6, direction = "left", ...props }: ComponentProps<typeof FlowText>) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 40, width: "100%", overflow: "hidden", padding: "40px 0" }}>
+    <FlowText text="Copy. Paste. Repeat." separator="  ✦  " rotate={rotate} direction={direction} {...props} />
+    <FlowText
+      text="Copy. Paste. Repeat."
+      separator="  ✦  "
+      background="#f472b6"
+      {...props}
+      rotate={-rotate}
+      direction={direction === "left" ? "right" : "left"}
+    />
+  </div>
+);
 
 export default FlowTextDemo;

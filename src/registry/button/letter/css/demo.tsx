@@ -1,9 +1,9 @@
-import React from "react";
-import Letter from "./preview";
-import "./style.css";
+"use client";
 
-const LetterBtnDemo = () => {
-  return <Letter className="letter-button">Hover me!</Letter>;
-};
+import type { ComponentProps } from "react";
+import Letter from "./preview";
+
+// Any prop passes straight through to the button.
+const LetterBtnDemo = (props: ComponentProps<typeof Letter>) => <Letter {...props}>{props.children ?? "Hover me!"}</Letter>;
 
 export default LetterBtnDemo;

@@ -1,56 +1,39 @@
-import SimpleCarousel, { type CarouselItem } from "./preview";
+"use client";
 
-const carouselItems: CarouselItem[] = [
+import type { ComponentProps } from "react";
+import SimpleCarousel from "./preview";
+
+const items = [
   {
     id: 1,
     title: "Mountain Vista",
     subtitle: "Nature's Majesty",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600",
     description: "Breathtaking mountain landscapes that inspire wanderlust",
   },
   {
     id: 2,
     title: "Ocean Waves",
     subtitle: "Coastal Beauty",
-    image:
-      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600",
     description: "The rhythmic dance of waves against pristine shores",
   },
   {
     id: 3,
     title: "Forest Path",
     subtitle: "Woodland Serenity",
-    image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600",
     description: "Peaceful trails through ancient woodland sanctuaries",
   },
   {
     id: 4,
     title: "Desert Dunes",
     subtitle: "Golden Horizons",
-    image:
-      "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&h=600",
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&h=600",
     description: "Endless golden sands sculpted by desert winds",
   },
 ];
 
-const CarouselDemo = () => {
-  return (
-    <main className=" p-8 flex items-center justify-center">
-      <div className="space-y-8 w-full">
-        <SimpleCarousel
-          items={carouselItems}
-          autoPlay={true}
-          autoPlayInterval={4000}
-          showControls={true}
-          showProgress={true}
-          showThumbnails={true}
-          showIndicators={true}
-        />
-      </div>
-    </main>
-  );
-};
+const SimpleCarouselDemo = (props: Partial<ComponentProps<typeof SimpleCarousel>>) => <SimpleCarousel items={items} {...props} />;
 
-export default CarouselDemo;
+export default SimpleCarouselDemo;

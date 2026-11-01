@@ -31,7 +31,7 @@ test("every component installs with imports that resolve", async () => {
 test("reports missing packages against the project's package.json", async () => {
   const cwd = await mkdtemp(join(tmpdir(), "rui-"));
   await writeFile(join(cwd, "package.json"), JSON.stringify({ dependencies: { motion: "^12" } }));
-  const { missing } = await addComponent("carousel-simple-carousel", { variant: "ts-tailwind", output: "c", registry, cwd });
+  const { missing } = await addComponent("commons-search-bar", { variant: "ts-tailwind", output: "c", registry, cwd });
   assert.deepEqual(missing, ["lucide-react"]);
 });
 

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { motion } from "motion/react";
 import "./style.css";
 
 export interface ModernCarouselItem {
@@ -13,172 +12,148 @@ export interface ModernCarouselItem {
   description: string;
 }
 
-interface ModernCarouselProps {
+export interface ModernCarouselProps {
   items: ModernCarouselItem[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
+  accentColor?: string;
+  spacing?: number;
+  angle?: number;
+  cardWidth?: number;
+  cardHeight?: number;
   className?: string;
 }
 
+const Chevron = ({ dir }: { dir: "left" | "right" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden>
+    <path d={dir === "left" ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+  </svg>
+);
+
+// A cover-flow: cards turn away in 3D on either side of the current one. Swipe, click or use the arrows.
 const ModernCarousel = ({
   items,
   autoPlay = true,
   autoPlayInterval = 4000,
+  accentColor = "#60a5fa",
+  spacing = 140,
+  angle = 25,
+  cardWidth = 340,
+  cardHeight = 420,
   className = "",
 }: ModernCarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
-  const [dragStartX, setDragStartX] = useState<number | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [current, setCurrent] = useState(0);
+  const [playing, setPlaying] = useState(autoPlay);
+  const [hovered, setHovered] = useState(false);
+  const dragStart = useRef<number | null>(null);
+  const count = items.length;
+  const go = (step: number) => setCurrent((i) => (i + step + count) % count);
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
-    timeoutRef.current = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % items.length);
-    }, autoPlayInterval);
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [currentIndex, isAutoPlaying, autoPlayInterval, items.length]);
+    if (!playing || hovered) return;
+    const timer = setTimeout(() => setCurrent((i) => (i + 1) % count), autoPlayInterval);
+    return () => clearTimeout(timer);
+  }, [current, playing, hovered, autoPlayInterval, count]);
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
+  const onPointerUp = (e: PointerEvent) => {
+    if (dragStart.current === null) return;
+    const dx = e.clientX - dragStart.current;
+    dragStart.current = null;
+    if (Math.abs(dx) > 30) go(dx > 0 ? -1 : 1);
   };
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  };
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    setDragStartX(e.clientX);
-    setDragging(true);
-    e.preventDefault();
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!dragging || dragStartX === null) return;
-    e.preventDefault();
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (!dragging || dragStartX === null) return;
-    const diff = e.clientX - dragStartX;
-    if (Math.abs(diff) > 30) {
-      if (diff > 0) {
-        prevSlide();
-      } else {
-        nextSlide();
-      }
-    }
-    setDragging(false);
-    setDragStartX(null);
-    e.preventDefault();
-  };
-
-  const handlePointerLeave = () => {
-    if (dragging) {
-      setDragging(false);
-      setDragStartX(null);
-    }
-  };
+  const navButton = "rui-flow-nav";
 
   return (
-    <div className={`modern-carousel ${className}`}>
+    <div
+      className={`rui-flow-carousel ${className}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}>
       <div
-        className={`modern-carousel__container ${
-          dragging
-            ? "modern-carousel__container--grabbing"
-            : "modern-carousel__container--grab"
-        }`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerLeave}>
-        <AnimatePresence>
-          {items.map((item, idx) => {
-            const isActive = idx === currentIndex;
-            const isPrev =
-              idx === (currentIndex - 1 + items.length) % items.length;
-            const isNext = idx === (currentIndex + 1) % items.length;
-            return (
-              <motion.div
-                key={item.id}
-                initial={{
-                  opacity: isActive ? 1 : 0.5,
-                  scale: isActive ? 1 : 0.8,
-                  x: isPrev ? -120 : isNext ? 120 : 0,
-                  zIndex: isActive ? 2 : 1,
-                  rotateY: isActive ? 0 : isPrev ? 20 : isNext ? -20 : 0,
-                }}
-                animate={{
-                  opacity: isActive ? 1 : 0.5,
-                  scale: isActive ? 1 : 0.8,
-                  x: isPrev ? -120 : isNext ? 120 : 0,
-                  zIndex: isActive ? 2 : 1,
-                  rotateY: isActive ? 0 : isPrev ? 20 : isNext ? -20 : 0,
-                }}
-                exit={{ opacity: 0, scale: 0.7 }}
-                transition={{ duration: 0.7, type: "spring" }}
-                className={`modern-carousel__slide ${
-                  isActive ? "modern-carousel__slide--active" : ""
-                }`}
-                style={{ zIndex: isActive ? 2 : 1 }}
-                onClick={() => goToSlide(idx)}>
-                <div className="modern-carousel__image-container">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="modern-carousel__image"
-                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                  />
-                </div>
-                <div className="modern-carousel__content">
-                  <h2 className="modern-carousel__title">{item.title}</h2>
-                  <p className="modern-carousel__subtitle">{item.subtitle}</p>
-                  <p className="modern-carousel__description">
-                    {item.description}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+        className="rui-flow-stage"
+        style={{ height: cardHeight }}
+        onPointerDown={(e) => (dragStart.current = e.clientX)}
+        onPointerUp={onPointerUp}
+        onPointerLeave={() => (dragStart.current = null)}>
+        {items.map((item, idx) => {
+          let rel = (idx - current + count) % count;
+          if (rel > count / 2) rel -= count;
+          const distance = Math.abs(rel);
+          const active = rel === 0;
+          return (
+            <motion.div
+              key={item.id}
+              onClick={() => setCurrent(idx)}
+              className="rui-flow-card"
+              style={{
+                width: cardWidth,
+                height: cardHeight,
+                marginLeft: -cardWidth / 2,
+                zIndex: 10 - distance,
+                pointerEvents: distance > 2 ? "none" : "auto",
+                boxShadow: active ? `0 0 0 3px ${accentColor}, 0 30px 60px -20px rgba(0,0,0,0.6)` : undefined,
+              }}
+              initial={false}
+              animate={{
+                x: rel * spacing,
+                rotateY: -rel * angle,
+                scale: 1 - Math.min(distance, 2) * 0.12,
+                opacity: distance > 2 ? 0 : 1 - distance * 0.3,
+              }}
+              transition={{ type: "spring", stiffness: 260, damping: 30 }}>
+              <img src={item.image} alt={item.title} draggable={false} className="rui-flow-image" />
+              <div className="rui-flow-shade" />
+              <div className="rui-flow-content">
+                <h2 className="rui-flow-title">{item.title}</h2>
+                <p className="rui-flow-subtitle" style={{ color: accentColor }}>
+                  {item.subtitle}
+                </p>
+                <p className="rui-flow-description">{item.description}</p>
+              </div>
+            </motion.div>
+          );
+        })}
 
-        <button
-          onClick={prevSlide}
-          className="modern-carousel__nav-button modern-carousel__nav-button--prev">
-          <ChevronLeft />
+        <button type="button" aria-label="Previous slide" onClick={() => go(-1)} className={`${navButton} rui-flow-prev`}>
+          <Chevron dir="left" />
         </button>
-
-        <button
-          onClick={nextSlide}
-          className="modern-carousel__nav-button modern-carousel__nav-button--next">
-          <ChevronRight />
-        </button>
-
-        <button
-          onClick={() => setIsAutoPlaying((v) => !v)}
-          className="modern-carousel__play-button">
-          {isAutoPlaying ? <Pause /> : <Play />}
+        <button type="button" aria-label="Next slide" onClick={() => go(1)} className={`${navButton} rui-flow-next`}>
+          <Chevron dir="right" />
         </button>
       </div>
 
-      <div className="modern-carousel__indicators">
-        {items.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => goToSlide(idx)}
-            className={`modern-carousel__indicator ${
-              idx === currentIndex ? "modern-carousel__indicator--active" : ""
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
+      <div className="rui-flow-bar">
+        <button
+          type="button"
+          aria-label={playing ? "Pause" : "Play"}
+          onClick={() => setPlaying((p) => !p)}
+          className="rui-flow-play"
+          style={{ background: accentColor }}>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden>
+            <path d={playing ? "M7 5h3v14H7zM14 5h3v14h-3z" : "M8 5v14l11-7z"} />
+          </svg>
+        </button>
+        <div className="rui-flow-dots">
+          {items.map((item, idx) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setCurrent(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className="rui-flow-dot"
+              style={{ width: idx === current ? 28 : 10, background: idx === current ? accentColor : "rgba(128,128,128,0.4)" }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

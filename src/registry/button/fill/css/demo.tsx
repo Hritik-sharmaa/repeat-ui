@@ -1,9 +1,9 @@
-import React from "react";
-import Fill from "./preview";
-import "./style.css";
+"use client";
 
-const FillBtnDemo = () => {
-  return <Fill className="fill-button">Fill</Fill>;
-};
+import type { ComponentProps } from "react";
+import Fill from "./preview";
+
+// Any prop passes straight through to the button.
+const FillBtnDemo = (props: ComponentProps<typeof Fill>) => <Fill {...props}>{props.children ?? "Fill"}</Fill>;
 
 export default FillBtnDemo;

@@ -4,7 +4,7 @@ export default {
   description: "Dynamic grid layout with animated items",
   dateAdded: "2025-08-14",
   tier: "free",
-  version: "1.0.0",
+  version: "2.0.0",
   props: [
     {
       name: "mainCard",
@@ -200,6 +200,52 @@ export default {
           description: "Background image URL (displayed with low opacity)",
         },
       ],
+    },
+    {
+      name: "gap",
+      type: "number",
+      default: "16",
+      description: "Space between cards, in pixels.",
+    },
+    {
+      name: "radius",
+      type: "number",
+      default: "24",
+      description: "Card corner radius in pixels.",
+    },
+    {
+      name: "hoverScale",
+      type: "number",
+      default: "1.02",
+      description: "How much a card grows on hover.",
+    },
+  ],
+  controls: [
+    {
+      prop: "gap",
+      type: "number",
+      default: 16,
+      min: 0,
+      max: 40,
+      unit: "px",
+    },
+    {
+      prop: "radius",
+      type: "number",
+      default: 24,
+      min: 0,
+      max: 48,
+      unit: "px",
+    },
+    {
+      prop: "hoverScale",
+      label: "Hover scale",
+      type: "number",
+      default: 1.02,
+      min: 1,
+      max: 1.1,
+      step: 0.01,
+      unit: "×",
     },
   ],
 } satisfies ComponentMeta;

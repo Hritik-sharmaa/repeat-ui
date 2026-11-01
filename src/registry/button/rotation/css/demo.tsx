@@ -1,9 +1,9 @@
-import React from "react";
-import Rotation from "./preview";
-import "./style.css";
+"use client";
 
-const RotationBtnDemo = () => {
-  return <Rotation className="rotation-button">Rotate</Rotation>;
-};
+import type { ComponentProps } from "react";
+import Rotation from "./preview";
+
+// Any prop passes straight through to the button.
+const RotationBtnDemo = (props: ComponentProps<typeof Rotation>) => <Rotation {...props}>{props.children ?? "Rotate"}</Rotation>;
 
 export default RotationBtnDemo;

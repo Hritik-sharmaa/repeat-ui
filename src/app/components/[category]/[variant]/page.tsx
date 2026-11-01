@@ -143,6 +143,12 @@ export default async function ComponentVariantPage({
             sourceCode={preview.content}
             fileName={preview.path}
             cssCode={css?.content ?? null}
+            controls={meta.controls}
+            usage={{
+              name: name.replace(/(^|-)(\w)/g, (_, __, c: string) => c.toUpperCase()).replace(/^(\d)/, "C$1"),
+              importPath: `@/components/repeat-ui/${name}/preview`,
+              required: meta.usage,
+            }}
           />
 
           <InstallationGuide componentName={name} shadcnName={item.shadcnName} variant={flavor} dependencies={item.dependencies} />

@@ -1,9 +1,9 @@
-import React from "react";
-import Layers from "./preview";
-import "./style.css";
+"use client";
 
-const LayersBtnDemo = () => {
-  return <Layers className="layers-button">Hover me!</Layers>;
-};
+import type { ComponentProps } from "react";
+import Layers from "./preview";
+
+// Any prop passes straight through to the button.
+const LayersBtnDemo = (props: ComponentProps<typeof Layers>) => <Layers {...props}>{props.children ?? "Hover me!"}</Layers>;
 
 export default LayersBtnDemo;

@@ -1,90 +1,85 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState, type PointerEvent } from "react";
 import "./style.css";
 
-interface Card3DProps {
+export interface Card3DProps {
   companyName?: string;
   logo?: string;
   userName?: string;
   userRole?: string;
   avatar?: string;
+  maxTilt?: number;
+  colorFrom?: string;
+  colorTo?: string;
+  textColor?: string;
+  shiftHue?: boolean;
+  glare?: boolean;
+  className?: string;
 }
 
+// A badge that tilts towards the pointer, with its layers floating at different depths.
+const Card3D = ({
+  companyName = "Repeat UI",
+  logo,
+  userName = "Your name",
+  userRole = "Your role",
+  avatar,
+  maxTilt = 15,
+  colorFrom = "#ff6ec7",
+  colorTo = "#4facfe",
+  textColor = "#111827",
+  shiftHue = true,
+  glare = true,
+  className = "",
+}: Card3DProps) => {
+  // Where the pointer is over the card, from 0 to 1 on each axis; null when it is elsewhere.
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
 
-const Card3D: React.FC<Card3DProps> = ({
-  companyName,
-  logo = "www.repeatui.com",
-  userName,
-  userRole,
-  avatar = "https://i.pravatar.cc/150?img=3",
-}) => {
-  const cardRef = useRef(null);
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0 });
-  const [background, setBackground] = useState(
-    "linear-gradient(135deg, #ff6ec7, #4facfe)"
-  );
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPointer({ x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height });
+  };
 
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const onMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 30;
-      const y = (e.clientY / window.innerHeight - 0.5) * -30;
-
-      setTransform({ rotateX: y, rotateY: x });
-
-      const percentX = (e.clientX / window.innerWidth) * 360;
-      const percentY = (e.clientY / window.innerHeight) * 120 + 240;
-      setBackground(`linear-gradient(135deg,
-        hsl(${percentX}, 80%, 70%),
-        hsl(${percentY}, 80%, 60%))`);
-    };
-
-    const onMouseLeave = () => {
-      setTransform({ rotateX: 0, rotateY: 0 });
-      setBackground("linear-gradient(135deg, #ff6ec7, #4facfe)");
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseleave", onMouseLeave);
-
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseleave", onMouseLeave);
-    };
-  }, []);
+  const rotateX = pointer ? (0.5 - pointer.y) * 2 * maxTilt : 0;
+  const rotateY = pointer ? (pointer.x - 0.5) * 2 * maxTilt : 0;
+  const background =
+    pointer && shiftHue
+      ? `linear-gradient(135deg, hsl(${pointer.x * 360} 80% 72%), hsl(${240 + pointer.y * 120} 80% 64%))`
+      : `linear-gradient(135deg, ${colorFrom}, ${colorTo})`;
 
   return (
-    <div className="card-container">
-      <div className="card-wrapper">
-        <div
-          ref={cardRef}
-          className="card-inner"
-          style={{
-            transform: `rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg)`,
-            background: background,
-          }}>
-          <div className="company-header">
-            <img
-              src={logo}
-              alt="Company Logo"
-              className="company-logo"
-              width={10}
-              height={10}
-            />
-            <h2 className="company-name">{companyName}</h2>
-          </div>
-          <div className="avatar-section">
-            <img src={avatar} alt="User Avatar" width={150} height={150} />
-          </div>
-
-          <div className="user-info">
-            <h3 className="user-name">{userName}</h3>
-            <p className="user-role">{userRole}</p>
-          </div>
+    <div className={`rui-card3d ${className}`}>
+      <div
+        onPointerMove={onPointerMove}
+        onPointerLeave={() => setPointer(null)}
+        className="rui-card3d-face"
+        style={{
+          color: textColor,
+          background,
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transition: pointer ? "transform 0.1s ease-out, background 0.2s" : "transform 0.6s ease, background 0.6s",
+        }}>
+        <div className="rui-card3d-brand">
+          {logo && <img src={logo} alt="" />}
+          <span>{companyName}</span>
         </div>
+        <div className="rui-card3d-avatar">
+          {avatar ? <img src={avatar} alt={userName} /> : <span>{userName.charAt(0)}</span>}
+        </div>
+        <div className="rui-card3d-person">
+          <h3>{userName}</h3>
+          <p>{userRole}</p>
+        </div>
+        {glare && pointer && (
+          <div
+            aria-hidden
+            className="rui-card3d-glare"
+            style={{
+              background: `radial-gradient(circle at ${pointer.x * 100}% ${pointer.y * 100}%, rgba(255,255,255,0.4), transparent 55%)`,
+            }}
+          />
+        )}
       </div>
     </div>
   );

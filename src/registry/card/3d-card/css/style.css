@@ -1,73 +1,80 @@
-.card-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-wrapper {
-  width: 290px;
-  height: 380px;
-  border-radius: 24px;
-  padding: 20px;
-  text-align: center;
-  color: white;
+.rui-card3d {
   perspective: 1000px;
 }
 
-.card-inner {
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  padding: 20px;
-  text-align: center;
-  transform-style: preserve-3d;
-  transition: transform 0.1s ease-out, background 0.2s ease-out;
-}
-
-.company-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.company-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 4px;
-}
-
-.company-name {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
-}
-
-.avatar-section {
-  margin: 20px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-info {
+.rui-card3d-face {
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 290px;
+  height: 380px;
+  padding: 24px;
+  text-align: center;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform-style: preserve-3d;
+}
+
+.rui-card3d-brand {
+  display: flex;
+  align-items: center;
   gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  transform: translateZ(30px);
 }
 
-.user-name {
+.rui-card3d-brand img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.rui-card3d-avatar {
+  margin: auto 0;
+  transform: translateZ(60px);
+}
+
+.rui-card3d-avatar img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.1));
+}
+
+.rui-card3d-avatar span {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  font-size: 36px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+.rui-card3d-person {
+  transform: translateZ(40px);
+}
+
+.rui-card3d-person h3 {
+  margin: 0;
   font-size: 24px;
-  font-weight: bold;
-  color: black;
-  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))
-    drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
+  font-weight: 700;
 }
 
-.user-role {
-  color: black;
+.rui-card3d-person p {
+  margin: 4px 0 0;
   font-size: 14px;
   font-weight: 500;
+  opacity: 0.75;
+}
+
+.rui-card3d-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  pointer-events: none;
 }

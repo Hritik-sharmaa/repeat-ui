@@ -1,51 +1,53 @@
-.pinterest-wrapper {
+.rui-pin-pinterest-wrapper {
   width: 100%;
 }
 
-.pinterest-container {
+.rui-pin-pinterest-container {
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.pinterest-grid {
+.rui-pin-pinterest-grid {
   display: flex;
   gap: 1rem;
 }
 
-.pinterest-column {
+.rui-pin-pinterest-column {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.pinterest-item {
+.rui-pin-pinterest-item {
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
-.pinterest-item:hover {
+.rui-pin-pinterest-item:hover {
   transform: scale(1.02) translateY(-5px);
 }
 
-.pinterest-card {
+.rui-pin-pinterest-card {
   position: relative;
   overflow: hidden;
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  border-radius: calc(var(--rui-radius, 1.5rem) * 0.67);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   background-color: white;
   transition: box-shadow 0.3s ease;
 }
 
-.pinterest-card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+.rui-pin-pinterest-card:hover {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.pinterest-image {
+.rui-pin-pinterest-image {
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -53,11 +55,11 @@
   display: block;
 }
 
-.pinterest-item:hover .pinterest-image {
+.rui-pin-pinterest-item:hover .rui-pin-pinterest-image {
   transform: scale(1.05);
 }
 
-.pinterest-error-placeholder {
+.rui-pin-pinterest-error-placeholder {
   width: 100%;
   background: linear-gradient(135deg, #e5e7eb, #d1d5db);
   display: flex;
@@ -65,42 +67,37 @@
   justify-content: center;
 }
 
-.pinterest-error-content {
+.rui-pin-pinterest-error-content {
   text-align: center;
   color: #6b7280;
 }
 
-.pinterest-error-icon {
+.rui-pin-pinterest-error-icon {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
-.pinterest-error-text {
+.rui-pin-pinterest-error-text {
   font-size: 0.875rem;
   margin: 0;
 }
 
-.pinterest-overlay {
+.rui-pin-pinterest-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.pinterest-overlay-visible {
+.rui-pin-pinterest-overlay-visible {
   opacity: 1;
 }
 
-.pinterest-content {
+.rui-pin-pinterest-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -111,11 +108,11 @@
   transition: transform 0.3s ease;
 }
 
-.pinterest-content-visible {
+.rui-pin-pinterest-content-visible {
   transform: translateY(0);
 }
 
-.pinterest-title {
+.rui-pin-pinterest-title {
   font-size: 1.125rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
@@ -124,7 +121,7 @@
   line-height: 1.4;
 }
 
-.pinterest-description {
+.rui-pin-pinterest-description {
   font-size: 0.875rem;
   color: #e5e7eb;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -138,7 +135,7 @@
   -webkit-box-orient: vertical;
 }
 
-.pinterest-author {
+.rui-pin-pinterest-author {
   font-size: 0.75rem;
   color: #d1d5db;
   margin: 0.5rem 0 0 0;
@@ -147,124 +144,119 @@
 }
 
 @media (max-width: 1200px) {
-  .pinterest-container {
+  .rui-pin-pinterest-container {
     max-width: 60rem;
   }
 }
 
 @media (max-width: 768px) {
-  .pinterest-grid {
+  .rui-pin-pinterest-grid {
     gap: 0.75rem;
   }
 
-  .pinterest-column {
+  .rui-pin-pinterest-column {
     gap: 0.75rem;
   }
 
-  .pinterest-container {
+  .rui-pin-pinterest-container {
     padding: 0 0.75rem;
   }
 
-  .pinterest-content {
+  .rui-pin-pinterest-content {
     padding: 0.75rem;
   }
 
-  .pinterest-title {
+  .rui-pin-pinterest-title {
     font-size: 1rem;
   }
 
-  .pinterest-description {
+  .rui-pin-pinterest-description {
     font-size: 0.8125rem;
   }
 }
 
 @media (max-width: 640px) {
-  .pinterest-grid {
+  .rui-pin-pinterest-grid {
     gap: 0.5rem;
   }
 
-  .pinterest-column {
+  .rui-pin-pinterest-column {
     gap: 0.5rem;
   }
 
-  .pinterest-container {
+  .rui-pin-pinterest-container {
     padding: 0 0.5rem;
   }
 
-  .pinterest-card {
+  .rui-pin-pinterest-card {
     border-radius: 0.75rem;
   }
 
-  .pinterest-content {
+  .rui-pin-pinterest-content {
     padding: 0.5rem;
   }
 
-  .pinterest-title {
+  .rui-pin-pinterest-title {
     font-size: 0.875rem;
     margin-bottom: 0.25rem;
   }
 
-  .pinterest-description {
+  .rui-pin-pinterest-description {
     font-size: 0.75rem;
     -webkit-line-clamp: 2;
     line-clamp: 2;
   }
 
-  .pinterest-author {
+  .rui-pin-pinterest-author {
     font-size: 0.6875rem;
     margin-top: 0.25rem;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .pinterest-item {
+  .rui-pin-pinterest-item {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .pinterest-image {
+  .rui-pin-pinterest-image {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .pinterest-overlay {
+  .rui-pin-pinterest-overlay {
     transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .pinterest-content {
+  .rui-pin-pinterest-content {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .pinterest-card {
+  .rui-pin-pinterest-card {
     transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pinterest-item,
-  .pinterest-image,
-  .pinterest-overlay,
-  .pinterest-content,
-  .pinterest-card {
+  .rui-pin-pinterest-item,
+  .rui-pin-pinterest-image,
+  .rui-pin-pinterest-overlay,
+  .rui-pin-pinterest-content,
+  .rui-pin-pinterest-card {
     transition: none;
   }
 }
 
-.pinterest-item:focus-visible {
+.rui-pin-pinterest-item:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
-  border-radius: 1rem;
+  border-radius: calc(var(--rui-radius, 1.5rem) * 0.67);
 }
 
 @media (prefers-contrast: high) {
-  .pinterest-overlay {
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0.3) 50%,
-      transparent 100%
-    );
+  .rui-pin-pinterest-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
   }
 
-  .pinterest-card {
+  .rui-pin-pinterest-card {
     border: 1px solid #374151;
   }
 }

@@ -1,21 +1,22 @@
-.flow-text-container {
-  overflow: hidden;
-  width: 100%;
+.rui-flow {
   display: flex;
   align-items: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 12px 0;
+  font-weight: 700;
+  touch-action: pan-y;
+  user-select: none;
 }
 
-.flow-text-measure {
+.rui-flow-measure {
+  position: absolute;
   opacity: 0;
   pointer-events: none;
-  position: absolute;
-  white-space: nowrap;
-  font-size: 30px; 
-  font-weight: bold;
+  white-space: pre;
 }
 
-.flow-text-track {
-  white-space: nowrap;
-  font-size: 30px; 
-  font-weight: bold;
+.rui-flow-track {
+  white-space: pre;
+  will-change: transform;
 }

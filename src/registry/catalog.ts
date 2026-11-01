@@ -31,6 +31,16 @@ export interface PropDoc {
   properties?: PropField[];
 }
 
+// A knob in the website's Customize panel. `prop` is a documented prop of preview.tsx
+// (or "children"), and `default` is the value the component uses when the prop is left out.
+export type Control = { prop: string; label?: string } & (
+  | { type: "text"; default: string }
+  | { type: "number"; default: number; min: number; max: number; step?: number; unit?: string }
+  | { type: "color"; default: string }
+  | { type: "boolean"; default: boolean }
+  | { type: "select"; default: string; options: string[] }
+);
+
 export interface ComponentMeta {
   description: string;
   // YYYY-MM-DD. Components added in the last 30 days get a "New" badge, and a
@@ -42,4 +52,8 @@ export interface ComponentMeta {
   version: string;
   // The props of preview.tsx. The build checks these names against its TypeScript props.
   props: PropDoc[];
+  // What the Customize panel lets visitors change, in order.
+  controls?: Control[];
+  // JSX attributes the usage snippet always starts with: required data the panel cannot edit, like `items={items}`.
+  usage?: string[];
 }

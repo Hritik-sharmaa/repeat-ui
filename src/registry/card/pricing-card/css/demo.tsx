@@ -1,41 +1,39 @@
-import React from "react";
-import PricingCard from "./preview";
-import "./style.css";
+"use client";
 
-const PricingCardDemo = () => {
-  const features = [
-    "Advance data analysis",
-    "Priority support",
-    "Unlimited storage",
-  ];
-  return (
-    <div className="flex gap-10">
-      <PricingCard
-        plan="Basic"
-        price={90}
-        features={features}
-        billing="Per user/month, billed monthly"
-        buttonText="Upgrade to Basic"
-        isPopular={false}
-      />
-      <PricingCard
-        plan="Premium"
-        price={120}
-        billing="Per user/month, billed monthly"
-        features={features}
-        buttonText="Upgrade to Premium"
-        isPopular={true}
-      />
-      <PricingCard
-        plan="Enterprise"
-        price={200}
-        billing="Per user/month, billed annually"
-        features={features}
-        buttonText="Contact Sales"
-        isPopular={false}
-      />
-    </div>
-  );
-};
+import type { ComponentProps } from "react";
+import PricingCard from "./preview";
+
+const features = ["Advanced data analysis", "Priority support", "Unlimited storage"];
+
+// Three tiers. Customizing changes the highlighted middle card; colour and currency apply to all three.
+const PricingCardDemo = ({
+  plan,
+  price,
+  billing,
+  buttonText,
+  isPopular = true,
+  ...shared
+}: ComponentProps<typeof PricingCard>) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+    <PricingCard plan="Basic" price={90} features={features} buttonText="Start with Basic" {...shared} />
+    <PricingCard
+      plan={plan}
+      price={price}
+      billing={billing}
+      buttonText={buttonText}
+      isPopular={isPopular}
+      features={features}
+      {...shared}
+    />
+    <PricingCard
+      plan="Enterprise"
+      price={200}
+      billing="Per user/month, billed annually"
+      features={features}
+      buttonText="Contact sales"
+      {...shared}
+    />
+  </div>
+);
 
 export default PricingCardDemo;

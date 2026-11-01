@@ -1,91 +1,106 @@
-.profile-card {
+.rui-profile {
   width: 300px;
-  border-radius: 40px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  background: #fff;
-  transition: 0.3s ease;
-  color: black;
   padding: 10px;
+  overflow: hidden;
+  color: #0f172a;
+  background: #ffffff;
+  border-radius: var(--rui-radius);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
-.profile-card:hover {
-  transform: translateY(-2px);
+.rui-profile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.profile-image {
+.rui-profile-photo {
+  display: block;
   width: 100%;
   height: 300px;
   object-fit: cover;
-  border-radius: 30px;
+  border-radius: max(calc(var(--rui-radius) - 10px), 0px);
 }
 
-.card-content {
+.rui-profile-body {
   padding: 10px;
 }
 
-.card-header {
+.rui-profile-name {
   display: flex;
   align-items: center;
-  text-align: left;
+  gap: 4px;
+  margin: 0;
+  font-size: 18px;
   font-weight: 600;
-  font-size: 1.1rem;
 }
 
-.name {
-  text-align: left;
-  flex: 1;
+.rui-profile-name svg {
+  width: 20px;
+  height: 20px;
 }
 
-.verified {
-  color: #22c55e;
-  font-size: 1.1rem;
-  margin-right: 9.7rem;
+.rui-profile-bio {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #64748b;
 }
 
-.bio {
-  margin-top: 4px;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.card-footer {
+.rui-profile-row {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
-.stats span {
+.rui-profile-followers {
   display: flex;
   align-items: center;
-  font-size: 0.85rem;
-  color: #000;
-  margin-right: 12px;
+  gap: 6px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: #475569;
 }
 
-.stats svg {
-  margin-right: 4px;
+.rui-profile-followers svg {
+  width: 16px;
+  height: 16px;
 }
 
-.follow-btn {
+.rui-profile-follow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #111827;
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 9999px;
-  font-weight: 500;
-  font-size: 0.875rem;
+  gap: 6px;
+  height: 40px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--rui-accent);
+  border: 2px solid var(--rui-accent);
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
 }
 
-.follow-btn:hover {
-  background: #1f2937;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.rui-profile-follow:active {
+  transform: scale(0.95);
+}
+
+.rui-profile-follow span {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.3s;
+}
+
+.rui-profile-following {
+  color: var(--rui-accent);
+  background: transparent;
+}
+
+.rui-profile-following span {
+  transform: rotate(45deg);
 }

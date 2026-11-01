@@ -1,16 +1,17 @@
-import React from "react";
-import ProfileCard from "./preview";
-import "./style.css";
+"use client";
 
-const ProfileCardDemo = () => {
-  return (
-    <ProfileCard
-      name="Jon snow"
-      verified={true}
-      bio="hello, this is jon "
-      followers={223}
-      image="/image.webp"></ProfileCard>
-  );
-};
+import type { ComponentProps } from "react";
+import ProfileCard from "./preview";
+
+const ProfileCardDemo = (props: Partial<ComponentProps<typeof ProfileCard>>) => (
+  <ProfileCard
+    name="Maya Chen"
+    verified
+    bio="Product designer. Collects fonts and houseplants."
+    followers={2230}
+    image="/image.webp"
+    {...props}
+  />
+);
 
 export default ProfileCardDemo;

@@ -1,59 +1,56 @@
-"use client"
-import { useState } from "react";
-import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
+import type { ButtonHTMLAttributes } from "react";
 
+// Shared by every Repeat UI button, so they line up side by side.
+const SIZES = {
+  sm: { height: 36, paddingInline: 16, fontSize: 14 },
+  md: { height: 44, paddingInline: 22, fontSize: 15 },
+  lg: { height: 52, paddingInline: 28, fontSize: 17 },
+};
+
+export interface WiggleProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: keyof typeof SIZES;
+  color?: string;
+  fillColor?: string;
+  textColor?: string;
+  borderColor?: string;
+}
+
+// On hover a wave of colour rises through the button and the label wobbles like jelly.
 const Wiggle = ({
   children,
-  onClick,
+  size = "md",
+  color = "#facc15",
+  fillColor = "#3b82f6",
+  textColor = "#0a0a0a",
+  borderColor = "#0a0a0a",
   className = "",
+  style,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
-    const [hovered, setHovered] = useState(false);
+}: WiggleProps) => {
   return (
-    <div
-      className="relative w-[200px] h-[60px] bg-yellow-400 text-black border-4 border-black rounded-full font-bold text-[20px] flex justify-center items-center overflow-hidden cursor-pointer group"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div className="absolute w-[200px] h-[200px] bg-blue-500 rounded-t-full bottom-[-200px] z-0 transition-all duration-500 group-hover:bottom-0" />
-      <button
-        className={`relative z-10 transition-transform duration-500 origin-center ${
-          hovered ? "animate-bounce-middle" : ""
-        } ${className}`}
-        onClick={onClick}
-        {...rest}
-      >
-        {children}
-      </button>
-
+    <>
       <style>{`
-        @keyframes rui-bounce-middle {
-          0% {
-            transform: scale(1, 1) rotate(0deg);
-          }
-          20% {
-            transform: scale(1.2, 0.8) rotate(-4deg);
-          }
-          40% {
-            transform: scale(0.9, 1.1) rotate(4deg);
-          }
-          60% {
-            transform: scale(1.05, 0.95) rotate(-2deg);
-          }
-          80% {
-            transform: scale(0.98, 1.02) rotate(2deg);
-          }
-          100% {
-            transform: scale(1, 1) rotate(0deg);
-          }
-        }
-
-        .animate-bounce-middle {
-          animation: rui-bounce-middle 1s ease forwards;
+        @keyframes rui-wiggle {
+          20% { transform: scale(1.2, 0.8) rotate(-4deg); }
+          40% { transform: scale(0.9, 1.1) rotate(4deg); }
+          60% { transform: scale(1.05, 0.95) rotate(-2deg); }
+          80% { transform: scale(0.98, 1.02) rotate(2deg); }
         }
       `}</style>
-    </div>
+      <button
+        type="button"
+        className={`group relative isolate inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-full border-2 font-bold leading-none disabled:pointer-events-none disabled:opacity-50 ${className}`}
+        style={{ ...SIZES[size], background: color, color: textColor, borderColor, ...style }}
+        {...rest}>
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 aspect-square w-[140%] -translate-x-1/2 translate-y-full rounded-full transition-transform duration-500 ease-out group-hover:-translate-y-[30%]"
+          style={{ background: fillColor }}
+        />
+        <span className="inline-flex items-center gap-2 group-hover:animate-[rui-wiggle_0.9s_ease]">{children}</span>
+      </button>
+    </>
   );
-}
+};
 
 export default Wiggle;

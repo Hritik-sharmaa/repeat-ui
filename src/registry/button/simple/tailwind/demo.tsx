@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
+
+import type { ComponentProps } from "react";
 import Simple from "./preview";
 
-const SimpleBtnDemo = () => {
-  return <Simple>Simple</Simple>;
-};
+// Any prop passes straight through to the button.
+const SimpleBtnDemo = (props: ComponentProps<typeof Simple>) => <Simple {...props}>{props.children ?? "Simple"}</Simple>;
 
 export default SimpleBtnDemo;

@@ -1,40 +1,49 @@
-"use client";
+import type { ButtonHTMLAttributes, CSSProperties } from "react";
 
-import type { ButtonHTMLAttributes, PropsWithChildren } from "react";
+// Shared by every Repeat UI button, so they line up side by side.
+const SIZES = {
+  sm: { height: 36, paddingInline: 16, fontSize: 14 },
+  md: { height: 44, paddingInline: 22, fontSize: 15 },
+  lg: { height: 52, paddingInline: 28, fontSize: 17 },
+};
 
+export interface FillProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: keyof typeof SIZES;
+  color?: string;
+  textColor?: string;
+  duration?: number;
+}
+
+// An outlined pill that fills with its colour from the bottom, with a little overshoot.
 const Fill = ({
   children,
+  size = "md",
+  color = "#ff7675",
+  textColor = "#ffffff",
+  duration = 0.4,
   className = "",
+  style,
   ...rest
-}: PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>) => {
+}: FillProps) => {
   return (
-    <>
-      <style>{`
-        .fill-button::before {
-          content: "";
-          position: absolute;
-          top: 100%;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: #ff7675;
-          transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          z-index: -1;
-          border-radius: inherit;
-        }
-
-        .fill-button:hover::before {
-          top: 0;
-        }
-      `}</style>
-
-      <button
-        className={`relative bg-transparent border-2 border-[#ff7675] text-[#ff7675] px-9 py-3 text-base font-semibold rounded-full cursor-pointer overflow-hidden transition-all duration-300 ease-in-out uppercase tracking-wider fill-button hover:text-white hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(255,118,117,0.3)] ${className}`}
-        {...rest}>
-        <span className="relative z-10">{children}</span>
-      </button>
-    </>
+    <button
+      type="button"
+      className={`group relative isolate inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-full border-2 border-[var(--rui-color)] font-semibold uppercase leading-none tracking-wider text-[var(--rui-color)] transition-[color,transform,box-shadow] hover:-translate-y-0.5 hover:text-[var(--rui-text)] hover:shadow-[0_10px_24px_-8px_var(--rui-color)] disabled:pointer-events-none disabled:opacity-50 ${className}`}
+      style={{
+        ...SIZES[size],
+        transitionDuration: `${duration}s`,
+        ...({ "--rui-color": color, "--rui-text": textColor } as CSSProperties),
+        ...style,
+      }}
+      {...rest}>
+      <span
+        aria-hidden
+        className="absolute inset-0 -z-10 translate-y-full bg-[var(--rui-color)] transition-transform ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group-hover:translate-y-0"
+        style={{ transitionDuration: `${duration}s` }}
+      />
+      {children}
+    </button>
   );
-}
+};
 
 export default Fill;

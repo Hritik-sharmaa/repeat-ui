@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import "./style.css";
 
 export interface CarouselItem {
@@ -13,10 +12,13 @@ export interface CarouselItem {
   description: string;
 }
 
-interface SimpleCarouselProps {
+export interface SimpleCarouselProps {
   items: CarouselItem[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
+  height?: number;
+  overlay?: number;
+  accentColor?: string;
   showControls?: boolean;
   showProgress?: boolean;
   showThumbnails?: boolean;
@@ -24,296 +26,162 @@ interface SimpleCarouselProps {
   className?: string;
 }
 
+const Chevron = ({ dir }: { dir: "left" | "right" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width="22"
+    height="22"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden>
+    <path d={dir === "left" ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+  </svg>
+);
+
+// A full-bleed hero slider: the image slides in, then the copy rises line by line.
+// The progress bar fills over each slide's time on screen.
 const SimpleCarousel = ({
   items,
   autoPlay = true,
   autoPlayInterval = 5000,
+  height = 520,
+  overlay = 0.45,
+  accentColor = "#ffffff",
   showControls = true,
   showProgress = true,
   showThumbnails = true,
   showIndicators = true,
   className = "",
 }: SimpleCarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
-  const [direction, setDirection] = useState(0);
+  const [[current, direction], setSlide] = useState([0, 1]);
+  const [playing, setPlaying] = useState(autoPlay);
+  const count = items.length;
+  const go = (index: number, dir: number) => setSlide([(index + count) % count, dir]);
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!playing) return;
+    const timer = setTimeout(() => setSlide(([i]) => [(i + 1) % count, 1]), autoPlayInterval);
+    return () => clearTimeout(timer);
+  }, [current, playing, autoPlayInterval, count]);
 
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % items.length);
-    }, autoPlayInterval);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, items.length, autoPlayInterval]);
-
-  const nextSlide = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  };
-
-  const prevSlide = () => {
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  };
-
-  const goToSlide = (index: number) => {
-    setDirection(index > currentIndex ? 1 : -1);
-    setCurrentIndex(index);
-  };
-
-  const slideVariants = {
-    hiddenRight: {
-      x: "100%",
-      opacity: 0,
-    },
-    hiddenLeft: {
-      x: "-100%",
-      opacity: 0,
-    },
-    visible: {
-      x: "0",
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94] as const,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
-  const textVariants = {
-    hidden: {
-      y: 50,
-      opacity: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        delay: 0.3,
-        ease: "easeOut" as const,
-      },
-    },
-  };
-
-  const currentItem = items[currentIndex];
+  const item = items[current];
+  const glass = "rui-hero-glass";
 
   return (
-    <div className={`simple-carousel-container ${className}`}>
-      <div className="simple-carousel-image-wrapper">
-        <div className="simple-carousel-image-bg">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={currentIndex}
-              custom={direction}
-              variants={slideVariants}
-              initial={direction > 0 ? "hiddenRight" : "hiddenLeft"}
-              animate="visible"
-              exit="exit"
-              className="simple-carousel-image-motion">
-              <img
-                src={currentItem.image}
-                alt={currentItem.title}
-                className="simple-carousel-image"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
+    <div className={`rui-hero ${className}`}>
+      <div className="rui-hero-stage" style={{ height }}>
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.img
+            key={item.id}
+            src={item.image}
+            alt={item.title}
+            custom={direction}
+            className="rui-hero-image"
+            variants={{
+              enter: (d: number) => ({ x: `${d * 100}%` }),
+              center: { x: 0, scale: 1 },
+              exit: (d: number) => ({ x: `${d * -30}%`, scale: 0.95, opacity: 0.4 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
+        </AnimatePresence>
+        <div className="rui-hero-shade" style={{ opacity: overlay * 1.6 }} />
 
-        <div className="simple-carousel-content-row">
-          <motion.div
-            key={`content-${currentIndex}`}
-            variants={textVariants}
-            initial="hidden"
-            animate="visible"
-            className="simple-carousel-content">
-            <motion.p
-              className="simple-carousel-subtitle"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 0.9, y: 0 }}
-              transition={{ delay: 0.4 }}>
-              {currentItem.subtitle}
-            </motion.p>
-            <motion.h1
-              className="simple-carousel-title"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}>
-              {currentItem.title}
-            </motion.h1>
-            <motion.p
-              className="simple-carousel-description"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 0.9, y: 0 }}
-              transition={{ delay: 0.6 }}>
-              {currentItem.description}
-            </motion.p>
+        <div className="rui-hero-copy">
+          <motion.div key={item.id} initial="hidden" animate="visible" className="rui-hero-text">
+            {[
+              { el: "p", text: item.subtitle, className: "rui-hero-subtitle", style: { color: accentColor } },
+              { el: "h2", text: item.title, className: "rui-hero-title" },
+              { el: "p", text: item.description, className: "rui-hero-description" },
+            ].map(({ el, text, className, style }, i) => {
+              const Line = el === "h2" ? motion.h2 : motion.p;
+              return (
+                <Line
+                  key={el + i}
+                  className={className}
+                  style={style}
+                  variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.6, delay: 0.3 + i * 0.1, ease: "easeOut" }}>
+                  {text}
+                </Line>
+              );
+            })}
           </motion.div>
-
-          <motion.div
-            className="simple-carousel-index"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.7 }}>
-            <div className="simple-carousel-index-number">
-              {String(currentIndex + 1).padStart(2, "0")}
-            </div>
-          </motion.div>
+          <span className="rui-hero-index">{String(current + 1).padStart(2, "0")}</span>
         </div>
 
         {showControls && (
           <>
             <button
-              onClick={prevSlide}
-              className="simple-carousel-control simple-carousel-control-left">
-              <ChevronLeft className="simple-carousel-control-icon" />
+              type="button"
+              aria-label="Previous slide"
+              onClick={() => go(current - 1, -1)}
+              className={`${glass} rui-hero-prev`}>
+              <Chevron dir="left" />
+            </button>
+            <button type="button" aria-label="Next slide" onClick={() => go(current + 1, 1)} className={`${glass} rui-hero-next`}>
+              <Chevron dir="right" />
             </button>
             <button
-              onClick={nextSlide}
-              className="simple-carousel-control simple-carousel-control-right">
-              <ChevronRight className="simple-carousel-control-icon" />
+              type="button"
+              aria-label={playing ? "Pause" : "Play"}
+              onClick={() => setPlaying((p) => !p)}
+              className={`${glass} rui-hero-play`}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden>
+                <path d={playing ? "M7 5h3v14H7zM14 5h3v14h-3z" : "M8 5v14l11-7z"} />
+              </svg>
             </button>
           </>
-        )}
-
-        {showControls && (
-          <button
-            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="simple-carousel-autoplay-toggle">
-            {isAutoPlaying ? (
-              <Pause className="simple-carousel-control-icon" />
-            ) : (
-              <Play className="simple-carousel-control-icon" />
-            )}
-          </button>
         )}
       </div>
 
       {(showIndicators || showProgress || showThumbnails) && (
-        <div className="simple-carousel-footer">
-          {showProgress ? (
-            <div className="simple-carousel-progress-row">
-              {showIndicators && (
-                <div className="simple-carousel-indicators">
-                  {items.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToSlide(index)}
-                      className="simple-carousel-indicator-btn">
-                      <div
-                        className={`simple-carousel-indicator-bar${
-                          index === currentIndex ? " active" : ""
-                        }`}
-                      />
-                      {index === currentIndex && (
-                        <motion.div
-                          className="simple-carousel-indicator-motion"
-                          layoutId="activeIndicator"
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <div className="simple-carousel-progress-bar-wrapper">
-                <div className="simple-carousel-progress-bar-bg">
-                  <motion.div
-                    className="simple-carousel-progress-bar"
-                    initial={{ width: "0%" }}
-                    animate={{
-                      width: `${((currentIndex + 1) / items.length) * 100}%`,
-                    }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                  />
-                </div>
-              </div>
-
-              {showThumbnails && (
-                <div className="simple-carousel-thumbnails">
-                  {items.map((item, index) => (
-                    <button
-                      key={item.id}
-                      onClick={() => goToSlide(index)}
-                      className={`simple-carousel-thumbnail-btn${
-                        index === currentIndex ? " active" : ""
-                      }`}>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="simple-carousel-thumbnail-img"
-                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+        <div className="rui-hero-bar">
+          {showIndicators && (
+            <div className="rui-hero-dots">
+              {items.map((it, i) => (
+                <button
+                  key={it.id}
+                  type="button"
+                  aria-label={`Go to slide ${i + 1}`}
+                  onClick={() => go(i, i > current ? 1 : -1)}
+                  className="rui-hero-dot"
+                  style={{ width: i === current ? 40 : 16, background: i === current ? accentColor : "rgba(255,255,255,0.3)" }}
+                />
+              ))}
             </div>
-          ) : (
-            <div className="simple-carousel-indicators-row">
-              {showIndicators && (
-                <div className="simple-carousel-indicators">
-                  {items.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToSlide(index)}
-                      className="simple-carousel-indicator-btn">
-                      <div
-                        className={`simple-carousel-indicator-bar${
-                          index === currentIndex ? " active" : ""
-                        }`}
-                      />
-                      {index === currentIndex && (
-                        <motion.div
-                          className="simple-carousel-indicator-motion"
-                          layoutId="activeIndicator"
-                          transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {showThumbnails && (
-                <div className="simple-carousel-thumbnails">
-                  {items.map((item, index) => (
-                    <button
-                      key={item.id}
-                      onClick={() => goToSlide(index)}
-                      className={`simple-carousel-thumbnail-btn${
-                        index === currentIndex ? " active" : ""
-                      }`}>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="simple-carousel-thumbnail-img"
-                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+          )}
+          {showProgress && (
+            <div className="rui-hero-progress">
+              <motion.div
+                key={`${current}-${playing}`}
+                className="rui-hero-progress-fill"
+                style={{ background: accentColor }}
+                initial={{ width: "0%" }}
+                animate={{ width: playing ? "100%" : "0%" }}
+                transition={{ duration: playing ? autoPlayInterval / 1000 : 0, ease: "linear" }}
+              />
+            </div>
+          )}
+          {showThumbnails && (
+            <div className="rui-hero-thumbs">
+              {items.map((it, i) => (
+                <button
+                  key={it.id}
+                  type="button"
+                  aria-label={`Show ${it.title}`}
+                  onClick={() => go(i, i > current ? 1 : -1)}
+                  className={`rui-hero-thumb ${i === current ? "rui-hero-thumb-active" : ""}`}
+                  style={{ boxShadow: i === current ? `0 0 0 2px ${accentColor}` : undefined }}>
+                  <img src={it.image} alt="" className="rui-hero-image" />
+                </button>
+              ))}
             </div>
           )}
         </div>

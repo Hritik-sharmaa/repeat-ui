@@ -1,27 +1,37 @@
 "use client";
-import { useRef, useEffect, useState, useMemo, type FC, type PointerEvent } from "react";
 
-interface FlatTextProps {
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
+
+export interface FlowTextProps {
   text?: string;
   speed?: number;
   direction?: "left" | "right";
   className?: string;
   interactive?: boolean;
   separator?: string;
+  color?: string;
+  background?: string;
+  fontSize?: number;
+  rotate?: number;
 }
 
-const FlatText: FC<FlatTextProps> = ({
+// An endless ribbon of text. Drag it to scrub; let go and it carries on the way you threw it.
+const FlowText = ({
   text = "",
   speed = 2,
   direction = "left",
-  className,
+  className = "",
   interactive = true,
   separator = " • ",
-}) => {
+  color = "#0a0a0a",
+  background = "#60a5fa",
+  fontSize = 30,
+  rotate = 0,
+}: FlowTextProps) => {
   const measureRef = useRef<HTMLSpanElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const [textWidth, setTextWidth] = useState(0);
-
+  // The width of one text + separator: the track loops by exactly this much.
+  const [period, setPeriod] = useState(0);
   const offsetRef = useRef(0);
   const dragRef = useRef(false);
   // dragRef is for the animation loop; this re-renders for the cursor.
@@ -29,58 +39,38 @@ const FlatText: FC<FlatTextProps> = ({
   const lastXRef = useRef(0);
   const velRef = useRef(0);
   const dirRef = useRef(direction);
-  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     dirRef.current = direction;
   }, [direction]);
 
   useEffect(() => {
-    if (measureRef.current && text) {
-      const newWidth = measureRef.current.getBoundingClientRect().width;
-      setTextWidth(newWidth);
-      offsetRef.current = 0;
-      if (trackRef.current) {
-        trackRef.current.style.transform = `translateX(0px)`;
-      }
-    }
-  }, [text]);
+    if (!measureRef.current || !text) return;
+    setPeriod(measureRef.current.getBoundingClientRect().width);
+  }, [text, separator, fontSize]);
 
-  const repeatedText = useMemo(() => {
-    if (!textWidth || !text) return text;
-    const repeatCount = Math.ceil(window.innerWidth / textWidth) + 3;
-    return Array(repeatCount).fill(text).join(separator);
-  }, [text, textWidth, separator]);
+  const repeated = useMemo(() => {
+    if (!period) return text;
+    return Array(Math.ceil(window.innerWidth / period) + 3)
+      .fill(text + separator)
+      .join("");
+  }, [text, period, separator]);
 
   useEffect(() => {
-    if (!textWidth) return;
-
-    const animate = () => {
+    if (!period) return;
+    let frame = 0;
+    const tick = () => {
       if (!dragRef.current && trackRef.current) {
-        const delta = dirRef.current === "right" ? speed : -speed;
-        offsetRef.current += delta;
-
-        const wrapPoint = textWidth + 20;
-        if (offsetRef.current <= -wrapPoint) {
-          offsetRef.current += wrapPoint;
-        }
-        if (offsetRef.current > 0) {
-          offsetRef.current -= wrapPoint;
-        }
-
+        offsetRef.current += dirRef.current === "right" ? speed : -speed;
+        if (offsetRef.current <= -period) offsetRef.current += period;
+        if (offsetRef.current > 0) offsetRef.current -= period;
         trackRef.current.style.transform = `translateX(${offsetRef.current}px)`;
       }
-      animationRef.current = requestAnimationFrame(animate);
+      frame = requestAnimationFrame(tick);
     };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [textWidth, speed]);
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [period, speed]);
 
   const onPointerDown = (e: PointerEvent) => {
     if (!interactive) return;
@@ -91,18 +81,16 @@ const FlatText: FC<FlatTextProps> = ({
   };
 
   const onPointerMove = (e: PointerEvent) => {
-    if (!interactive || !dragRef.current || !trackRef.current) return;
-
+    if (!dragRef.current || !trackRef.current) return;
     const dx = e.clientX - lastXRef.current;
     lastXRef.current = e.clientX;
     velRef.current = dx;
     offsetRef.current += dx;
-
     trackRef.current.style.transform = `translateX(${offsetRef.current}px)`;
   };
 
   const endDrag = () => {
-    if (!interactive) return;
+    if (!dragRef.current) return;
     dragRef.current = false;
     setIsDragging(false);
     dirRef.current = velRef.current > 0 ? "right" : "left";
@@ -110,31 +98,26 @@ const FlatText: FC<FlatTextProps> = ({
 
   return (
     <div
-      className={`overflow-hidden w-full flex items-center ${className ?? ""}`}
+      className={`flex w-full touch-pan-y select-none items-center overflow-hidden py-3 font-bold ${className}`}
       style={{
+        color,
+        background,
+        fontSize,
+        transform: `rotate(${rotate}deg)`,
         cursor: interactive ? (isDragging ? "grabbing" : "grab") : "auto",
       }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerLeave={endDrag}>
-      <span
-        ref={measureRef}
-        className="opacity-0 pointer-events-none absolute whitespace-nowrap text-3xl font-bold"
-        aria-hidden="true">
-        {text}
+      <span ref={measureRef} aria-hidden className="pointer-events-none absolute whitespace-pre opacity-0">
+        {text + separator}
       </span>
-
-      <div
-        ref={trackRef}
-        className="whitespace-nowrap text-3xl font-bold"
-        style={{
-          willChange: "transform",
-        }}>
-        {repeatedText}
+      <div ref={trackRef} className="whitespace-pre will-change-transform">
+        {repeated}
       </div>
     </div>
   );
 };
 
-export default FlatText;
+export default FlowText;

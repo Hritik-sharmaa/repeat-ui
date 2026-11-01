@@ -1,144 +1,98 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-interface CursorPosition {
-  x: number;
-  y: number;
-}
-
-interface TrailPoint extends CursorPosition {
-  id: number;
-  life: number;
-}
-
-interface CustomCursorProps {
+export interface TrailCursorProps {
   trailLength?: number;
   trailColor?: string;
+  width?: number;
+  dotColor?: string;
+  smoothness?: number;
+  hideCursor?: boolean;
 }
 
-const TrailCursor: React.FC<CustomCursorProps> = ({
-  trailLength = 20,
-  trailColor = "#3b82f6",
-}) => {
-  const [position, setPosition] = useState<CursorPosition>({ x: 0, y: 0 });
-  const [trail, setTrail] = useState<TrailPoint[]>([]);
-  const [isVisible, setIsVisible] = useState(false);
-  const targetRef = useRef<CursorPosition>({ x: 0, y: 0 });
-  const animationFrame = useRef<number | null>(null);
-  const trailIdRef = useRef(0);
+// A dot trailed by a ribbon that tapers and fades. Everything moves through refs, so React renders once.
+const TrailCursor = ({
+  trailLength = 40,
+  trailColor = "#9dff00",
+  width = 10,
+  dotColor = "currentColor",
+  smoothness = 0.15,
+  hideCursor = false,
+}: TrailCursorProps) => {
+  const trailRef = useRef<SVGGElement | null>(null);
+  const dotRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const updateCursor = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+    const target = { x: -100, y: -100 };
+    const pos = { x: -100, y: -100 };
+    let points: { x: number; y: number }[] = [];
+    let visible = false;
+
+    const onMove = (e: MouseEvent) => {
+      target.x = e.clientX;
+      target.y = e.clientY;
+      if (!visible) {
+        // Start from the pointer, not from the corner of the screen.
+        pos.x = target.x;
+        pos.y = target.y;
+        visible = true;
+      }
     };
+    const onLeave = () => {
+      visible = false;
+    };
+    document.addEventListener("mousemove", onMove);
+    document.documentElement.addEventListener("mouseleave", onLeave);
 
-    const hideCursor = () => setIsVisible(false);
-    const showCursor = () => setIsVisible(true);
+    let frame = 0;
+    const tick = () => {
+      pos.x += (target.x - pos.x) * smoothness;
+      pos.y += (target.y - pos.y) * smoothness;
+      points = visible ? [{ x: pos.x, y: pos.y }, ...points].slice(0, trailLength) : points.slice(0, -1);
 
-    document.addEventListener("mousemove", updateCursor);
-    document.addEventListener("mouseleave", hideCursor);
-    document.addEventListener("mouseenter", showCursor);
+      // One line per pair of points; lines without a pair collapse to nothing.
+      const lines = trailRef.current?.children ?? [];
+      for (let i = 0; i < lines.length; i++) {
+        const a = points[i] ?? points[points.length - 1] ?? pos;
+        const b = points[i + 1] ?? a;
+        lines[i].setAttribute("x1", String(a.x));
+        lines[i].setAttribute("y1", String(a.y));
+        lines[i].setAttribute("x2", String(b.x));
+        lines[i].setAttribute("y2", String(b.y));
+      }
+      if (dotRef.current) {
+        dotRef.current.style.opacity = visible ? "1" : "0";
+        dotRef.current.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
 
     return () => {
-      document.removeEventListener("mousemove", updateCursor);
-      document.removeEventListener("mouseleave", hideCursor);
-      document.removeEventListener("mouseenter", showCursor);
+      document.removeEventListener("mousemove", onMove);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
+      cancelAnimationFrame(frame);
     };
-  }, [isVisible]);
-
-  useEffect(() => {
-    const smoothFollow = () => {
-      setPosition((prev) => {
-        const dx = targetRef.current.x - prev.x;
-        const dy = targetRef.current.y - prev.y;
-
-        const ease = 0.15;
-        return {
-          x: prev.x + dx * ease,
-          y: prev.y + dy * ease,
-        };
-      });
-
-      setTrail((prev) => {
-        const newTrail = [
-          { ...position, id: trailIdRef.current++, life: 1 },
-          ...prev.map((p) => ({ ...p, life: Math.max(0, p.life - 0.02) })),
-        ].slice(0, trailLength);
-
-        return newTrail.filter((p) => p.life > 0);
-      });
-
-      animationFrame.current = requestAnimationFrame(smoothFollow);
-    };
-
-    animationFrame.current = requestAnimationFrame(smoothFollow);
-
-    return () => {
-      if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
-    };
-  }, [trailLength, position]);
-
-  if (!isVisible) return null;
-
-  const createSmoothPath = () => {
-    if (trail.length < 2) return "";
-
-    let path = `M ${trail[0].x} ${trail[0].y}`;
-    for (let i = 1; i < trail.length; i++) {
-      const curr = trail[i];
-      path += ` L ${curr.x} ${curr.y}`;
-    }
-    return path;
-  };
+  }, [trailLength, smoothness]);
 
   return (
     <>
-      <style>{`
-        [data-preview-active] * {
-          cursor: none !important;
-        }
-      `}</style>
-
-      {trail.length > 1 && (
-        <svg
-          className="fixed pointer-events-none z-[9999] top-0 left-0"
-          style={{ width: "100vw", height: "100vh" }}>
-          <defs>
-            <linearGradient
-              id="trailGradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%">
-              <stop offset="0%" stopColor={trailColor} stopOpacity="0" />
-              <stop offset="50%" stopColor={trailColor} stopOpacity="0.5" />
-              <stop offset="100%" stopColor={trailColor} stopOpacity="1" />
-            </linearGradient>
-          </defs>
-
-          <path
-            d={createSmoothPath()}
-            fill="none"
-            stroke="url(#trailGradient)"
-            strokeWidth="10"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.8"
-          />
-        </svg>
-      )}
-
+      {hideCursor && <style>{`body, body * { cursor: none !important; }`}</style>}
+      <svg aria-hidden className="pointer-events-none fixed left-0 top-0 z-[9999] h-screen w-screen">
+        <g ref={trailRef} stroke={trailColor} strokeLinecap="round">
+          {Array.from({ length: Math.max(trailLength - 1, 0) }, (_, i) => {
+            const fade = 1 - i / trailLength;
+            return <line key={i} strokeWidth={width * fade} strokeOpacity={fade} />;
+          })}
+        </g>
+      </svg>
       <div
-        className="fixed pointer-events-none z-[10000] transition-transform duration-75"
-        style={{
-          left: position.x,
-          top: position.y,
-          transform: "translate(-50%, -50%)",
-        }}>
-        <div className="w-3 h-3 bg-black dark:bg-white rounded-full shadow-lg" />
-      </div>
+        ref={dotRef}
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-[10000] size-3 rounded-full opacity-0 shadow-lg"
+        style={{ background: dotColor }}
+      />
     </>
   );
 };

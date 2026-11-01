@@ -1,120 +1,79 @@
-interface PricingCardProps {
-  plan: string;
-  price: number | string;
-  billing: string;
+export interface PricingCardProps {
+  plan?: string;
+  price?: number | string;
+  currency?: string;
+  billing?: string;
   features?: string[];
-  buttonText: string;
+  buttonText?: string;
   isPopular?: boolean;
+  accentColor?: string;
+  onSelect?: () => void;
+  className?: string;
 }
 
-type PlanType = "basic" | "premium" | "enterprise";
-
-const PricingCard: React.FC<PricingCardProps> = ({
-  plan,
-  price,
-  billing,
-  features = [],
-  buttonText,
+// A pricing tier. `isPopular` outlines it in the accent colour and fills its button.
+const PricingCard = ({
+  plan = "Premium",
+  price = 120,
+  currency = "$",
+  billing = "Per user/month, billed monthly",
+  features = ["Advanced data analysis", "Priority support", "Unlimited storage"],
+  buttonText = "Get started",
   isPopular = false,
-}) => {
-  const planStyles: Record<
-    PlanType,
-    { cardBg: string; border: string; iconBg: string }
-  > = {
-    basic: {
-      cardBg: "bg-gradient-to-br from-white to-slate-200",
-      border: "border-slate-300",
-      iconBg: "bg-gradient-to-br from-gray-500 to-gray-600",
-    },
-    premium: {
-      cardBg: "bg-gradient-to-br from-white to-slate-50",
-      border: "border-blue-500",
-      iconBg: "bg-gradient-to-br from-blue-500 to-blue-700",
-    },
-    enterprise: {
-      cardBg: "bg-gradient-to-br from-orange-50 to-orange-200",
-      border: "border-orange-400",
-      iconBg: "bg-gradient-to-br from-orange-500 to-orange-600",
-    },
-  };
-  const planClass = plan.toLowerCase() as PlanType;
-  const currentStyle = planStyles[planClass] || planStyles.premium;
-
+  accentColor = "#3b82f6",
+  onSelect,
+  className = "",
+}: PricingCardProps) => {
+  const tint = `color-mix(in srgb, ${accentColor} 12%, white)`;
   return (
     <div
-      className={`
-      w-80 border-2 ${currentStyle.border} rounded-3xl py-8 px-5 
-      ${currentStyle.cardBg} text-center 
-      shadow-xl font-sans transition-all duration-400 ease-out 
-      relative overflow-hidden
-      hover:-translate-y-2 hover:scale-105 hover:shadow-2xl hover:border-slate-300
-    `}>
-      <div className="flex items-center justify-center gap-3 mb-4 relative">
-        <div
-          className={`
-          ${currentStyle.iconBg} text-white p-3 rounded-full text-lg font-bold 
-          shadow-lg transition-all duration-300 ease-in-out
-        `}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="white"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-zap-icon lucide-zap">
-            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
-          </svg>
+      className={`flex w-80 flex-col rounded-3xl border-2 bg-white p-7 text-left text-slate-900 transition duration-300 hover:-translate-y-2 ${className}`}
+      style={{
+        borderColor: isPopular ? accentColor : "#e2e8f0",
+        boxShadow: `0 24px 48px -20px color-mix(in srgb, ${isPopular ? accentColor : "#0f172a"} 45%, transparent)`,
+      }}>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="grid size-10 place-items-center rounded-xl text-white" style={{ background: accentColor }}>
+            <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden>
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+            </svg>
+          </span>
+          <h3 className="m-0 text-xl font-bold tracking-tight">{plan}</h3>
         </div>
-        <h3 className="text-2xl font-bold text-slate-800 m-0 tracking-tight">
-          {plan}
-        </h3>
         {isPopular && (
-          <span className="bg-gradient-to-br from-blue-500 to-blue-700 text-white text-xs py-1.5 px-1.5 rounded-2xl uppercase tracking-wider shadow-md ml-6">
-            Most Popular
+          <span
+            className="rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider"
+            style={{ background: tint, color: accentColor }}>
+            Popular
           </span>
         )}
       </div>
 
-      <div className="text-5xl font-extrabold my-5 mb-2 bg-gradient-to-br from-slate-800 to-blue-500 bg-clip-text text-transparent leading-none tracking-tight">
-        ${price}
-      </div>
-
-      <p className="text-base text-slate-500 mb-7 font-medium leading-relaxed">
-        {billing}
+      <p className="mt-6 text-5xl font-extrabold leading-none tracking-tight">
+        {currency}
+        {price}
       </p>
+      <p className="mt-2 text-sm text-slate-500">{billing}</p>
 
-      <div className="text-left mb-8 px-1">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="text-base my-3 flex items-center gap-3 text-gray-700 font-medium leading-relaxed transition-all duration-200 ease-in-out hover:text-gray-800 hover:translate-x-1">
-            <span className="text-emerald-500 font-bold text-base bg-emerald-50 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 transition-all duration-200 ease-in-out hover:bg-emerald-500 hover:text-white hover:scale-110">
-              ✔
+      <ul className="mt-6 space-y-3 border-t border-slate-100 pt-6 text-sm font-medium text-slate-700">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-center gap-3">
+            <span
+              className="grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold"
+              style={{ background: tint, color: accentColor }}>
+              ✓
             </span>
             {feature}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <button
-        className="
-        bg-gradient-to-br from-blue-500 to-blue-700 text-white border-none 
-        py-4 px-8 rounded-xl text-base font-semibold cursor-pointer 
-        transition-all duration-300 ease-out w-full tracking-wide 
-        shadow-lg relative overflow-hidden
-        hover:bg-gradient-to-br hover:from-blue-700 hover:to-blue-800 
-        hover:-translate-y-0.5 hover:shadow-xl
-        active:translate-y-0 active:shadow-lg
-        before:content-[''] before:absolute before:top-0 before:-left-full 
-        before:w-full before:h-full before:bg-gradient-to-r 
-        before:from-transparent before:via-white/20 before:to-transparent 
-        before:transition-all before:duration-500
-        hover:before:left-full
-      ">
+        type="button"
+        onClick={onSelect}
+        className="mt-8 h-11 w-full cursor-pointer rounded-xl font-semibold transition hover:brightness-110 active:scale-[0.98]"
+        style={isPopular ? { background: accentColor, color: "#ffffff" } : { background: tint, color: accentColor }}>
         {buttonText}
       </button>
     </div>

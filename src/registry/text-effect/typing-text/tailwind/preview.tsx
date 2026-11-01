@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
-interface TypingTextProps {
-  text: string;
+export interface TypingTextProps {
+  text?: string;
   speed?: number;
   delay?: number;
   character?: string;
@@ -12,157 +12,86 @@ interface TypingTextProps {
   pauseAfterComplete?: number;
   className?: string;
   showLetterAnimation?: boolean;
+  cursorColor?: string;
+  deleteColor?: string;
+  fontSize?: number;
   onComplete?: () => void;
   onDeleteComplete?: () => void;
 }
 
-const TypingText: React.FC<TypingTextProps> = ({
-  text,
-  speed = 100,
-  character,
+// Types the text out, pauses, deletes it, and starts again, with a blinking cursor.
+const TypingText = ({
+  text = "",
+  speed = 80,
+  character = "_",
   delay = 0,
   deleteSpeed = 30,
   pauseAfterComplete = 1000,
   className = "",
   showLetterAnimation = true,
+  cursorColor = "#3b82f6",
+  deleteColor = "#ef4444",
+  fontSize = 36,
   onComplete,
   onDeleteComplete,
-}) => {
+}: TypingTextProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
   const displayedText = text.slice(0, currentIndex);
 
   useEffect(() => {
-    const delayTimer = setTimeout(() => {
-      setIsTyping(true);
-    }, delay);
-    return () => clearTimeout(delayTimer);
+    const timer = setTimeout(() => setIsTyping(true), delay);
+    return () => clearTimeout(timer);
   }, [delay]);
 
   useEffect(() => {
     if (!isTyping || isDeleting) return;
-
     if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setCurrentIndex((prev) => prev + 1);
-      }, speed);
-
+      const timer = setTimeout(() => setCurrentIndex((i) => i + 1), speed);
       return () => clearTimeout(timer);
-    } else {
-      if (onComplete) {
-        onComplete();
-      }
-
-      const pauseTimer = setTimeout(() => {
-        setIsDeleting(true);
-        setCurrentIndex(text.length);
-      }, pauseAfterComplete);
-
-      return () => clearTimeout(pauseTimer);
     }
-  }, [
-    currentIndex,
-    text,
-    speed,
-    isTyping,
-    isDeleting,
-    onComplete,
-    pauseAfterComplete,
-  ]);
+    onComplete?.();
+    const timer = setTimeout(() => {
+      setIsDeleting(true);
+      setCurrentIndex(text.length);
+    }, pauseAfterComplete);
+    return () => clearTimeout(timer);
+  }, [currentIndex, text, speed, isTyping, isDeleting, onComplete, pauseAfterComplete]);
 
   useEffect(() => {
     if (!isDeleting) return;
-
     const timer = setTimeout(() => {
       const next = Math.max(currentIndex - 1, 0);
       setCurrentIndex(next);
       if (next === 0) {
         setIsDeleting(false);
-        if (onDeleteComplete) {
-          onDeleteComplete();
-        }
+        onDeleteComplete?.();
       }
     }, deleteSpeed);
-
     return () => clearTimeout(timer);
   }, [currentIndex, isDeleting, deleteSpeed, onDeleteComplete]);
 
   return (
     <motion.div
-      className={`relative font-bold text-4xl ${className}`}
+      className={`relative font-mono font-bold ${className}`}
+      style={{ fontSize }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}>
-      <span className="font-mono text-inherit">
-        {showLetterAnimation ? (
-          <>
-            {displayedText.split("").map((char, index) => (
-              <motion.span
-                key={`${char}-${index}`}
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  color: "inherit",
-                }}
-                transition={{
-                  duration: 0.2,
-                  ease: "easeOut",
-                }}
-                style={{ display: "inline" }}>
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-            <motion.span
-              className={`${
-                isDeleting
-                  ? "text-red-500 dark:text-red-400"
-                  : "text-blue-500 dark:text-blue-400"
-              }`}
-              animate={{
-                opacity: [1, 0, 1],
-                scale: [1, 0.8, 1],
-              }}
-              transition={{
-                duration: 1.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              style={{ display: "inline" }}>
-              {character ? character : "|"}
+      {showLetterAnimation
+        ? [...displayedText].map((char, i) => (
+            <motion.span key={`${char}-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+              {char === " " ? " " : char}
             </motion.span>
-          </>
-        ) : (
-          <>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.1 }}
-              style={{ display: "inline" }}>
-              {displayedText}
-            </motion.span>
-            <motion.span
-              className={`${
-                isDeleting
-                  ? "text-red-500 dark:text-red-400"
-                  : "text-blue-500 dark:text-blue-400"
-              }`}
-              animate={{
-                opacity: [1, 0, 1],
-                scale: [1, 0.8, 1],
-              }}
-              transition={{
-                duration: 1.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              style={{ display: "inline" }}>
-              {character ? character : "|"}
-            </motion.span>
-          </>
-        )}
-      </span>
+          ))
+        : displayedText}
+      <motion.span
+        style={{ color: isDeleting ? deleteColor : cursorColor }}
+        animate={{ opacity: [1, 0, 1], scale: [1, 0.8, 1] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}>
+        {character}
+      </motion.span>
     </motion.div>
   );
 };

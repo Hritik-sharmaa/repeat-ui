@@ -1,13 +1,13 @@
-import React from "react";
-import Cursor from "./preview";
+"use client";
 
-const DotCursorDemo = () => {
-  return (
-    <div>
-      <h1 className="text-6xl font-bold text-zinc-700">Move the cursor</h1>
-      <Cursor size={30}/>
-    </div>
-  );
-};
+import type { ComponentProps } from "react";
+import DotCursor from "./preview";
+
+const DotCursorDemo = (props: ComponentProps<typeof DotCursor>) => (
+  <div>
+    <h1 style={{ fontSize: 56, fontWeight: 700, letterSpacing: "-0.03em", opacity: 0.35 }}>Move the cursor</h1>
+    <DotCursor {...props} />
+  </div>
+);
 
 export default DotCursorDemo;

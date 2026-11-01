@@ -1,21 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { Search, X } from "lucide-react";
 import "./style.css";
 
-type SearchWithHotkeyProps = {
+export type SearchWithHotkeyProps = {
   placeholder?: string;
   className?: string;
   enableHotkey?: boolean;
   enableModal?: boolean;
+  hotkey?: string;
+  width?: number;
+  radius?: number;
+  accentColor?: string;
   onSearch?: (query: string) => void;
 };
 
+// A search field. With `enableModal` it is a button that opens a search dialog, also on Ctrl/⌘ + hotkey.
 const SearchWithHotkey = ({
   placeholder = "Search...",
   enableHotkey = true,
   enableModal = true,
+  hotkey = "k",
+  width = 300,
+  radius = 12,
+  accentColor = "#f97316",
   className = "",
   onSearch,
 }: SearchWithHotkeyProps) => {
@@ -24,79 +33,69 @@ const SearchWithHotkey = ({
 
   useEffect(() => {
     if (!enableHotkey || !enableModal) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === hotkey.toLowerCase()) {
         e.preventDefault();
-        setOpen((prev) => !prev);
+        setOpen((o) => !o);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [enableHotkey, enableModal]);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [enableHotkey, enableModal, hotkey]);
 
-  const handleSearch = (searchQuery: string) => {
-    if (onSearch) {
-      onSearch(searchQuery);
-    }
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    if (!enableModal) onSearch?.(e.target.value);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    if (!enableModal) {
-      handleSearch(value);
-    }
+  const onInputKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && enableModal) onSearch?.(query);
+    if (e.key === "Escape") setOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && enableModal) {
-      handleSearch(query);
-    }
-  };
+  const shortcut = enableHotkey && <kbd className="rui-search-kbd">Ctrl {hotkey.toUpperCase()}</kbd>;
 
   if (!enableModal) {
     return (
-      <div className={`${className}`}>
-        <div className="search-box">
-          <Search className="search-bar-icon" />
-          <input
-            value={query}
-            onChange={handleInputChange}
-            type="text"
-            placeholder={placeholder}
-            className="search-input"
-          />
-          {enableHotkey && <kbd className="shortcut">Ctrl K</kbd>}
-        </div>
-      </div>
+      <label
+        className={`rui-search-field ${className}`}
+        style={{ width, borderRadius: radius, ["--rui-accent" as string]: accentColor }}>
+        <Search className="rui-search-icon" />
+        <input value={query} onChange={onChange} type="text" placeholder={placeholder} className="rui-search-input" />
+        {shortcut}
+      </label>
     );
   }
 
   return (
-    <div className={`${className}`}>
-      <button onClick={() => setOpen(true)} className="search-button">
-        <Search className="search-bar-icon" />
-        <span className="placeholder-text">{placeholder}</span>
-        {enableHotkey && <kbd className="shortcut">Ctrl K</kbd>}
+    <div className={className}>
+      <button type="button" onClick={() => setOpen(true)} className="rui-search-trigger" style={{ width, borderRadius: radius }}>
+        <Search className="rui-search-icon" />
+        <span className="rui-search-placeholder">{placeholder}</span>
+        {shortcut}
       </button>
 
       {open && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-input-wrapper">
-              <Search className="search-bar-icon" />
+        <div className="rui-search-overlay" onClick={() => setOpen(false)}>
+          <div
+            role="dialog"
+            aria-label="Search"
+            className="rui-search-dialog"
+            style={{ borderRadius: radius + 4 }}
+            onClick={(e) => e.stopPropagation()}>
+            <div className="rui-search-box" style={{ borderColor: accentColor, borderRadius: radius }}>
+              <Search className="rui-search-icon rui-search-icon-lg" />
               <input
                 autoFocus
                 value={query}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
+                onChange={onChange}
+                onKeyDown={onInputKeyDown}
                 type="text"
                 placeholder={placeholder}
-                className="search-input"
+                className="rui-search-input"
               />
-              <button onClick={() => setOpen(false)} className="close-btn">
-                <X className="search-bar-icon" />
+              <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="rui-search-close">
+                <X className="rui-search-icon-lg" />
               </button>
             </div>
           </div>

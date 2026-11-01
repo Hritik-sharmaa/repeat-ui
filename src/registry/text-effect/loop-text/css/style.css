@@ -1,0 +1,21 @@
+.rui-loop {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  cursor: default;
+  user-select: none;
+}
+
+.rui-loop-ring,
+.rui-loop-center {
+  grid-area: 1 / 1;
+}
+
+.rui-loop-ring {
+  overflow: visible;
+}
+
+.rui-loop-center {
+  display: grid;
+  place-items: center;
+}

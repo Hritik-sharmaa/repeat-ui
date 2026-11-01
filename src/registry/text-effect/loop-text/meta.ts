@@ -1,0 +1,116 @@
+import type { ComponentMeta } from "../../catalog";
+
+export default {
+  description: "Text running round a circle, faster on hover",
+  dateAdded: "2026-11-01",
+  tier: "free",
+  version: "1.0.0",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: '"Scroll to explore • Copy • Paste • Repeat • "',
+      description: "Text that runs round the circle; end it with a separator so the loop joins up.",
+    },
+    {
+      name: "radius",
+      type: "number",
+      default: "72",
+      description: "Circle radius in pixels.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: "13",
+      description: "Text size in pixels.",
+    },
+    {
+      name: "speed",
+      type: "number",
+      default: "14",
+      description: "Seconds per turn at rest.",
+    },
+    {
+      name: "hoverSpeed",
+      type: "number",
+      default: "4",
+      description: "How many times faster it spins on hover.",
+    },
+    {
+      name: "reverse",
+      type: "boolean",
+      default: "false",
+      description: "Spin anticlockwise.",
+    },
+    {
+      name: "color",
+      type: "string",
+      default: '"currentColor"',
+      description: "Text colour.",
+    },
+    {
+      name: "children",
+      type: "ReactNode",
+      default: "-",
+      description: "Shown in the middle of the circle.",
+    },
+    {
+      name: "className",
+      type: "string",
+      default: '""',
+      description: "Extra classes for the root element.",
+    },
+  ],
+  controls: [
+    {
+      prop: "text",
+      type: "text",
+      default: "Scroll to explore • Copy • Paste • Repeat • ",
+    },
+    {
+      prop: "radius",
+      type: "number",
+      default: 72,
+      min: 40,
+      max: 140,
+      unit: "px",
+    },
+    {
+      prop: "fontSize",
+      type: "number",
+      default: 13,
+      min: 9,
+      max: 24,
+      unit: "px",
+    },
+    {
+      prop: "speed",
+      type: "number",
+      default: 14,
+      min: 3,
+      max: 40,
+      unit: "s",
+    },
+    {
+      prop: "hoverSpeed",
+      label: "Hover boost",
+      type: "number",
+      default: 4,
+      min: 1,
+      max: 10,
+      step: 0.5,
+      unit: "×",
+    },
+    {
+      prop: "reverse",
+      type: "boolean",
+      default: false,
+    },
+    {
+      prop: "color",
+      label: "Text",
+      type: "color",
+      default: "currentColor",
+    },
+  ],
+} satisfies ComponentMeta;

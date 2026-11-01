@@ -1,0 +1,75 @@
+.rui-stack {
+  position: relative;
+}
+
+.rui-stack-card {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  cursor: grab;
+  touch-action: pan-y;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+}
+
+.rui-stack-card:active {
+  cursor: grabbing;
+}
+
+.rui-stack-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.rui-stack-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rui-stack-title,
+.rui-stack-text {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rui-stack-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rui-stack-text {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.rui-stack-close {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.rui-stack-close:hover {
+  opacity: 1;
+}

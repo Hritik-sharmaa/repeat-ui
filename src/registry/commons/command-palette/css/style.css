@@ -1,0 +1,148 @@
+.rui-cmd-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.2s;
+}
+
+.rui-cmd-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.rui-cmd-kbd {
+  padding: 2px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  opacity: 0.7;
+}
+
+.rui-cmd-row-kbd {
+  position: relative;
+}
+
+.rui-cmd-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 15vh 16px 16px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.rui-cmd-panel {
+  width: 100%;
+  max-width: 32rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.rui-cmd-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rui-cmd-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.rui-cmd-input::placeholder {
+  color: inherit;
+  opacity: 0.5;
+}
+
+.rui-cmd-list {
+  max-height: 20rem;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.rui-cmd-group {
+  margin: 0;
+  padding: 12px 12px 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.rui-cmd-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+}
+
+.rui-cmd-highlight {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+}
+
+.rui-cmd-row-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.rui-cmd-row-label {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rui-cmd-empty {
+  margin: 0;
+  padding: 40px 12px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.rui-cmd-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  font-size: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.5;
+}

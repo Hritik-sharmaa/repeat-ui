@@ -1,0 +1,111 @@
+import type { ComponentMeta } from "../../catalog";
+
+export default {
+  description: "A number on split-flap tiles that flip when it changes",
+  dateAdded: "2026-11-01",
+  tier: "free",
+  version: "1.0.0",
+  props: [
+    {
+      name: "value",
+      type: "number",
+      default: "2048",
+      description: "The number to show. Changing it flips the digits that differ.",
+    },
+    {
+      name: "minDigits",
+      type: "number",
+      default: "4",
+      description: "Pad with leading zeros to at least this many digits.",
+    },
+    {
+      name: "grouping",
+      type: "boolean",
+      default: "true",
+      description: "Put a comma between thousands.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: "48",
+      description: "Digit size in pixels.",
+    },
+    {
+      name: "color",
+      type: "string",
+      default: '"#fafafa"',
+      description: "Digit colour.",
+    },
+    {
+      name: "tileColor",
+      type: "string",
+      default: '"#171717"',
+      description: "Tile colour.",
+    },
+    {
+      name: "duration",
+      type: "number",
+      default: "0.6",
+      description: "Seconds per flip.",
+    },
+    {
+      name: "className",
+      type: "string",
+      default: '""',
+      description: "Extra classes for the root element.",
+    },
+  ],
+  controls: [
+    {
+      prop: "value",
+      label: "Start value",
+      type: "number",
+      default: 2048,
+      min: 0,
+      max: 99999,
+      step: 1,
+    },
+    {
+      prop: "minDigits",
+      label: "Min digits",
+      type: "number",
+      default: 4,
+      min: 1,
+      max: 8,
+    },
+    {
+      prop: "grouping",
+      type: "boolean",
+      default: true,
+    },
+    {
+      prop: "fontSize",
+      type: "number",
+      default: 48,
+      min: 20,
+      max: 96,
+      unit: "px",
+    },
+    {
+      prop: "color",
+      label: "Digits",
+      type: "color",
+      default: "#fafafa",
+    },
+    {
+      prop: "tileColor",
+      label: "Tiles",
+      type: "color",
+      default: "#171717",
+    },
+    {
+      prop: "duration",
+      type: "number",
+      default: 0.6,
+      min: 0.2,
+      max: 1.5,
+      step: 0.05,
+      unit: "s",
+    },
+  ],
+} satisfies ComponentMeta;

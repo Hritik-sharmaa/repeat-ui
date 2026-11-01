@@ -1,0 +1,34 @@
+.rui-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rui-toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s;
+}
+
+.rui-toggle-track:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.rui-toggle-knob {
+  position: absolute;
+  border-radius: 999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.rui-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+}

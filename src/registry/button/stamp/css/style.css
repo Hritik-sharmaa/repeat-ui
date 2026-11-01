@@ -1,0 +1,78 @@
+.rui-stamp {
+  position: relative;
+  display: inline-flex;
+}
+
+.rui-stamp-slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rui-stamp-ink {
+  display: block;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 2px solid;
+  border-radius: 6px;
+  opacity: 0;
+  animation: rui-stamp 1.6s ease-out forwards;
+}
+
+.rui-stamp-button {
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s;
+}
+
+.rui-stamp-button:hover {
+  transform: translateY(-2px);
+}
+
+.rui-stamp-button:active {
+  transform: translateY(2px) scale(0.97);
+}
+
+.rui-stamp-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes rui-stamp {
+  0% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  12% {
+    transform: scale(0.94);
+    opacity: 0.95;
+  }
+  20% {
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}

@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import {
   Boxes,
   GalleryHorizontal,
+  ImageIcon,
   LayoutGrid,
   MousePointer2,
   MousePointerClick,
@@ -19,6 +20,7 @@ const STYLES: Record<string, { icon: LucideIcon; tint: string; blurb: string }> 
   "text-effect": { icon: Type, tint: "#10b981", blurb: "Type that types, flips, flows and pops." },
   grid: { icon: LayoutGrid, tint: "#f59e0b", blurb: "Bento and masonry layouts, ready to fill." },
   cursor: { icon: MousePointer2, tint: "#ec4899", blurb: "Custom cursors that follow with style." },
+  image: { icon: ImageIcon, tint: "#84cc16", blurb: "Photos turned into dither, ASCII and other textures." },
   commons: { icon: Boxes, tint: "#14b8a6", blurb: "Everyday pieces: search, upload, accordion." },
 };
 

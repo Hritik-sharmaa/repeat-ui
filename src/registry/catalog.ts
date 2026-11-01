@@ -9,6 +9,7 @@ export const CATEGORIES = [
   "text-effect",
   "grid",
   "cursor",
+  "image",
   "commons",
 ] as const;
 

@@ -14,6 +14,7 @@ export const FIT: Record<string, { scale?: number; live?: false }> = {
   carousel: { scale: 0.5 },
   "text-effect": { scale: 0.6 },
   grid: { scale: 0.38 },
+  image: { scale: 0.55 },
   commons: { scale: 0.7 },
   cursor: { live: false },
 };

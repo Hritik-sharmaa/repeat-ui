@@ -158,11 +158,12 @@ export default async function ComponentVariantPage({
                 </Link>
               </div>
               <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {siblings.map((s) => (
+                {siblings.map((s, i) => (
                   <DemoTile
                     key={s.name}
                     size="sm"
                     category={category}
+                    beatIndex={i}
                     variants={[s.name]}
                     title={formatName(s.name)}
                     subtitle={s.description}

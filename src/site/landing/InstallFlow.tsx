@@ -104,7 +104,8 @@ export function InstallFlow() {
                   <motion.span
                     className="ml-px inline-block h-4 w-2 translate-y-0.5 bg-accent"
                     animate={{ opacity: [1, 0, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
+                    // One blink per beat (--beat in globals.css).
+                    transition={{ duration: 1.2, repeat: Infinity }}
                   />
                 )}
               </p>

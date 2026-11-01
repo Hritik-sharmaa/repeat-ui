@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
-import { categories, isNewComponent } from "@/data/categories";
+import { categories, isNewComponent, type ComponentVariant } from "@/data/categories";
+import { Peek, type PeekTarget } from "@/site/navs/Peek";
 import { useFlavor } from "@/lib/use-flavor";
 import { formatDateForDisplay } from "@/lib/dateUtils";
 import { categoryStyle, tintStyle } from "@/site/categoryStyle";
@@ -20,11 +22,41 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const flavor = useFlavor();
+  // The component name under the pointer; Peek shows its preview after a short hover.
+  const [hovered, setHovered] = useState<PeekTarget | null>(null);
+  const hidePeek = () => setHovered(null);
 
-  const item = (href: string, label: React.ReactNode, active: boolean, extra?: React.ReactNode) => (
+  // Only in the desktop sidebar.
+  const peekHandlers = (category: string, variant: ComponentVariant) =>
+    layoutGroup === "sidebar"
+      ? {
+          onMouseEnter: (e: React.MouseEvent<HTMLAnchorElement>) => {
+            const { top } = e.currentTarget.getBoundingClientRect();
+            setHovered({
+              category,
+              name: variant.name,
+              description: variant.description,
+              top: Math.min(Math.max(top - 90, 72), window.innerHeight - 260),
+            });
+          },
+          onMouseLeave: hidePeek,
+        }
+      : {};
+
+  const item = (
+    href: string,
+    label: React.ReactNode,
+    active: boolean,
+    extra?: React.ReactNode,
+    handlers: ReturnType<typeof peekHandlers> = {}
+  ) => (
     <Link
       href={href}
-      onClick={onNavigate}
+      {...handlers}
+      onClick={() => {
+        hidePeek();
+        onNavigate?.();
+      }}
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative flex items-center justify-between gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors",
@@ -83,7 +115,8 @@ export default function Sidebar({
                           title={`Added on ${formatDateForDisplay(variant.dateAdded)}`}>
                           New
                         </span>
-                      )
+                      ),
+                      peekHandlers(sub.name, variant)
                     )}
                   </div>
                 );
@@ -91,6 +124,7 @@ export default function Sidebar({
             </div>
           );
         })}
+      <Peek hovered={hovered} />
     </nav>
   );
 }

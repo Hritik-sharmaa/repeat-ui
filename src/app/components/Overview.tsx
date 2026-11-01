@@ -89,7 +89,7 @@ export function Overview() {
 
       <motion.div layout className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout" initial={false}>
-          {shown.map((c) => (
+          {shown.map((c, i) => (
             <motion.div
               key={`${c.category}-${c.name}`}
               layout
@@ -99,6 +99,7 @@ export function Overview() {
               transition={{ duration: 0.25 }}>
               <DemoTile
                 size="sm"
+                beatIndex={i}
                 showCategory={filter === "all"}
                 category={c.category}
                 variants={[c.name]}

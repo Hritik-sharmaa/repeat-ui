@@ -28,7 +28,7 @@ export function LiveWall() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {TILES.map(({ className, ...tile }, i) => (
           <Reveal key={tile.title} delay={(i % 3) * 0.08} className={className}>
-            <DemoTile {...tile} />
+            <DemoTile {...tile} beatIndex={i} />
           </Reveal>
         ))}
       </div>

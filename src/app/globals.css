@@ -71,6 +71,51 @@
   --animate-shimmer: shimmer 2.4s linear infinite;
 }
 
+/* The site's beat: one tempo that small pulses share, so the whole site moves in time,
+   like the repeat sign in the logo. Use .beat (a quick pulse) or .breathe (a slow glow, one beat
+   per --beat-index so a row of tiles lights up in turn). */
+:root {
+  --beat: 1.2s;
+}
+
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.18);
+  }
+  28% {
+    transform: scale(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+  }
+}
+
+.beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: beat var(--beat) cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: var(--beat-delay, 0s);
+}
+
+.breathe {
+  animation: breathe calc(var(--beat) * 8) ease-in-out infinite;
+  animation-delay: calc(var(--beat) * var(--beat-index, 0));
+}
+
 @keyframes marquee {
   to {
     transform: translateX(calc(-50% - var(--marquee-gap, 1rem) / 2));
@@ -177,7 +222,9 @@ body {
 /* Only the site's own decoration. The component demos keep their motion: it is what they show. */
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
-  .text-shimmer {
+  .text-shimmer,
+  .beat,
+  .breathe {
     animation: none;
   }
 }

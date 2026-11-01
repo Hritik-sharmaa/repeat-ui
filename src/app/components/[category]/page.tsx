@@ -51,6 +51,7 @@ export default function CategoryGalleryPage() {
             <DemoTile
               size="sm"
               category={category}
+              beatIndex={i}
               variants={[variant.name]}
               title={formatName(variant.name)}
               subtitle={variant.description}

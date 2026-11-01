@@ -17,11 +17,14 @@ export function LogoMark({
   className,
   animate = false,
   mono = false,
+  beat = true,
 }: {
   className?: string;
-  // Plays the "beat" intro: bars rise, then the dots land.
+  // Plays the intro: bars rise, then the dots land.
   animate?: boolean;
   mono?: boolean;
+  // Keeps the dots pulsing on the site's beat.
+  beat?: boolean;
 }) {
   const ease = [0.22, 1, 0.36, 1] as const;
   return (
@@ -42,18 +45,20 @@ export function LogoMark({
         />
       ))}
       {DOTS.map((cy, i) => (
-        <motion.circle
-          key={cy}
-          cx={194}
-          cy={cy}
-          r={22}
-          className={mono ? undefined : "text-accent"}
-          fill="currentColor"
-          style={{ transformBox: "fill-box", originX: 0.5, originY: 0.5 }}
-          initial={animate ? { scale: 0 } : false}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 18, delay: 0.35 + i * 0.12 }}
-        />
+        // The dots pulse on the site's beat (see .beat in globals.css), the second just after the first.
+        <g key={cy} className={beat ? "beat" : undefined} style={{ ["--beat-delay" as string]: `${i * 0.12}s` }}>
+          <motion.circle
+            cx={194}
+            cy={cy}
+            r={22}
+            className={mono ? undefined : "text-accent"}
+            fill="currentColor"
+            style={{ transformBox: "fill-box", originX: 0.5, originY: 0.5 }}
+            initial={animate ? { scale: 0 } : false}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 18, delay: 0.35 + i * 0.12 }}
+          />
+        </g>
       ))}
     </svg>
   );

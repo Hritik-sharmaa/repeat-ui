@@ -1,11 +1,13 @@
 "use client";
 
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { allComponents } from "@/data/categories";
 import { CopyButton } from "@/site/ui/CopyButton";
-import { formatName } from "@/lib/utils";
+import { RepeatGrid, type Phase } from "./RepeatGrid";
+import { cn, formatName } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const COMMAND = "npx @hritik-sharmaa/repeat-ui add";
@@ -16,7 +18,32 @@ const rise = (delay: number) => ({
   transition: { duration: 0.9, delay, ease },
 });
 
+const PHASES: Phase[] = ["copy", "paste", "repeat"];
+// 1.5 beats per phase (--beat is 1.2s in globals.css).
+const PHASE_MS = 1800;
+
 export function Hero() {
+  const reduce = useReducedMotion();
+  // null until the intro has played, so the loop starts once the headline is in place.
+  const [step, setStep] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (reduce) return;
+    let interval: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      setStep(0);
+      interval = setInterval(() => setStep((s) => ((s ?? 0) + 1) % PHASES.length), PHASE_MS);
+    }, 1400);
+    return () => {
+      clearTimeout(start);
+      clearInterval(interval);
+    };
+  }, [reduce]);
+
+  // Without motion, show the finished picture.
+  const phase = reduce ? "paste" : PHASES[step ?? 0];
+  const words = ["Copy.", "Paste.", "Repeat."];
+
   return (
     <section className="relative overflow-hidden pt-36 pb-8 sm:pt-44">
       {/* Grid that fades out from the middle, and a warm glow above the headline. */}
@@ -42,17 +69,27 @@ export function Hero() {
         </motion.div>
 
         <h1 className="mt-8 text-[clamp(3rem,10vw,7.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
-          {["Copy.", "Paste."].map((word, i) => (
-            <motion.span key={word} className="mr-[0.22em] inline-block" {...rise(0.1 + i * 0.12)}>
-              {word}
-            </motion.span>
+          {words.map((word, i) => (
+            <Fragment key={word}>
+              {i === 2 && <br />}
+              <motion.span
+                className={cn(
+                  "relative inline-block",
+                  i < 2 ? "mr-[0.22em]" : "pr-[0.08em] font-serif font-normal tracking-[-0.02em] text-accent"
+                )}
+                {...rise(0.1 + i * 0.15)}>
+                {word}
+                {/* Slides to the word the graphic below is playing. */}
+                {step === i && (
+                  <motion.span
+                    layoutId="hero-beat"
+                    className="absolute inset-x-[0.06em] -bottom-[0.02em] h-[0.05em] rounded-full bg-accent"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+              </motion.span>
+            </Fragment>
           ))}
-          <br />
-          <motion.span
-            className="inline-block pr-[0.08em] font-serif font-normal tracking-[-0.02em] text-accent"
-            {...rise(0.4)}>
-            Repeat.
-          </motion.span>
         </h1>
 
         <motion.p
@@ -79,7 +116,11 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <motion.div className="relative mt-20" {...rise(0.9)}>
+      <motion.div className="relative mt-16" {...rise(0.9)}>
+        <RepeatGrid phase={phase} />
+      </motion.div>
+
+      <motion.div className="relative mt-16" {...rise(1)}>
         <Ticker />
       </motion.div>
     </section>

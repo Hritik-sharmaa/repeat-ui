@@ -26,6 +26,31 @@ export default function ComponentTabs({ category, component, sourceCode, fileNam
   const [tab, setTab] = useState<Tab>("preview");
   const [replay, setReplay] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
+  const [speed, setSpeed] = useState("1");
+  // The canvas element; a state ref, so slow motion re-attaches when the preview remounts.
+  const [stage, setStage] = useState<HTMLDivElement | null>(null);
+
+  // Slow motion: every CSS and Web Animations animation inside the canvas plays at `speed`.
+  // Checked each frame, because hovering starts new ones. Animations a component drives from
+  // JavaScript timers (springs, setTimeout) keep their own pace.
+  useEffect(() => {
+    if (!stage || speed === "1") return;
+    const rate = Number(speed);
+    const apply = () => {
+      for (const animation of stage.getAnimations({ subtree: true })) {
+        if (animation.playbackRate !== rate) animation.playbackRate = rate;
+      }
+    };
+    apply();
+    let frame = requestAnimationFrame(function loop() {
+      apply();
+      frame = requestAnimationFrame(loop);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      for (const animation of stage.getAnimations({ subtree: true })) animation.playbackRate = 1;
+    };
+  }, [stage, speed]);
 
   useEffect(() => {
     if (!fullscreen) return;
@@ -50,12 +75,25 @@ export default function ComponentTabs({ category, component, sourceCode, fileNam
       <div className="relative flex items-center justify-between border-b border-line py-1.5 pl-5 pr-2">
         <span className="inline-flex items-center gap-2 text-xs text-muted">
           <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-(--tint) opacity-60" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-(--tint) opacity-60 [animation-duration:var(--beat)]" />
             <span className="relative inline-flex size-2 rounded-full bg-(--tint)" />
           </span>
           Live preview
         </span>
         <div className="flex items-center gap-1">
+          <Segmented
+            size="sm"
+            label="Playback speed"
+            title="Slow motion, for CSS animations and transitions"
+            value={speed}
+            onChange={setSpeed}
+            className="mr-1"
+            options={[
+              { value: "0.25", label: "¼×" },
+              { value: "0.5", label: "½×" },
+              { value: "1", label: "1×" },
+            ]}
+          />
           <ToolButton label="Replay the animation" onClick={() => setReplay((n) => n + 1)}>
             <RotateCcw className="size-4 transition-transform duration-500 group-hover:-rotate-180" />
           </ToolButton>
@@ -66,6 +104,7 @@ export default function ComponentTabs({ category, component, sourceCode, fileNam
       </div>
       {/* Wide components scroll sideways; "safe" centring keeps their left edge reachable. */}
       <div
+        ref={setStage}
         className={cn(
           "thin-scrollbar relative flex flex-1 items-center overflow-auto p-6 sm:p-10",
           !fullscreen && "min-h-[420px] sm:min-h-[500px]"

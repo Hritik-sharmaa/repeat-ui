@@ -8,7 +8,7 @@ import { cn, formatName, trackPointer } from "@/lib/utils";
 
 // How each category's demos fit a tile. Large components render at full size and shrink to fit
 // (and are not interactive in the tile); cursors take over the whole page, so they show text.
-const FIT: Record<string, { scale?: number; live?: false }> = {
+export const FIT: Record<string, { scale?: number; live?: false }> = {
   button: {},
   card: { scale: 0.6 },
   carousel: { scale: 0.5 },
@@ -28,8 +28,11 @@ export function DemoTile({
   scale = FIT[category]?.scale,
   showCategory = false,
   size = "md",
+  beatIndex = 0,
   className,
 }: {
+  // Position in its grid, so neighbouring tiles pulse one beat apart.
+  beatIndex?: number;
   category: string;
   // One component, or several small ones side by side.
   variants: string[];
@@ -57,6 +60,12 @@ export function DemoTile({
         className
       )}>
       <div aria-hidden className="tint-glow pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+      {/* The border lights up once every 8 beats; neighbouring tiles take turns (see .breathe). */}
+      <div
+        aria-hidden
+        className="breathe pointer-events-none absolute inset-0 rounded-3xl border border-(--tint)/50"
+        style={{ ["--beat-index" as string]: beatIndex % 8 }}
+      />
       <div aria-hidden className="spotlight pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div aria-hidden className="bg-dots fade-edges pointer-events-none absolute inset-0 opacity-50" />
 

@@ -1,0 +1,34 @@
+.rui-echo-text {
+  position: relative;
+  display: inline-block;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  cursor: default;
+  user-select: none;
+}
+
+.rui-echo-text-copy {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rui-echo-text:hover .rui-echo-text-copy,
+.rui-echo-text-open .rui-echo-text-copy {
+  transform: translate(var(--rui-x), var(--rui-y));
+}
+
+.rui-echo-text-front {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rui-echo-text:hover .rui-echo-text-front,
+.rui-echo-text-open .rui-echo-text-front {
+  transform: translate(var(--rui-lift-x), var(--rui-lift-y));
+}

@@ -1,0 +1,133 @@
+import type { ComponentMeta } from "../../catalog";
+
+export default {
+  description: "Letters shuffle through noise, then lock into place",
+  dateAdded: "2026-11-01",
+  tier: "free",
+  version: "1.0.0",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: '"Copy. Paste. Repeat."',
+      description: "The text to reveal.",
+    },
+    {
+      name: "trigger",
+      type: '"hover" | "mount" | "loop"',
+      default: '"hover"',
+      description: "Scramble on hover, once on load, or on a loop.",
+      options: ["hover", "mount", "loop"],
+    },
+    {
+      name: "speed",
+      type: "number",
+      default: "40",
+      description: "Milliseconds per frame.",
+    },
+    {
+      name: "characters",
+      type: "string",
+      default: '"!<>-_/[]{}=+*^?#ABCXYZ0123456789"',
+      description: "Characters used for the noise.",
+    },
+    {
+      name: "interval",
+      type: "number",
+      default: "3000",
+      description: "Milliseconds between runs when looping.",
+    },
+    {
+      name: "color",
+      type: "string",
+      default: '"currentColor"',
+      description: "Text colour.",
+    },
+    {
+      name: "scrambleColor",
+      type: "string",
+      default: '"#fa5f1b"',
+      description: "Colour of letters still scrambling.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: "40",
+      description: "Text size in pixels.",
+    },
+    {
+      name: "mono",
+      type: "boolean",
+      default: "true",
+      description: "Use a monospace font, so the width never jumps.",
+    },
+    {
+      name: "className",
+      type: "string",
+      default: '""',
+      description: "Extra classes for the root element.",
+    },
+  ],
+  controls: [
+    {
+      prop: "text",
+      type: "text",
+      default: "Copy. Paste. Repeat.",
+    },
+    {
+      prop: "trigger",
+      type: "select",
+      default: "hover",
+      options: ["hover", "mount", "loop"],
+    },
+    {
+      prop: "speed",
+      type: "number",
+      default: 40,
+      min: 15,
+      max: 120,
+      step: 5,
+      unit: "ms",
+    },
+    {
+      prop: "characters",
+      type: "text",
+      default: "!<>-_/[]{}=+*^?#ABCXYZ0123456789",
+    },
+    {
+      prop: "interval",
+      type: "number",
+      default: 3000,
+      min: 1000,
+      max: 8000,
+      step: 250,
+      unit: "ms",
+    },
+    {
+      prop: "color",
+      label: "Text",
+      type: "color",
+      default: "currentColor",
+    },
+    {
+      prop: "scrambleColor",
+      label: "Scramble",
+      type: "color",
+      default: "#fa5f1b",
+    },
+    {
+      prop: "fontSize",
+      type: "number",
+      default: 40,
+      min: 16,
+      max: 96,
+      unit: "px",
+    },
+    {
+      prop: "mono",
+      label: "Monospace",
+      type: "boolean",
+      default: true,
+    },
+  ],
+} satisfies ComponentMeta;

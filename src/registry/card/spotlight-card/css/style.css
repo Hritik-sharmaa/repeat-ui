@@ -1,0 +1,102 @@
+.rui-spotlight {
+  position: relative;
+  width: 100%;
+  max-width: 18rem;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 0.3s ease-out,
+    box-shadow 0.3s ease-out;
+}
+
+.rui-spotlight:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px var(--rui-glow);
+}
+
+.rui-spotlight-light,
+.rui-spotlight-border {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+/* A ring: the light painted on the border only, by masking out the padding box. */
+.rui-spotlight-border {
+  border: 2px solid transparent;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.rui-spotlight:hover .rui-spotlight-light {
+  opacity: 0.15;
+}
+
+.rui-spotlight:hover .rui-spotlight-border {
+  opacity: 1;
+}
+
+.rui-spotlight-arrow {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: all 0.3s ease-out;
+}
+
+.rui-spotlight:hover .rui-spotlight-arrow {
+  opacity: 0.6;
+  transform: none;
+}
+
+.rui-spotlight-body {
+  position: relative;
+}
+
+.rui-spotlight-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rui-spotlight-icon > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.rui-spotlight:hover .rui-spotlight-icon {
+  transform: rotate(-6deg) scale(1.1);
+}
+
+.rui-spotlight-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.375;
+  letter-spacing: -0.025em;
+}
+
+.rui-spotlight-text {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.625;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.rui-spotlight:hover .rui-spotlight-text {
+  opacity: 0.8;
+}

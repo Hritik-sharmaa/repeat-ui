@@ -1,0 +1,20 @@
+.rui-scramble {
+  display: inline-block;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  white-space: pre-wrap;
+  cursor: default;
+}
+
+.rui-scramble-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Each letter eases from the scramble colour back to the text colour as it settles. */
+.rui-scramble-glyph {
+  display: inline-block;
+  transition:
+    color 0.3s,
+    opacity 0.3s;
+}

@@ -1,0 +1,77 @@
+.rui-echo {
+  position: relative;
+  display: inline-flex;
+}
+
+/* An outline that drifts away from the button's edge and fades. */
+.rui-echo-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--rui-radius);
+  outline: 2px solid var(--rui-color);
+  opacity: 0;
+  pointer-events: none;
+  animation: rui-echo var(--rui-duration) cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+}
+
+/* A faint first echo on hover, hinting at what a press does. */
+.rui-echo-hint {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--rui-radius);
+  outline: 1px solid var(--rui-color);
+  outline-offset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease-out;
+}
+
+.rui-echo:hover .rui-echo-hint {
+  opacity: 0.4;
+  outline-offset: 4px;
+}
+
+.rui-echo-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--rui-color);
+  border: none;
+  border-radius: var(--rui-radius);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.2s ease-out;
+}
+
+.rui-echo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px var(--rui-color);
+}
+
+.rui-echo-button:active {
+  transform: scale(0.95);
+}
+
+.rui-echo-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes rui-echo {
+  from {
+    outline-offset: 0;
+    opacity: 0.9;
+  }
+  to {
+    outline-offset: var(--rui-to);
+    opacity: 0;
+  }
+}

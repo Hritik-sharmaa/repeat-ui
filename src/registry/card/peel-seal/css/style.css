@@ -36,13 +36,12 @@
   inset: 0;
   pointer-events: none;
   background: linear-gradient(115deg, transparent 25%, rgba(255, 255, 255, 0.6) 42%, transparent 58%);
+  opacity: 0.5;
 }
 
 .rui-peel-face {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,44 +66,36 @@
   opacity: 0.55;
 }
 
-/* The pull tab, behind a perforated line. */
+/* The pull tab in the peeling corner. */
 .rui-peel-tab {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  gap: 6px;
   font-size: 10px;
   font-weight: 700;
+  line-height: 1;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  border-left: 2px dashed;
 }
 
 .rui-peel-arrow {
+  display: block;
   animation: rui-peel-nudge 1.6s ease-in-out infinite;
 }
 
-/* The shadow the lifted strip casts onto the part still stuck down. */
-.rui-peel-fold {
+/* The crease shadow and the flap are SVG layers that may reach past the seal's edges. */
+.rui-peel-layer {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 32px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   pointer-events: none;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent);
 }
 
-.rui-peel-flap {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  pointer-events: none;
-  box-shadow: -8px 6px 18px rgba(0, 0, 0, 0.28);
+.rui-peel-paper {
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.28));
 }
 
 .rui-peel-reseal {
@@ -132,9 +123,9 @@
 @keyframes rui-peel-nudge {
   0%,
   100% {
-    transform: translateX(0);
+    transform: translate(0, 0);
   }
   50% {
-    transform: translateX(-4px);
+    transform: translate(-3px, -3px);
   }
 }

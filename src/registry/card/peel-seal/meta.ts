@@ -4,7 +4,7 @@ export default {
   description: "A tamper seal you peel back to reveal what is underneath",
   dateAdded: "2026-11-02",
   tier: "free",
-  version: "1.0.0",
+  version: "1.1.0",
   props: [
     {
       name: "children",
@@ -25,6 +25,13 @@ export default {
       description: "Height in pixels.",
     },
     {
+      name: "corner",
+      type: '"bottom-right" | "bottom-left" | "top-right" | "top-left"',
+      default: '"bottom-right"',
+      description: "The corner that peels.",
+      options: ["bottom-right", "bottom-left", "top-right", "top-left"],
+    },
+    {
       name: "label",
       type: "string",
       default: '"Sealed"',
@@ -33,14 +40,14 @@ export default {
     {
       name: "sublabel",
       type: "string",
-      default: '"Pull the tab to open"',
+      default: '"Peel from the corner to open"',
       description: "Small text under the label.",
     },
     {
       name: "pullText",
       type: "string",
       default: '"Pull"',
-      description: "Text on the pull tab.",
+      description: "Text beside the arrow in the corner.",
     },
     {
       name: "color",
@@ -75,8 +82,8 @@ export default {
     {
       name: "threshold",
       type: "number",
-      default: "0.55",
-      description: "How far it must be pulled before it comes off, as a share of its width.",
+      default: "0.45",
+      description: "How far the corner must be pulled before it comes off, as a share of the diagonal.",
     },
     {
       name: "hint",
@@ -121,6 +128,12 @@ export default {
       unit: "px",
     },
     {
+      prop: "corner",
+      type: "select",
+      default: "bottom-right",
+      options: ["bottom-right", "bottom-left", "top-right", "top-left"],
+    },
+    {
       prop: "label",
       type: "text",
       default: "Sealed",
@@ -128,7 +141,7 @@ export default {
     {
       prop: "sublabel",
       type: "text",
-      default: "Pull the tab to open",
+      default: "Peel from the corner to open",
     },
     {
       prop: "pullText",
@@ -171,8 +184,8 @@ export default {
     {
       prop: "threshold",
       type: "number",
-      default: 0.55,
-      min: 0.2,
+      default: 0.45,
+      min: 0.15,
       max: 0.9,
       step: 0.05,
     },

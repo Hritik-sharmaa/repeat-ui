@@ -1,0 +1,221 @@
+.rui-receipt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.rui-receipt-list {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: calc(100% - 28px);
+}
+
+.rui-receipt-roll {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 24px;
+  margin-bottom: -4px;
+  padding: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 0;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.rui-receipt-slip {
+  position: relative;
+  padding: 0 4px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  outline: none;
+}
+
+.rui-receipt-slip:active {
+  cursor: grabbing;
+}
+
+.rui-receipt-edge {
+  width: 100%;
+  height: 5px;
+}
+
+.rui-receipt-paper {
+  position: relative;
+  padding: 12px 20px 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.rui-receipt-scissors {
+  position: absolute;
+  z-index: 10;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 9999px;
+}
+
+.rui-receipt-header {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rui-receipt-title {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rui-receipt-meta {
+  margin: 4px 0 0;
+  font-size: 10px;
+  text-align: center;
+}
+
+.rui-receipt-rule {
+  margin: 8px 0;
+  border: 0;
+  border-top: 1px dashed;
+}
+
+.rui-receipt-row,
+.rui-receipt-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rui-receipt-total {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rui-receipt-barcode {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1px;
+  height: 28px;
+  margin-top: 12px;
+}
+
+.rui-receipt-note {
+  margin: 6px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rui-receipt-printer {
+  position: relative;
+  width: 100%;
+  margin-top: -10px;
+  padding: 6px 16px 12px;
+  border-radius: 16px;
+  box-shadow:
+    0 24px 40px -12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.rui-receipt-slot {
+  height: 8px;
+  background: #000;
+  border-radius: 9999px;
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.rui-receipt-front {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rui-receipt-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+.rui-receipt-feed {
+  width: 28px;
+  height: 12px;
+  margin-left: auto;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.rui-receipt-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rui-receipt-shade {
+  position: absolute;
+  right: 4px;
+  bottom: 0;
+  left: 4px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.rui-receipt-bar {
+  display: block;
+  transform-origin: top;
+}
+
+.rui-receipt-status {
+  display: inline-block;
+}
+
+.rui-receipt-foot {
+  position: absolute;
+  bottom: -4px;
+  width: 32px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 0 0 6px 6px;
+}

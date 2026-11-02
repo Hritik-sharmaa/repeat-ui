@@ -1,0 +1,140 @@
+.rui-peel {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+
+.rui-peel-content {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.rui-peel-seal {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+
+.rui-peel-seal:active {
+  cursor: grabbing;
+}
+
+.rui-peel-front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.rui-peel-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 25%, rgba(255, 255, 255, 0.6) 42%, transparent 58%);
+}
+
+.rui-peel-face {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.rui-peel-label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.rui-peel-sublabel {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.55;
+}
+
+/* The pull tab, behind a perforated line. */
+.rui-peel-tab {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-left: 2px dashed;
+}
+
+.rui-peel-arrow {
+  animation: rui-peel-nudge 1.6s ease-in-out infinite;
+}
+
+/* The shadow the lifted strip casts onto the part still stuck down. */
+.rui-peel-fold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.2), transparent);
+}
+
+.rui-peel-flap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  box-shadow: -8px 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+.rui-peel-reseal {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 10;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #171717;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+}
+
+.rui-peel-reseal:hover {
+  transform: scale(1.05);
+}
+
+@keyframes rui-peel-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+}

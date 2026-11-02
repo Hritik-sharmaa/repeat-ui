@@ -4,6 +4,12 @@ import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { motion } from "motion/react";
 import "./style.css";
 
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+}
+
 export interface ModernCarouselItem {
   id: number;
   title: string;
@@ -45,13 +51,29 @@ const ModernCarousel = ({
   autoPlay = true,
   autoPlayInterval = 4000,
   accentColor = "#60a5fa",
-  spacing = 140,
+  spacing: maxSpacing = 140,
   angle = 25,
-  cardWidth = 340,
-  cardHeight = 420,
+  cardWidth: maxCardWidth = 340,
+  cardHeight: maxCardHeight = 420,
   className = "",
 }: ModernCarouselProps) => {
   const [current, setCurrent] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Cards shrink on narrow screens so the whole thing still fits; the props are the most they take up.
+  const [k, setK] = useState(1);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const measure = (available: number) => setK(Math.min(1, (available * 0.72) / maxCardWidth));
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(el));
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [maxCardWidth]);
+  const cardWidth = Math.round(maxCardWidth * k);
+  const cardHeight = Math.round(maxCardHeight * k);
+  const spacing = maxSpacing * k;
   const [playing, setPlaying] = useState(autoPlay);
   const [hovered, setHovered] = useState(false);
   const dragStart = useRef<number | null>(null);
@@ -75,6 +97,7 @@ const ModernCarousel = ({
 
   return (
     <div
+      ref={rootRef}
       className={`rui-flow-carousel ${className}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}>

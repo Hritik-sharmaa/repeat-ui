@@ -22,7 +22,8 @@ export default {
       name: "speed",
       type: "number",
       default: "40",
-      description: "Seconds for the first row to loop; each row below is slower.",
+      description:
+        "Seconds for the first row to loop; each row below is slower.",
     },
     {
       name: "gap",

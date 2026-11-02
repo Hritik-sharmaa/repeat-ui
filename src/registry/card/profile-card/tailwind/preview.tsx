@@ -36,7 +36,7 @@ const ProfileCard = ({
 
   return (
     <div
-      className={`w-[300px] overflow-hidden bg-white p-2.5 text-slate-900 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${className}`}
+      className={`w-[300px] max-w-full overflow-hidden bg-white p-2.5 text-slate-900 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${className}`}
       style={{ borderRadius: radius }}>
       <img src={image} alt={name} className="h-[300px] w-full object-cover" style={{ borderRadius: Math.max(radius - 10, 0) }} />
       <div className="p-2.5">

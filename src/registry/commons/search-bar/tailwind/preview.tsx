@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import { Search, X } from "lucide-react";
 
 export type SearchWithHotkeyProps = {
@@ -33,7 +38,10 @@ const SearchWithHotkey = ({
   useEffect(() => {
     if (!enableHotkey || !enableModal) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === hotkey.toLowerCase()) {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === hotkey.toLowerCase()
+      ) {
         e.preventDefault();
         setOpen((o) => !o);
       }
@@ -53,14 +61,22 @@ const SearchWithHotkey = ({
   };
 
   const shortcut = enableHotkey && (
-    <kbd className="ml-auto rounded bg-neutral-200 px-2 py-1 font-sans text-xs text-neutral-500">Ctrl {hotkey.toUpperCase()}</kbd>
+    <kbd className="ml-auto rounded bg-neutral-200 px-2 py-1 font-sans text-xs text-neutral-500">
+      Ctrl {hotkey.toUpperCase()}
+    </kbd>
   );
 
   if (!enableModal) {
     return (
       <label
         className={`flex cursor-text items-center gap-2 border-2 border-transparent bg-neutral-100 px-4 py-2 transition focus-within:border-[var(--rui-accent)] hover:bg-neutral-200 ${className}`}
-        style={{ width, borderRadius: radius, ["--rui-accent" as string]: accentColor }}>
+        style={{
+          width,
+          maxWidth: "100%",
+          borderRadius: radius,
+          ["--rui-accent" as string]: accentColor,
+        }}
+      >
         <Search className="size-4 shrink-0 text-neutral-500" />
         <input
           value={query}
@@ -80,7 +96,8 @@ const SearchWithHotkey = ({
         type="button"
         onClick={() => setOpen(true)}
         className="flex cursor-pointer items-center gap-2 bg-neutral-100 px-4 py-2 text-left transition hover:bg-neutral-200"
-        style={{ width, borderRadius: radius }}>
+        style={{ width, maxWidth: "100%", borderRadius: radius }}
+      >
         <Search className="size-4 shrink-0 text-neutral-500" />
         <span className="text-neutral-600">{placeholder}</span>
         {shortcut}
@@ -89,16 +106,19 @@ const SearchWithHotkey = ({
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-[15vh] backdrop-blur-sm"
-          onClick={() => setOpen(false)}>
+          onClick={() => setOpen(false)}
+        >
           <div
             role="dialog"
             aria-label="Search"
             className="w-full max-w-lg bg-white p-4 shadow-2xl"
             style={{ borderRadius: radius + 4 }}
-            onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}
+          >
             <div
               className="flex items-center gap-2 border-2 px-3 py-2"
-              style={{ borderColor: accentColor, borderRadius: radius }}>
+              style={{ borderColor: accentColor, borderRadius: radius }}
+            >
               <Search className="size-5 shrink-0 text-neutral-500" />
               <input
                 autoFocus
@@ -113,7 +133,8 @@ const SearchWithHotkey = ({
                 type="button"
                 aria-label="Close"
                 onClick={() => setOpen(false)}
-                className="cursor-pointer px-1 text-neutral-400 hover:text-neutral-600">
+                className="cursor-pointer px-1 text-neutral-400 hover:text-neutral-600"
+              >
                 <X className="size-5" />
               </button>
             </div>

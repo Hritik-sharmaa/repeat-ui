@@ -59,18 +59,25 @@ const LiquidToggle = ({
         }}
         whileTap={{ scale: 0.94 }}
         className={C.track}
-        style={{ width, height, background: on ? onColor : offColor }}>
+        style={{ width, height, background: on ? onColor : offColor }}
+      >
         <motion.span
           className={C.knob}
           style={{ top: pad, height: knob, background: knobColor }}
           initial={false}
           // Named states, so the stretch replays on every toggle (unchanged keyframes would not).
           variants={{
-            on: { left: pad + travel, width: [knob, knob + travel * 0.5, knob] },
+            on: {
+              left: pad + travel,
+              width: [knob, knob + travel * 0.5, knob],
+            },
             off: { left: pad, width: [knob, knob + travel * 0.5, knob] },
           }}
           animate={on ? "on" : "off"}
-          transition={{ left: { duration: 0.45, ease: [0.65, 0, 0.35, 1] }, width: { duration: 0.45, times: [0, 0.45, 1] } }}
+          transition={{
+            left: { duration: 0.45, ease: [0.65, 0, 0.35, 1] },
+            width: { duration: 0.45, times: [0, 0.45, 1] },
+          }}
         />
       </motion.button>
       {label && <span className={C.label}>{label}</span>}

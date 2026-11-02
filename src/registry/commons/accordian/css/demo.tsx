@@ -31,7 +31,14 @@ const accordionItems = [
 ];
 
 const AccordianDemo = (props: Partial<ComponentProps<typeof Accordian>>) => (
-  <div style={{ width: "100%", maxWidth: 896, margin: "0 auto", padding: "0 16px" }}>
+  <div
+    style={{
+      width: "100%",
+      maxWidth: 896,
+      margin: "0 auto",
+      padding: "0 16px",
+    }}
+  >
     <Accordian items={accordionItems} {...props} />
   </div>
 );

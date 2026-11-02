@@ -56,8 +56,10 @@ export function DocumentUploadModal({
   function validateFile(f: File): string {
     const ext = "." + (f.name.split(".").pop()?.toLowerCase() ?? "");
     const allowed = accept.replace(/\s/g, "").split(",");
-    if (!allowed.includes(ext)) return "Unsupported file type. Please upload a document file.";
-    if (f.size > maxSizeMB * 1024 * 1024) return `File is too large. Maximum size is ${maxSizeMB}MB.`;
+    if (!allowed.includes(ext))
+      return "Unsupported file type. Please upload a document file.";
+    if (f.size > maxSizeMB * 1024 * 1024)
+      return `File is too large. Maximum size is ${maxSizeMB}MB.`;
     return "";
   }
 
@@ -127,7 +129,8 @@ export function DocumentUploadModal({
         onClick={() => setOpen(true)}
         aria-label="Open document upload modal"
         style={vars}
-        className={`inline-flex h-10 items-center justify-center rounded-lg bg-[var(--rui-accent)] px-5 text-base font-semibold text-white shadow-md cursor-pointer transition-all duration-150 hover:scale-105 hover:brightness-90 focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)]/60 ${className}`}>
+        className={`inline-flex h-10 items-center justify-center rounded-lg bg-[var(--rui-accent)] px-5 text-base font-semibold text-white shadow-md cursor-pointer transition-all duration-150 hover:scale-105 hover:brightness-90 focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)]/60 ${className}`}
+      >
         {buttonText}
       </button>
 
@@ -138,7 +141,8 @@ export function DocumentUploadModal({
           style={vars}
           aria-modal="true"
           aria-labelledby="upload-doc-title"
-          aria-describedby="upload-doc-description">
+          aria-describedby="upload-doc-description"
+        >
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => {
@@ -153,7 +157,8 @@ export function DocumentUploadModal({
 
           <div
             className={`relative z-10 w-full max-w-lg rounded-xl border bg-white text-black p-8 shadow-2xl focus:outline-none flex flex-col max-h-[90vh] overflow-y-auto`}
-            onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-6">
               <h2 id="upload-doc-title" className="text-2xl font-bold mb-2">
                 {title}
@@ -169,25 +174,44 @@ export function DocumentUploadModal({
                 tabIndex={0}
                 onClick={() => inputRef.current?.click()}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+                  if (e.key === "Enter" || e.key === " ")
+                    inputRef.current?.click();
                 }}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 className={`rounded-lg border-2 border-dashed p-8 text-center cursor-pointer select-none transition-all duration-200 hover:border-[var(--rui-accent)] hover:bg-[var(--rui-accent)]/5 ${
-                  isDragging ? "border-[var(--rui-accent)] bg-[var(--rui-accent)]/10 scale-[1.02]" : "border-muted-foreground/30"
+                  isDragging
+                    ? "border-[var(--rui-accent)] bg-[var(--rui-accent)]/10 scale-[1.02]"
+                    : "border-muted-foreground/30"
                 } ${file && "border-green-500 bg-green-50/50"}`}
-                aria-label="Choose a file or drag and drop to upload">
+                aria-label="Choose a file or drag and drop to upload"
+              >
                 <div className="flex flex-col items-center space-y-3">
                   <div className="w-12 h-12 rounded-full bg-[var(--rui-accent)]/10 flex items-center justify-center">
                     {isUploading ? (
                       <div className="animate-spin w-6 h-6 border-2 border-[var(--rui-accent)] border-t-transparent rounded-full"></div>
                     ) : uploadComplete ? (
-                      <svg className="w-6 h-6 text-green-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-6 h-6 text-green-600 animate-pulse"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     ) : (
-                      <svg className="w-6 h-6 text-[var(--rui-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-6 h-6 text-[var(--rui-accent)]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -222,7 +246,9 @@ export function DocumentUploadModal({
                   {file && !isUploading && !uploadComplete && (
                     <div className="mt-3 p-3 rounded-lg border">
                       <p className="text-sm font-medium ">{file.name}</p>
-                      <p className="text-xs mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p className="text-xs mt-1">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
                   )}
                 </div>
@@ -230,7 +256,10 @@ export function DocumentUploadModal({
 
               {!isUploading && !uploadComplete && (
                 <div className="space-y-2">
-                  <label htmlFor="doc-file" className="block text-sm font-medium">
+                  <label
+                    htmlFor="doc-file"
+                    className="block text-sm font-medium"
+                  >
                     Choose File
                   </label>
                   <input
@@ -240,7 +269,9 @@ export function DocumentUploadModal({
                     accept={accept}
                     onChange={onInputChange}
                     aria-invalid={!!error}
-                    aria-describedby={error ? "doc-file-error" : "doc-file-help"}
+                    aria-describedby={
+                      error ? "doc-file-error" : "doc-file-help"
+                    }
                     className={`block w-full cursor-pointer rounded-lg border px-3 py-2.5 text-sm transition-colors file:mr-3 file:rounded-md file:border-0 file:px-3 file:py-1.5 file:text-sm file:font-medium file:cursor-pointer hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 ${
                       error && "border-red-600"
                     }`}
@@ -248,7 +279,11 @@ export function DocumentUploadModal({
 
                   {error ? (
                     <div className="flex items-start space-x-2 mt-2">
-                      <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path
                           fillRule="evenodd"
                           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -261,7 +296,13 @@ export function DocumentUploadModal({
                     </div>
                   ) : (
                     <p id="doc-file-help" className="text-xs mt-2">
-                      Supported formats: {accept.replace(/\./g, "").toUpperCase().split(",").join(", ")} (Max {maxSizeMB}MB)
+                      Supported formats:{" "}
+                      {accept
+                        .replace(/\./g, "")
+                        .toUpperCase()
+                        .split(",")
+                        .join(", ")}{" "}
+                      (Max {maxSizeMB}MB)
                     </p>
                   )}
                 </div>
@@ -280,7 +321,8 @@ export function DocumentUploadModal({
                   setUploadComplete(false);
                 }}
                 disabled={isUploading}
-                className={`inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium bg-neutral-200 transition-colors focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-300`}>
+                className={`inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium bg-neutral-200 transition-colors focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-300`}
+              >
                 Cancel
               </button>
 
@@ -289,7 +331,8 @@ export function DocumentUploadModal({
                   type="button"
                   onClick={onUpload}
                   disabled={!file || !!error || isUploading}
-                  className={`inline-flex h-10 items-center justify-center rounded-lg px-6 text-sm font-medium bg-zinc-900 text-white shadow-sm transition-all duration-200 hover:bg-[var(--rui-accent)]/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer disabled:hover:bg-[var(--rui-accent)] disabled:hover:shadow-sm`}>
+                  className={`inline-flex h-10 items-center justify-center rounded-lg px-6 text-sm font-medium bg-zinc-900 text-white shadow-sm transition-all duration-200 hover:bg-[var(--rui-accent)]/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--rui-accent)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer disabled:hover:bg-[var(--rui-accent)] disabled:hover:shadow-sm`}
+                >
                   {isUploading ? (
                     <>
                       <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>

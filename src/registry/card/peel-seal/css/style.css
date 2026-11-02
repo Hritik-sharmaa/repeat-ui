@@ -1,6 +1,14 @@
-.rui-peel {
+/* Sized to the seal, shrunk to fit a narrower parent; the seal inside keeps its own pixel layout. */
+.rui-peel-fit {
   position: relative;
-  display: inline-block;
+  max-width: 100%;
+}
+
+.rui-peel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
   user-select: none;
 }
 

@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type RefObject } from "react";
+
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+}
 
 // Every class name in one place; the CSS version of this file swaps this map for its own classes.
 const C = {
@@ -11,6 +17,23 @@ const C = {
 };
 
 const FILTERS = { grayscale: "grayscale(1) contrast(1.1)", blur: "blur(10px) saturate(0.6)", dim: "brightness(0.3)" };
+
+// Shrinks width × height to fit a narrower parent, keeping the shape, so the image is drawn at
+// the size it is shown rather than squeezed.
+function useFitSize(ref: RefObject<HTMLElement | null>, width: number, height: number) {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const parent = ref.current?.parentElement;
+    if (!parent) return;
+    const measure = (available: number) => setScale(Math.min(1, available / width));
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(parent));
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [ref, width]);
+  return { w: Math.round(width * scale), h: Math.round(height * scale) };
+}
 
 export interface InkRevealProps {
   src?: string;
@@ -31,8 +54,8 @@ export interface InkRevealProps {
 const InkReveal = ({
   src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=900&fit=crop",
   alt = "",
-  width = 420,
-  height = 300,
+  width: maxWidth = 420,
+  height: maxHeight = 300,
   brushSize = 70,
   mode = "grayscale",
   fade = true,
@@ -41,6 +64,9 @@ const InkReveal = ({
   hint = "Move to reveal",
   className = "",
 }: InkRevealProps) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  // `width` and `height` are the most it takes up; on a narrower screen it shrinks to fit.
+  const { w: width, h: height } = useFitSize(rootRef, maxWidth, maxHeight);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   // Where the brush has been, kept off screen as a soft white mask.
@@ -122,6 +148,7 @@ const InkReveal = ({
 
   return (
     <div
+      ref={rootRef}
       className={`${C.root} ${className}`}
       style={{ width, height, borderRadius: radius }}
       onPointerMove={paint}

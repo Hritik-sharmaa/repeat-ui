@@ -1,0 +1,250 @@
+/* Sized to the scene, shrunk to fit a narrower parent; the scene inside keeps its own pixel layout. */
+.rui-match-fit {
+  position: relative;
+  max-width: 100%;
+}
+
+.rui-match {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: top left;
+  touch-action: none;
+  user-select: none;
+}
+
+.rui-match-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The words fill the room, so the light on them is measured from the flame itself. */
+.rui-match-words {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  pointer-events: none;
+}
+
+.rui-match-layer {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding-right: 40px;
+  padding-left: 40px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+/* The matchbox: a paper sleeve with a printed label, a striker along its top, and the drawer peeking out. */
+.rui-match-box {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 5px;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.rui-match-striker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 14px;
+  overflow: hidden;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.rui-match-scratch {
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  background: rgba(217, 185, 143, 0.5);
+  border-radius: 999px;
+}
+
+.rui-match-label {
+  position: absolute;
+  top: 21px;
+  right: 7px;
+  bottom: 7px;
+  left: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 1px solid;
+  border-radius: 3px;
+}
+
+.rui-match-box-label {
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.rui-match-box-small {
+  font-size: 6.5px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.rui-match-drawer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  width: 22px;
+  padding-right: 3px;
+  pointer-events: none;
+  border-radius: 0 3px 3px 0;
+  box-shadow: inset 4px 0 6px rgba(0, 0, 0, 0.35);
+}
+
+.rui-match-drawer-head {
+  display: block;
+  width: 9px;
+  height: 7px;
+  border-radius: 45%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.rui-match-stick {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 7px;
+  padding: 0;
+  cursor: grab;
+  border: none;
+  border-radius: 999px;
+  outline: none;
+  transform-origin: 0 50%;
+}
+
+.rui-match-stick:active {
+  cursor: grabbing;
+}
+
+.rui-match-char {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 999px;
+}
+
+.rui-match-head {
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  width: 15px;
+  height: 13px;
+  border-radius: 45%;
+  transform: translateY(-50%);
+  transition: background-color 0.7s;
+}
+
+/* The flame always points up, wherever the match is held. */
+.rui-match-flame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+/* Scaled as the match burns low, anchored at the base so the flame stays on the head. */
+.rui-match-flame-size {
+  display: block;
+  transform-origin: bottom;
+}
+
+.rui-match-flame-body {
+  display: block;
+  transform-origin: bottom;
+  animation: rui-flame 0.35s ease-in-out infinite alternate;
+}
+
+.rui-match-halo {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.rui-match-spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: rui-spark 0.6s ease-out forwards;
+}
+
+.rui-match-smoke {
+  position: absolute;
+  pointer-events: none;
+  animation: rui-smoke 2.2s ease-out forwards;
+}
+
+.rui-match-hint {
+  position: absolute;
+  right: 0;
+  bottom: 12px;
+  left: 0;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 0.7s;
+}
+
+@keyframes rui-flame {
+  from {
+    transform: scale(0.96, 1.04) skewX(-2deg);
+  }
+  to {
+    transform: scale(1.04, 0.95) skewX(2.5deg);
+  }
+}
+
+@keyframes rui-spark {
+  to {
+    transform: translate(var(--rui-dx), var(--rui-dy));
+    opacity: 0;
+  }
+}
+
+@keyframes rui-smoke {
+  from {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: translateY(-60px) scaleX(1.6);
+    opacity: 0;
+  }
+}

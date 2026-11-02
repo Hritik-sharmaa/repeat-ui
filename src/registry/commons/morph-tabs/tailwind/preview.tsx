@@ -5,9 +5,9 @@ import { animate, motion, useMotionValue, useTransform } from "motion/react";
 
 // Every class name in one place; the CSS version of this file swaps this map for its own classes.
 const C = {
-  root: "relative inline-flex items-center rounded-full border border-white/10 p-1 shadow-lg",
+  root: "relative inline-flex max-w-full items-center overflow-x-auto rounded-full border border-white/10 p-1 shadow-lg [scrollbar-width:none]",
   highlight: "absolute inset-y-1 rounded-full",
-  tab: "relative z-10 cursor-pointer whitespace-nowrap rounded-full border-0 bg-transparent px-4 py-2 text-sm font-medium transition-colors duration-300",
+  tab: "relative z-10 shrink-0 cursor-pointer whitespace-nowrap rounded-full border-0 bg-transparent px-4 py-2 text-sm font-medium transition-colors duration-300",
 };
 
 export interface MorphTabsProps {
@@ -57,7 +57,10 @@ const MorphTabs = ({
     const spring = { type: "spring", stiffness: 380, damping: 30 } as const;
     const toRight = l > left.get();
     const lead = animate(toRight ? right : left, toRight ? r : l, spring);
-    const trail = animate(toRight ? left : right, toRight ? l : r, { ...spring, delay: stretch });
+    const trail = animate(toRight ? left : right, toRight ? l : r, {
+      ...spring,
+      delay: stretch,
+    });
     return () => {
       lead.stop();
       trail.stop();
@@ -65,8 +68,16 @@ const MorphTabs = ({
   }, [active, stretch, left, right]);
 
   return (
-    <div role="tablist" className={`${C.root} ${className}`} style={{ background }}>
-      <motion.span aria-hidden className={C.highlight} style={{ left, width, background: accentColor }} />
+    <div
+      role="tablist"
+      className={`${C.root} ${className}`}
+      style={{ background }}
+    >
+      <motion.span
+        aria-hidden
+        className={C.highlight}
+        style={{ left, width, background: accentColor }}
+      />
       {tabs.map((tab, i) => (
         <button
           key={tab}
@@ -81,7 +92,8 @@ const MorphTabs = ({
             onChange?.(i);
           }}
           className={C.tab}
-          style={{ color: i === active ? activeTextColor : textColor }}>
+          style={{ color: i === active ? activeTextColor : textColor }}
+        >
           {tab}
         </button>
       ))}

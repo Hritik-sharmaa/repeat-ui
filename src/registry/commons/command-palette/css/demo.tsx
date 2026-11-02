@@ -13,7 +13,8 @@ const Icon = ({ children }: { children: ReactNode }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    aria-hidden>
+    aria-hidden
+  >
     {children}
   </svg>
 );
@@ -100,6 +101,8 @@ const items = [
   },
 ];
 
-const CommandPaletteDemo = (props: Partial<ComponentProps<typeof CommandPalette>>) => <CommandPalette items={items} {...props} />;
+const CommandPaletteDemo = (
+  props: Partial<ComponentProps<typeof CommandPalette>>,
+) => <CommandPalette items={items} {...props} />;
 
 export default CommandPaletteDemo;

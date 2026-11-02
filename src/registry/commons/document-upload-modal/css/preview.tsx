@@ -57,8 +57,10 @@ export function DocumentUploadModal({
   function validateFile(f: File): string {
     const ext = "." + (f.name.split(".").pop()?.toLowerCase() ?? "");
     const allowed = accept.replace(/\s/g, "").split(",");
-    if (!allowed.includes(ext)) return "Unsupported file type. Please upload a document file.";
-    if (f.size > maxSizeMB * 1024 * 1024) return `File is too large. Maximum size is ${maxSizeMB}MB.`;
+    if (!allowed.includes(ext))
+      return "Unsupported file type. Please upload a document file.";
+    if (f.size > maxSizeMB * 1024 * 1024)
+      return `File is too large. Maximum size is ${maxSizeMB}MB.`;
     return "";
   }
 
@@ -128,7 +130,8 @@ export function DocumentUploadModal({
         onClick={() => setOpen(true)}
         aria-label="Open document upload modal"
         style={vars}
-        className={`document-upload-btn${className ? ` ${className}` : ""}`}>
+        className={`document-upload-btn${className ? ` ${className}` : ""}`}
+      >
         {buttonText}
       </button>
 
@@ -139,7 +142,8 @@ export function DocumentUploadModal({
           style={vars}
           aria-modal="true"
           aria-labelledby="upload-doc-title"
-          aria-describedby="upload-doc-description">
+          aria-describedby="upload-doc-description"
+        >
           <div
             className="document-modal-backdrop"
             onClick={() => {
@@ -168,13 +172,15 @@ export function DocumentUploadModal({
                 tabIndex={0}
                 onClick={() => inputRef.current?.click()}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+                  if (e.key === "Enter" || e.key === " ")
+                    inputRef.current?.click();
                 }}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 className={`document-dropzone${isDragging ? " dragging" : ""}${file ? " selected" : ""}`}
-                aria-label="Choose a file or drag and drop to upload">
+                aria-label="Choose a file or drag and drop to upload"
+              >
                 <div className="document-dropzone-inner">
                   <div className="document-dropzone-icon">
                     {isUploading ? (
@@ -186,13 +192,32 @@ export function DocumentUploadModal({
                           border: "2px solid #2563eb",
                           borderTop: "2px solid transparent",
                           borderRadius: "50%",
-                        }}></div>
+                        }}
+                      ></div>
                     ) : uploadComplete ? (
-                      <svg className="rui-upload-pulse" width="24" height="24" fill="none" stroke="green" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="rui-upload-pulse"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="green"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     ) : (
-                      <svg width="24" height="24" fill="none" stroke="#2563eb" viewBox="0 0 24 24">
+                      <svg
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="#2563eb"
+                        viewBox="0 0 24 24"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -227,7 +252,9 @@ export function DocumentUploadModal({
                   {file && !isUploading && !uploadComplete && (
                     <div className="document-file-info">
                       <p className="document-file-name">{file.name}</p>
-                      <p className="document-file-size">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p className="document-file-size">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
                   )}
                 </div>
@@ -245,13 +272,20 @@ export function DocumentUploadModal({
                     accept={accept}
                     onChange={onInputChange}
                     aria-invalid={!!error}
-                    aria-describedby={error ? "doc-file-error" : "doc-file-help"}
+                    aria-describedby={
+                      error ? "doc-file-error" : "doc-file-help"
+                    }
                     className={`document-input${error ? " error" : ""}`}
                   />
 
                   {error ? (
                     <div className="document-error">
-                      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path
                           fillRule="evenodd"
                           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
@@ -262,7 +296,13 @@ export function DocumentUploadModal({
                     </div>
                   ) : (
                     <p id="doc-file-help" className="document-help">
-                      Supported formats: {accept.replace(/\./g, "").toUpperCase().split(",").join(", ")} (Max {maxSizeMB}MB)
+                      Supported formats:{" "}
+                      {accept
+                        .replace(/\./g, "")
+                        .toUpperCase()
+                        .split(",")
+                        .join(", ")}{" "}
+                      (Max {maxSizeMB}MB)
                     </p>
                   )}
                 </div>
@@ -281,7 +321,8 @@ export function DocumentUploadModal({
                   setUploadComplete(false);
                 }}
                 disabled={isUploading}
-                className="document-cancel-btn">
+                className="document-cancel-btn"
+              >
                 Cancel
               </button>
 
@@ -290,7 +331,8 @@ export function DocumentUploadModal({
                   type="button"
                   onClick={onUpload}
                   disabled={!file || !!error || isUploading}
-                  className="document-upload-action-btn">
+                  className="document-upload-action-btn"
+                >
                   {isUploading ? (
                     <>
                       <div
@@ -302,7 +344,8 @@ export function DocumentUploadModal({
                           borderTop: "2px solid transparent",
                           borderRadius: "50%",
                           marginRight: 8,
-                        }}></div>
+                        }}
+                      ></div>
                       Uploading...
                     </>
                   ) : (

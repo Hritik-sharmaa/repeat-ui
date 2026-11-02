@@ -4,8 +4,15 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEve
 import { AnimatePresence, animate, motion, useMotionValue, type AnimationPlaybackControls } from "motion/react";
 import "./style.css";
 
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+}
+
 // Every class name in one place; the styles live in style.css.
 const C = {
+  fit: "rui-peel-fit",
   root: "rui-peel",
   content: "rui-peel-content",
   seal: "rui-peel-seal",
@@ -67,6 +74,25 @@ const PeelSeal = ({
   className = "",
 }: PeelSealProps) => {
   const [peeled, setPeeled] = useState(false);
+  const fitRef = useRef<HTMLDivElement>(null);
+  // How much the seal is shrunk to fit its container, from 0 to 1.
+  const [scale, setScale] = useState(1);
+  const scaleRef = useRef(1);
+
+  // Shrink to fit narrow containers, like a phone screen.
+  useEffect(() => {
+    const parent = fitRef.current?.parentElement;
+    if (!parent) return;
+    const measure = (available: number) => {
+      scaleRef.current = Math.min(1, available / width);
+      setScale(scaleRef.current);
+    };
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(parent));
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [width]);
   const ids = useId().replace(/[^a-zA-Z0-9]/g, "");
   // The corner being peeled, and the point it has been pulled to.
   const right = corner.endsWith("right");
@@ -173,8 +199,9 @@ const PeelSeal = ({
     const start = drag.current;
     if (!start) return;
     // The corner follows the pointer, but only inward: it can't be pulled out past its own edges.
-    const x = start.px + e.clientX - start.x;
-    const y = start.py + e.clientY - start.y;
+    // Pointer movement in the seal's own pixels, however much it is shrunk.
+    const x = start.px + (e.clientX - start.x) / scaleRef.current;
+    const y = start.py + (e.clientY - start.y) / scaleRef.current;
     px.set(right ? Math.min(qx, Math.max(-width, x)) : Math.max(qx, Math.min(2 * width, x)));
     py.set(bottom ? Math.min(qy, Math.max(-height, y)) : Math.max(qy, Math.min(2 * height, y)));
   };
@@ -199,114 +226,116 @@ const PeelSeal = ({
   const arrowFlip = `scale(${right ? 1 : -1}, ${bottom ? 1 : -1})`;
 
   return (
-    <div className={`${C.root} ${className}`} style={{ width, height }}>
-      <div className={C.content} style={{ borderRadius: radius }}>
-        {children}
-      </div>
+    <div ref={fitRef} className={`${C.fit} ${className}`} style={{ width: width * scale, height: height * scale }}>
+      <div className={C.root} style={{ width, height, transform: scale < 1 ? `scale(${scale})` : undefined }}>
+        <div className={C.content} style={{ borderRadius: radius }}>
+          {children}
+        </div>
 
-      <AnimatePresence>
-        {!peeled && (
-          <motion.div
-            key="seal"
-            role="button"
-            tabIndex={0}
-            aria-label={`${label}. Peel off to open`}
-            className={C.seal}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-            onKeyDown={onKeyDown}
-            exit={{ opacity: 0, scale: 0.92, y: -16, rotate: right ? -6 : 6, transition: { duration: 0.4, ease: "easeIn" } }}>
-            <div ref={frontRef} className={C.front} style={{ background: color, color: textColor, borderRadius: radius }}>
-              <div className={C.sheen} />
-              <div className={C.face}>
-                <svg
-                  viewBox="0 0 24 24"
-                  width="22"
-                  height="22"
-                  fill="none"
-                  stroke={accentColor}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden>
-                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-                  <path d="m9 12 2 2 4-4" />
-                </svg>
-                <p className={C.label}>{label}</p>
-                <p className={C.sublabel}>{sublabel}</p>
-              </div>
-              <span className={C.tab} style={{ ...tabPlace, color: accentColor, flexDirection: right ? "row" : "row-reverse" }}>
-                {pullText}
-                <span style={{ transform: arrowFlip }}>
+        <AnimatePresence>
+          {!peeled && (
+            <motion.div
+              key="seal"
+              role="button"
+              tabIndex={0}
+              aria-label={`${label}. Peel off to open`}
+              className={C.seal}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+              onKeyDown={onKeyDown}
+              exit={{ opacity: 0, scale: 0.92, y: -16, rotate: right ? -6 : 6, transition: { duration: 0.4, ease: "easeIn" } }}>
+              <div ref={frontRef} className={C.front} style={{ background: color, color: textColor, borderRadius: radius }}>
+                <div className={C.sheen} />
+                <div className={C.face}>
                   <svg
                     viewBox="0 0 24 24"
-                    width="14"
-                    height="14"
+                    width="22"
+                    height="22"
                     fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
+                    stroke={accentColor}
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={C.arrow}
                     aria-hidden>
-                    <path d="M17 17 7 7M7 15V7h8" />
+                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    <path d="m9 12 2 2 4-4" />
                   </svg>
+                  <p className={C.label}>{label}</p>
+                  <p className={C.sublabel}>{sublabel}</p>
+                </div>
+                <span className={C.tab} style={{ ...tabPlace, color: accentColor, flexDirection: right ? "row" : "row-reverse" }}>
+                  {pullText}
+                  <span style={{ transform: arrowFlip }}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={C.arrow}
+                      aria-hidden>
+                      <path d="M17 17 7 7M7 15V7h8" />
+                    </svg>
+                  </span>
                 </span>
-              </span>
-            </div>
+              </div>
 
-            {/* The shadow the lifted flap casts along the crease. */}
-            <svg ref={shadowRef} aria-hidden className={C.layer} style={{ visibility: "hidden" }}>
-              <defs>
-                <linearGradient id={`${ids}band`} gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stopColor="#000" stopOpacity="0.22" />
-                  <stop offset="1" stopColor="#000" stopOpacity="0" />
-                </linearGradient>
-                <clipPath id={`${ids}shape`}>
-                  <rect width={width} height={height} rx={radius} />
-                </clipPath>
-              </defs>
-              <polygon fill={`url(#${ids}band)`} clipPath={`url(#${ids}shape)`} />
-            </svg>
+              {/* The shadow the lifted flap casts along the crease. */}
+              <svg ref={shadowRef} aria-hidden className={C.layer} style={{ visibility: "hidden" }}>
+                <defs>
+                  <linearGradient id={`${ids}band`} gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stopColor="#000" stopOpacity="0.22" />
+                    <stop offset="1" stopColor="#000" stopOpacity="0" />
+                  </linearGradient>
+                  <clipPath id={`${ids}shape`}>
+                    <rect width={width} height={height} rx={radius} />
+                  </clipPath>
+                </defs>
+                <polygon fill={`url(#${ids}band)`} clipPath={`url(#${ids}shape)`} />
+              </svg>
 
-            {/* The flap: the lifted part of the seal mirrored across the crease, its rounded corner intact. */}
-            <svg ref={paperRef} aria-hidden className={C.paper} style={{ visibility: "hidden" }}>
-              <defs>
-                <clipPath id={`${ids}lifted`}>
-                  <polygon />
-                </clipPath>
-                <linearGradient id={`${ids}shade`} gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stopColor="#000" stopOpacity="0.28" />
-                  <stop offset="0.06" stopColor="#fff" stopOpacity="0.55" />
-                  <stop offset="0.3" stopColor="#fff" stopOpacity="0" />
-                  <stop offset="1" stopColor="#000" stopOpacity="0.08" />
-                </linearGradient>
-              </defs>
-              <g>
-                <g clipPath={`url(#${ids}lifted)`}>
-                  <rect width={width} height={height} rx={radius} fill={backColor} />
-                  <rect width={width} height={height} rx={radius} fill={`url(#${ids}shade)`} />
+              {/* The flap: the lifted part of the seal mirrored across the crease, its rounded corner intact. */}
+              <svg ref={paperRef} aria-hidden className={C.paper} style={{ visibility: "hidden" }}>
+                <defs>
+                  <clipPath id={`${ids}lifted`}>
+                    <polygon />
+                  </clipPath>
+                  <linearGradient id={`${ids}shade`} gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stopColor="#000" stopOpacity="0.28" />
+                    <stop offset="0.06" stopColor="#fff" stopOpacity="0.55" />
+                    <stop offset="0.3" stopColor="#fff" stopOpacity="0" />
+                    <stop offset="1" stopColor="#000" stopOpacity="0.08" />
+                  </linearGradient>
+                </defs>
+                <g>
+                  <g clipPath={`url(#${ids}lifted)`}>
+                    <rect width={width} height={height} rx={radius} fill={backColor} />
+                    <rect width={width} height={height} rx={radius} fill={`url(#${ids}shade)`} />
+                  </g>
                 </g>
-              </g>
-            </svg>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </svg>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {peeled && resealable && (
-        <button
-          type="button"
-          className={C.reseal}
-          onClick={() => {
-            px.set(qx);
-            py.set(qy);
-            setPeeled(false);
-          }}>
-          Reseal
-        </button>
-      )}
+        {peeled && resealable && (
+          <button
+            type="button"
+            className={C.reseal}
+            onClick={() => {
+              px.set(qx);
+              py.set(qy);
+              setPeeled(false);
+            }}>
+            Reseal
+          </button>
+        )}
+      </div>
     </div>
   );
 };

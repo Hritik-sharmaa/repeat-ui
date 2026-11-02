@@ -72,7 +72,8 @@ const SimpleCarousel = ({
 
   return (
     <div className={`rui-hero ${className}`}>
-      <div className="rui-hero-stage" style={{ height }}>
+      {/* Never taller than the screen is wide on phones, so the slide keeps a sensible shape. */}
+      <div className="rui-hero-stage" style={{ height: `min(${height}px, 100vw)` }}>
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={item.id}

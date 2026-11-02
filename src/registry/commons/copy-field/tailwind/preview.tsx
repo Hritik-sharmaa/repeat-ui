@@ -48,10 +48,14 @@ const CopyField = ({
   return (
     <div
       className={`group relative flex w-full max-w-lg items-center gap-3 overflow-visible rounded-2xl border border-white/10 py-2 pl-5 pr-2 font-mono text-sm leading-none shadow-xl transition-colors duration-300 hover:border-white/20 ${className}`}
-      style={{ background, color: textColor }}>
+      style={{ background, color: textColor }}
+    >
       <style>{`@keyframes rui-caret { 50% { opacity: 0; } }`}</style>
       {prefix && (
-        <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" style={{ color: accentColor }}>
+        <span
+          className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+          style={{ color: accentColor }}
+        >
           {prefix}
         </span>
       )}
@@ -75,13 +79,17 @@ const CopyField = ({
               initial={{ y: 0, opacity: 0.9 }}
               animate={{ y: -28, opacity: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
               {text}
             </motion.span>
           )}
         </AnimatePresence>
       </span>
-      <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl"
+      >
         <AnimatePresence>
           {copied && (
             <motion.span
@@ -102,7 +110,8 @@ const CopyField = ({
         onClick={copy}
         aria-label={copied ? "Copied" : "Copy"}
         className="relative grid size-9 shrink-0 cursor-pointer place-items-center rounded-xl border border-white/10 transition-[background-color,transform] duration-200 hover:bg-white/10 active:scale-90"
-        style={{ color: copied ? accentColor : textColor }}>
+        style={{ color: copied ? accentColor : textColor }}
+      >
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.svg
             key={copied ? "check" : "copy"}
@@ -117,7 +126,8 @@ const CopyField = ({
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.4, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 500, damping: 28 }}>
+            transition={{ type: "spring", stiffness: 500, damping: 28 }}
+          >
             {copied ? (
               <path d="M20 6 9 17l-5-5" />
             ) : (
@@ -136,7 +146,8 @@ const CopyField = ({
               style={{ background: accentColor }}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ opacity: 0 }}>
+              exit={{ opacity: 0 }}
+            >
               ×{copies}
             </motion.span>
           )}

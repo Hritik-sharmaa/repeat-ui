@@ -17,14 +17,16 @@ const items = [
     src: "https://plus.unsplash.com/premium_photo-1675620963970-41055a7d6cfc?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Ocean water waves",
     title: "Ocean water",
-    description: "Clear blue ocean water with gentle waves and natural movement",
+    description:
+      "Clear blue ocean water with gentle waves and natural movement",
   },
   {
     id: "3",
     src: "https://images.unsplash.com/photo-1542128047-9b51cb9b931d?q=80&w=1499&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Vintage camera rolls",
     title: "Camera rolls",
-    description: "Collection of vintage film camera rolls and photography equipment",
+    description:
+      "Collection of vintage film camera rolls and photography equipment",
     author: "Sarah Johnson",
   },
   {
@@ -68,7 +70,8 @@ const items = [
     src: "https://plus.unsplash.com/premium_vector-1746416995848-7fb8a141686f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     alt: "Spider artwork illustration",
     title: "Spider Art",
-    description: "Artistic illustration or design featuring spider motifs and patterns",
+    description:
+      "Artistic illustration or design featuring spider motifs and patterns",
   },
   {
     id: "10",
@@ -79,7 +82,9 @@ const items = [
   },
 ];
 
-const PinterestGridDemo = (props: Partial<ComponentProps<typeof PinterestGrid>>) => {
+const PinterestGridDemo = (
+  props: Partial<ComponentProps<typeof PinterestGrid>>,
+) => {
   return (
     <main className="p-8 flex items-center justify-center">
       <div className="w-full max-w-7xl">

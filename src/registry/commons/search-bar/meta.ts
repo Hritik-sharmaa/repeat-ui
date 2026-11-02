@@ -1,7 +1,8 @@
 import type { ComponentMeta } from "../../catalog";
 
 export default {
-  description: "Search bar component with keyboard shortcuts (Ctrl+K) and modal support",
+  description:
+    "Search bar component with keyboard shortcuts (Ctrl+K) and modal support",
   dateAdded: "2025-09-04",
   tier: "free",
   version: "2.0.0",
@@ -22,7 +23,8 @@ export default {
       name: "enableHotkey",
       type: "boolean",
       default: "true",
-      description: "Toggle the dialog with Ctrl/⌘ + hotkey, and show the shortcut.",
+      description:
+        "Toggle the dialog with Ctrl/⌘ + hotkey, and show the shortcut.",
     },
     {
       name: "hotkey",
@@ -52,7 +54,8 @@ export default {
       name: "onSearch",
       type: "(query: string) => void",
       default: "-",
-      description: "Called on Enter in the dialog, or on every keystroke inline.",
+      description:
+        "Called on Enter in the dialog, or on every keystroke inline.",
     },
     {
       name: "className",

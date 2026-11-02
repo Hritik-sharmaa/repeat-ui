@@ -33,7 +33,13 @@ const Accordion = ({
 }: AccordionProps) => {
   const [openItems, setOpenItems] = useState(defaultOpen);
   const toggle = (id: string | number) =>
-    setOpenItems((open) => (open.includes(id) ? open.filter((o) => o !== id) : allowMultiple ? [...open, id] : [id]));
+    setOpenItems((open) =>
+      open.includes(id)
+        ? open.filter((o) => o !== id)
+        : allowMultiple
+          ? [...open, id]
+          : [id],
+    );
 
   const separated = variant === "separated";
 
@@ -44,7 +50,8 @@ const Accordion = ({
           ? "space-y-3"
           : "overflow-hidden border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-950"
       } ${className}`}
-      style={separated ? undefined : { borderRadius: radius }}>
+      style={separated ? undefined : { borderRadius: radius }}
+    >
       {items.map((item, index) => {
         const isOpen = openItems.includes(item.id);
         return (
@@ -57,13 +64,25 @@ const Accordion = ({
                   ? "border-t border-neutral-200 dark:border-neutral-800"
                   : ""
             }
-            style={separated ? { borderRadius: radius, borderColor: isOpen ? accentColor : undefined } : undefined}>
+            style={
+              separated
+                ? {
+                    borderRadius: radius,
+                    borderColor: isOpen ? accentColor : undefined,
+                  }
+                : undefined
+            }
+          >
             <button
               type="button"
               aria-expanded={isOpen}
               onClick={() => toggle(item.id)}
-              className="group flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900">
-              <span className="text-lg font-medium transition-colors" style={{ color: isOpen ? accentColor : undefined }}>
+              className="group flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900"
+            >
+              <span
+                className="text-lg font-medium transition-colors"
+                style={{ color: isOpen ? accentColor : undefined }}
+              >
                 {item.title}
               </span>
               <motion.svg
@@ -76,8 +95,11 @@ const Accordion = ({
                 aria-hidden
                 animate={{ rotate: isOpen ? (icon === "plus" ? 45 : 180) : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                style={{ color: isOpen ? accentColor : undefined }}>
-                <path d={icon === "plus" ? "M12 5v14M5 12h14" : "m6 9 6 6 6-6"} />
+                style={{ color: isOpen ? accentColor : undefined }}
+              >
+                <path
+                  d={icon === "plus" ? "M12 5v14M5 12h14" : "m6 9 6 6 6-6"}
+                />
               </motion.svg>
             </button>
             <AnimatePresence initial={false}>
@@ -87,8 +109,11 @@ const Accordion = ({
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="overflow-hidden">
-                  <p className="m-0 px-6 pb-5 pt-0 leading-relaxed text-neutral-600 dark:text-neutral-400">{item.content}</p>
+                  className="overflow-hidden"
+                >
+                  <p className="m-0 px-6 pb-5 pt-0 leading-relaxed text-neutral-600 dark:text-neutral-400">
+                    {item.content}
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>

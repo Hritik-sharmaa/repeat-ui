@@ -52,7 +52,7 @@ const Card3D = ({
       <div
         onPointerMove={onPointerMove}
         onPointerLeave={() => setPointer(null)}
-        className="relative flex h-[380px] w-[290px] flex-col items-center rounded-3xl p-6 text-center shadow-2xl [transform-style:preserve-3d]"
+        className="relative flex h-[380px] w-[290px] max-w-full flex-col items-center rounded-3xl p-6 text-center shadow-2xl [transform-style:preserve-3d]"
         style={{
           color: textColor,
           background,

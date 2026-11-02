@@ -21,7 +21,8 @@ export default {
     {
       name: "description",
       type: "string",
-      default: '"Choose a document to upload. Supported formats include PDF, Word, PowerPoint, Excel, and text files."',
+      default:
+        '"Choose a document to upload. Supported formats include PDF, Word, PowerPoint, Excel, and text files."',
       description: "Text under the heading.",
     },
     {
@@ -64,7 +65,8 @@ export default {
     {
       prop: "description",
       type: "text",
-      default: "Choose a document to upload. Supported formats include PDF, Word, PowerPoint, Excel, and text files.",
+      default:
+        "Choose a document to upload. Supported formats include PDF, Word, PowerPoint, Excel, and text files.",
     },
     {
       prop: "accept",

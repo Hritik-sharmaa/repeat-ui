@@ -1,5 +1,6 @@
 .rui-profile {
   width: 300px;
+  max-width: 100%;
   padding: 10px;
   overflow: hidden;
   color: #0f172a;

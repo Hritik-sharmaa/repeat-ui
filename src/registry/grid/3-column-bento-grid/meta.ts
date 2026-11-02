@@ -23,7 +23,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Find your next favorite read. Explore curated recommendations tailored to your taste.",
+          default:
+            "Find your next favorite read. Explore curated recommendations tailored to your taste.",
           description: "Detailed description text shown below the heading",
         },
         {
@@ -31,7 +32,8 @@ export default {
           type: "string",
           optional: true,
           default: "Book illustration URL",
-          description: "Large illustration/image URL displayed in the center of the card",
+          description:
+            "Large illustration/image URL displayed in the center of the card",
         },
         {
           name: "backgroundColor",
@@ -59,7 +61,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Organize your reading list, track progress, & set reading goals.",
+          default:
+            "Organize your reading list, track progress, & set reading goals.",
           description: "Card description text",
         },
         {
@@ -95,7 +98,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Set annual reading targets or challenge yourself with new genres.",
+          default:
+            "Set annual reading targets or challenge yourself with new genres.",
           description: "Card description text",
         },
         {
@@ -130,7 +134,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Join reading communities & discover books through discussions.",
+          default:
+            "Join reading communities & discover books through discussions.",
           description: "Card description text",
         },
         {
@@ -165,7 +170,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Personalized reading plan that fits your schedule and interests.",
+          default:
+            "Personalized reading plan that fits your schedule and interests.",
           description: "Card description text",
         },
         {
@@ -173,7 +179,8 @@ export default {
           type: "string",
           optional: true,
           default: "Strategy illustration URL",
-          description: "Illustration/image URL displayed at bottom-right of card",
+          description:
+            "Illustration/image URL displayed at bottom-right of card",
         },
         {
           name: "backgroundColor",
@@ -201,7 +208,8 @@ export default {
           name: "description",
           type: "string",
           optional: false,
-          default: "Discover great books. Compare reviews and start reading instantly.",
+          default:
+            "Discover great books. Compare reviews and start reading instantly.",
           description: "Card description text",
         },
         {
@@ -209,7 +217,8 @@ export default {
           type: "string",
           optional: true,
           default: "Comparison interface illustration URL",
-          description: "Illustration/image URL displayed at bottom-right of card",
+          description:
+            "Illustration/image URL displayed at bottom-right of card",
         },
         {
           name: "backgroundColor",

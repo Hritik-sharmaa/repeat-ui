@@ -72,7 +72,8 @@ const SimpleCarousel = ({
 
   return (
     <div className={`relative mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-neutral-950 shadow-2xl ${className}`}>
-      <div className="relative overflow-hidden" style={{ height }}>
+      {/* Never taller than the screen is wide on phones, so the slide keeps a sensible shape. */}
+      <div className="relative overflow-hidden" style={{ height: `min(${height}px, 100vw)` }}>
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={item.id}
@@ -93,12 +94,17 @@ const SimpleCarousel = ({
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent" style={{ opacity: overlay * 1.6 }} />
 
-        <div className="absolute inset-0 flex items-center justify-between gap-6 px-16 py-12 text-white">
+        <div className="absolute inset-0 flex items-center justify-between gap-6 px-6 py-8 text-white sm:px-16 sm:py-12">
           <motion.div key={item.id} initial="hidden" animate="visible" className="max-w-md">
             {[
-              { el: "p", text: item.subtitle, className: "mb-2 text-lg font-light tracking-wide", style: { color: accentColor } },
-              { el: "h2", text: item.title, className: "mb-5 text-5xl font-bold leading-tight sm:text-6xl" },
-              { el: "p", text: item.description, className: "text-lg font-light leading-relaxed text-white/85" },
+              {
+                el: "p",
+                text: item.subtitle,
+                className: "mb-2 text-sm font-light tracking-wide sm:text-lg",
+                style: { color: accentColor },
+              },
+              { el: "h2", text: item.title, className: "mb-3 text-3xl font-bold leading-tight sm:mb-5 sm:text-5xl lg:text-6xl" },
+              { el: "p", text: item.description, className: "text-sm font-light leading-relaxed text-white/85 sm:text-lg" },
             ].map(({ el, text, className, style }, i) => {
               const Line = el === "h2" ? motion.h2 : motion.p;
               return (
@@ -113,7 +119,7 @@ const SimpleCarousel = ({
               );
             })}
           </motion.div>
-          <span className="self-end font-mono text-6xl font-thin tabular-nums text-white/80">
+          <span className="hidden self-end font-mono text-6xl font-thin tabular-nums text-white/80 sm:block">
             {String(current + 1).padStart(2, "0")}
           </span>
         </div>
@@ -124,21 +130,21 @@ const SimpleCarousel = ({
               type="button"
               aria-label="Previous slide"
               onClick={() => go(current - 1, -1)}
-              className={`${glass} absolute left-4 top-1/2 z-20 size-12 -translate-y-1/2`}>
+              className={`${glass} absolute left-2 top-1/2 z-20 size-10 -translate-y-1/2 sm:left-4 sm:size-12`}>
               <Chevron dir="left" />
             </button>
             <button
               type="button"
               aria-label="Next slide"
               onClick={() => go(current + 1, 1)}
-              className={`${glass} absolute right-4 top-1/2 z-20 size-12 -translate-y-1/2`}>
+              className={`${glass} absolute right-2 top-1/2 z-20 size-10 -translate-y-1/2 sm:right-4 sm:size-12`}>
               <Chevron dir="right" />
             </button>
             <button
               type="button"
               aria-label={playing ? "Pause" : "Play"}
               onClick={() => setPlaying((p) => !p)}
-              className={`${glass} absolute right-6 top-6 z-20 size-11`}>
+              className={`${glass} absolute right-4 top-4 z-20 size-10 sm:right-6 sm:top-6 sm:size-11`}>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden>
                 <path d={playing ? "M7 5h3v14H7zM14 5h3v14h-3z" : "M8 5v14l11-7z"} />
               </svg>
@@ -148,7 +154,7 @@ const SimpleCarousel = ({
       </div>
 
       {(showIndicators || showProgress || showThumbnails) && (
-        <div className="flex items-center gap-8 bg-white/5 px-6 py-5">
+        <div className="flex items-center gap-4 bg-white/5 px-4 py-4 sm:gap-8 sm:px-6 sm:py-5">
           {showIndicators && (
             <div className="flex gap-2">
               {items.map((it, i) => (
@@ -176,7 +182,7 @@ const SimpleCarousel = ({
             </div>
           )}
           {showThumbnails && (
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto hidden gap-2 sm:flex">
               {items.map((it, i) => (
                 <button
                   key={it.id}

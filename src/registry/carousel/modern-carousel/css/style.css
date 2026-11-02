@@ -12,6 +12,7 @@
 .rui-flow-stage {
   position: relative;
   width: 100%;
+  overflow: hidden;
   perspective: 1200px;
   touch-action: pan-y;
   user-select: none;

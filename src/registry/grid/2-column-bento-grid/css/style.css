@@ -259,7 +259,11 @@
   right: 0;
   width: 16rem;
   height: 100%;
-  background: linear-gradient(to left, rgba(31, 41, 55, 0.5) 0%, transparent 100%);
+  background: linear-gradient(
+    to left,
+    rgba(31, 41, 55, 0.5) 0%,
+    transparent 100%
+  );
 }
 .rui-b2-card-details-circle1 {
   position: absolute;
@@ -305,4 +309,24 @@
 }
 .rui-b2-card-contact-about {
   margin-top: 3rem;
+}
+
+/* Phones and small tablets: one card per row, each as tall as its content. */
+@media (max-width: 767px) {
+  .rui-b2-bento-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    height: auto;
+    max-height: none;
+  }
+
+  .rui-b2-card-main,
+  .rui-b2-card-contact,
+  .rui-b2-card-logo,
+  .rui-b2-card-map,
+  .rui-b2-card-details {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 160px;
+  }
 }

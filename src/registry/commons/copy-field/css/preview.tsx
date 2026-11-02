@@ -47,7 +47,10 @@ const CopyField = ({
   };
 
   return (
-    <div className={`rui-copy-field ${className}`} style={{ background, color: textColor }}>
+    <div
+      className={`rui-copy-field ${className}`}
+      style={{ background, color: textColor }}
+    >
       {prefix && (
         <span className="rui-copy-field-prefix" style={{ color: accentColor }}>
           {prefix}
@@ -57,7 +60,11 @@ const CopyField = ({
         <span className="rui-copy-field-text">
           {text}
           {/* A terminal caret, blinking after the command. */}
-          <span aria-hidden className="rui-copy-field-caret" style={{ background: accentColor }} />
+          <span
+            aria-hidden
+            className="rui-copy-field-caret"
+            style={{ background: accentColor }}
+          />
         </span>
         <AnimatePresence>
           {copied && (
@@ -69,7 +76,8 @@ const CopyField = ({
               initial={{ y: 0, opacity: 0.9 }}
               animate={{ y: -28, opacity: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
               {text}
             </motion.span>
           )}
@@ -96,7 +104,8 @@ const CopyField = ({
         onClick={copy}
         aria-label={copied ? "Copied" : "Copy"}
         className="rui-copy-field-button"
-        style={{ color: copied ? accentColor : textColor }}>
+        style={{ color: copied ? accentColor : textColor }}
+      >
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.svg
             key={copied ? "check" : "copy"}
@@ -111,7 +120,8 @@ const CopyField = ({
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.4, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 500, damping: 28 }}>
+            transition={{ type: "spring", stiffness: 500, damping: 28 }}
+          >
             {copied ? (
               <path d="M20 6 9 17l-5-5" />
             ) : (
@@ -130,7 +140,8 @@ const CopyField = ({
               style={{ background: accentColor }}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ opacity: 0 }}>
+              exit={{ opacity: 0 }}
+            >
               ×{copies}
             </motion.span>
           )}

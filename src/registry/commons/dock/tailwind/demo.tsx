@@ -11,7 +11,8 @@ const Icon = ({ children }: { children: ReactNode }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    aria-hidden>
+    aria-hidden
+  >
     {children}
   </svg>
 );
@@ -76,7 +77,7 @@ const items = [
 ];
 
 const DockDemo = (props: Partial<ComponentProps<typeof Dock>>) => (
-  <div style={{ paddingTop: 80 }}>
+  <div style={{ width: "100%", paddingTop: 80 }}>
     <Dock items={items} {...props} />
   </div>
 );

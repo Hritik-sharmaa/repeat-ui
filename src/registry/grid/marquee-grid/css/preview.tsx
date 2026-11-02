@@ -66,9 +66,14 @@ const MarqueeGrid = ({
                 animationDuration: `${speed * (1 + r * 0.25)}s`,
                 animationDirection: r % 2 ? "reverse" : "normal",
               } as CSSProperties
-            }>
+            }
+          >
             {row.map((item, i) => (
-              <span key={i} className={C.item} style={{ background: cardColor, color: textColor }}>
+              <span
+                key={i}
+                className={C.item}
+                style={{ background: cardColor, color: textColor }}
+              >
                 <span className={C.dot} style={{ background: accentColor }} />
                 {item}
               </span>

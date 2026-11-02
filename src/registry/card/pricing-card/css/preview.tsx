@@ -20,7 +20,11 @@ const PricingCard = ({
   price = 120,
   currency = "$",
   billing = "Per user/month, billed monthly",
-  features = ["Advanced data analysis", "Priority support", "Unlimited storage"],
+  features = [
+    "Advanced data analysis",
+    "Priority support",
+    "Unlimited storage",
+  ],
   buttonText = "Get started",
   isPopular = false,
   accentColor = "#3b82f6",
@@ -30,7 +34,8 @@ const PricingCard = ({
   return (
     <div
       className={`rui-pricing ${isPopular ? "rui-pricing-popular" : ""} ${className}`}
-      style={{ "--rui-accent": accentColor } as CSSProperties}>
+      style={{ "--rui-accent": accentColor } as CSSProperties}
+    >
       <div className="rui-pricing-head">
         <div className="rui-pricing-title">
           <span className="rui-pricing-icon">

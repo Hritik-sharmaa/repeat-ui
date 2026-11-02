@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type RefObject } from "react";
+
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+}
 
 // How far down the crop sits when the photo is taller than the frame: a little above centre keeps faces in.
 const FOCUS_Y = 0.35;
@@ -91,6 +97,23 @@ function toLinearRgb(color: string) {
   return [...ctx.getImageData(0, 0, 1, 1).data.slice(0, 3)].map((c) => toLinear(c / 255));
 }
 
+// Shrinks width × height to fit a narrower parent, keeping the shape, so the image is drawn at
+// the size it is shown rather than squeezed.
+function useFitSize(ref: RefObject<HTMLElement | null>, width: number, height: number) {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const parent = ref.current?.parentElement;
+    if (!parent) return;
+    const measure = (available: number) => setScale(Math.min(1, available / width));
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(parent));
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [ref, width]);
+  return { w: Math.round(width * scale), h: Math.round(height * scale) };
+}
+
 export interface DitherImageProps {
   src?: string;
   alt?: string;
@@ -116,8 +139,8 @@ export interface DitherImageProps {
 const DitherImage = ({
   src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=900&fit=crop",
   alt = "",
-  width = 420,
-  height = 300,
+  width: maxWidth = 420,
+  height: maxHeight = 300,
   algorithm = "atkinson",
   pixelSize = 2,
   levels = 2,
@@ -131,6 +154,9 @@ const DitherImage = ({
   radius = 24,
   className = "",
 }: DitherImageProps) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  // `width` and `height` are the most it takes up; on a narrower screen it shrinks to fit.
+  const { w: width, h: height } = useFitSize(rootRef, maxWidth, maxHeight);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lensRef = useRef<HTMLImageElement>(null);
 
@@ -229,6 +255,7 @@ const DitherImage = ({
     <div
       role="img"
       aria-label={alt}
+      ref={rootRef}
       className={`${C.root} ${className}`}
       style={{ width, height, borderRadius: radius, background: darkColor }}
       onPointerMove={(e) => lensSize > 0 && moveLens(e, true)}

@@ -58,7 +58,10 @@ const MorphTabs = ({
     const spring = { type: "spring", stiffness: 380, damping: 30 } as const;
     const toRight = l > left.get();
     const lead = animate(toRight ? right : left, toRight ? r : l, spring);
-    const trail = animate(toRight ? left : right, toRight ? l : r, { ...spring, delay: stretch });
+    const trail = animate(toRight ? left : right, toRight ? l : r, {
+      ...spring,
+      delay: stretch,
+    });
     return () => {
       lead.stop();
       trail.stop();
@@ -66,8 +69,16 @@ const MorphTabs = ({
   }, [active, stretch, left, right]);
 
   return (
-    <div role="tablist" className={`${C.root} ${className}`} style={{ background }}>
-      <motion.span aria-hidden className={C.highlight} style={{ left, width, background: accentColor }} />
+    <div
+      role="tablist"
+      className={`${C.root} ${className}`}
+      style={{ background }}
+    >
+      <motion.span
+        aria-hidden
+        className={C.highlight}
+        style={{ left, width, background: accentColor }}
+      />
       {tabs.map((tab, i) => (
         <button
           key={tab}
@@ -82,7 +93,8 @@ const MorphTabs = ({
             onChange?.(i);
           }}
           className={C.tab}
-          style={{ color: i === active ? activeTextColor : textColor }}>
+          style={{ color: i === active ? activeTextColor : textColor }}
+        >
           {tab}
         </button>
       ))}

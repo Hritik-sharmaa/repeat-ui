@@ -10,7 +10,8 @@ export default {
       name: "checked",
       type: "boolean",
       default: "-",
-      description: "Controlled state; leave out to let the toggle manage itself.",
+      description:
+        "Controlled state; leave out to let the toggle manage itself.",
     },
     {
       name: "defaultChecked",

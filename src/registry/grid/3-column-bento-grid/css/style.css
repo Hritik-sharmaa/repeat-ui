@@ -246,3 +246,43 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Phones and small tablets: one card per row, each as tall as its content. */
+@media (max-width: 1279px) {
+  .rui-b3-bento-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    height: auto;
+    max-height: none;
+  }
+
+  .rui-b3-maximize-card,
+  .rui-b3-right-column,
+  .rui-b3-manage-card,
+  .rui-b3-small-cards-row,
+  .rui-b3-strategy-card,
+  .rui-b3-find-compare-card {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 160px;
+  }
+
+  .rui-b3-maximize-card-title {
+    font-size: 2.25rem;
+  }
+
+  .rui-b3-manage-card-title {
+    font-size: 1.875rem;
+  }
+
+  .rui-b3-strategy-card-illustration {
+    width: 6rem;
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+  }
+
+  .rui-b3-find-compare-card-illustration {
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+  }
+}

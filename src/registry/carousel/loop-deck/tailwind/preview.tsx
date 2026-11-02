@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+}
 
 export interface LoopDeckItem {
   id: number;
@@ -44,14 +50,30 @@ const LoopDeck = ({
   autoPlay = true,
   autoPlayInterval = 3000,
   accentColor = "#60a5fa",
-  cardWidth = 320,
-  cardHeight = 420,
-  spread = 48,
+  cardWidth: maxCardWidth = 320,
+  cardHeight: maxCardHeight = 420,
+  spread: maxSpread = 48,
   tilt = 8,
   showCounter = true,
   className = "",
 }: LoopDeckProps) => {
   const [current, setCurrent] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Cards shrink on narrow screens so the whole thing still fits; the props are the most they take up.
+  const [k, setK] = useState(1);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const measure = (available: number) => setK(Math.min(1, (available - 32) / (maxCardWidth + 2 * maxSpread)));
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(el));
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [maxCardWidth, maxSpread]);
+  const cardWidth = Math.round(maxCardWidth * k);
+  const cardHeight = Math.round(maxCardHeight * k);
+  const spread = maxSpread * k;
   const [hovered, setHovered] = useState(false);
   const count = items.length;
   const go = (step: number) => setCurrent((i) => (i + step + count) % count);
@@ -67,6 +89,7 @@ const LoopDeck = ({
 
   return (
     <div
+      ref={rootRef}
       className={`mx-auto flex w-full max-w-4xl flex-col items-center gap-8 py-10 ${className}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}>

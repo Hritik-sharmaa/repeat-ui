@@ -7,10 +7,13 @@ const C = {
   root: "flex w-full",
   panel:
     "relative min-w-0 cursor-pointer overflow-hidden outline-none transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]",
-  image: "absolute inset-0 size-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]",
-  shade: "absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent",
+  image:
+    "absolute inset-0 size-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]",
+  shade:
+    "absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent",
   index: "absolute left-4 top-4 font-mono text-xs text-white/80",
-  caption: "absolute inset-x-0 bottom-0 p-5 text-white transition-all duration-500 ease-out",
+  caption:
+    "absolute inset-x-0 bottom-0 p-5 text-white transition-all duration-500 ease-out",
   title: "m-0 truncate text-lg font-semibold",
   subtitle: "m-0 mt-1 truncate text-sm opacity-75",
 };
@@ -57,7 +60,12 @@ const AccordionGallery = ({
             onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
             className={C.panel}
-            style={{ flexGrow: open ? expandRatio : 1, flexBasis: 0, borderRadius: radius }}>
+            style={{
+              flexGrow: open ? expandRatio : 1,
+              flexBasis: 0,
+              borderRadius: radius,
+            }}
+          >
             <img
               src={item.image}
               alt=""
@@ -67,7 +75,13 @@ const AccordionGallery = ({
             />
             <div className={C.shade} />
             <span className={C.index}>{String(i + 1).padStart(2, "0")}</span>
-            <div className={C.caption} style={{ opacity: open ? 1 : 0, transform: open ? "none" : "translateY(12px)" }}>
+            <div
+              className={C.caption}
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? "none" : "translateY(12px)",
+              }}
+            >
               <p className={C.title}>{item.title}</p>
               {item.subtitle && <p className={C.subtitle}>{item.subtitle}</p>}
             </div>

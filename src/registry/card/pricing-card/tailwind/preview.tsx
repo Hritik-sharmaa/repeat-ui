@@ -17,7 +17,11 @@ const PricingCard = ({
   price = 120,
   currency = "$",
   billing = "Per user/month, billed monthly",
-  features = ["Advanced data analysis", "Priority support", "Unlimited storage"],
+  features = [
+    "Advanced data analysis",
+    "Priority support",
+    "Unlimited storage",
+  ],
   buttonText = "Get started",
   isPopular = false,
   accentColor = "#3b82f6",
@@ -27,15 +31,24 @@ const PricingCard = ({
   const tint = `color-mix(in srgb, ${accentColor} 12%, white)`;
   return (
     <div
-      className={`flex w-80 flex-col rounded-3xl border-2 bg-white p-7 text-left text-slate-900 transition duration-300 hover:-translate-y-2 ${className}`}
+      className={`flex w-80 max-w-full flex-col rounded-3xl border-2 bg-white p-7 text-left text-slate-900 transition duration-300 hover:-translate-y-2 ${className}`}
       style={{
         borderColor: isPopular ? accentColor : "#e2e8f0",
         boxShadow: `0 24px 48px -20px color-mix(in srgb, ${isPopular ? accentColor : "#0f172a"} 45%, transparent)`,
-      }}>
+      }}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-xl text-white" style={{ background: accentColor }}>
-            <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden>
+          <span
+            className="grid size-10 place-items-center rounded-xl text-white"
+            style={{ background: accentColor }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="size-5"
+              fill="currentColor"
+              aria-hidden
+            >
               <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
             </svg>
           </span>
@@ -44,7 +57,8 @@ const PricingCard = ({
         {isPopular && (
           <span
             className="rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider"
-            style={{ background: tint, color: accentColor }}>
+            style={{ background: tint, color: accentColor }}
+          >
             Popular
           </span>
         )}
@@ -61,7 +75,8 @@ const PricingCard = ({
           <li key={feature} className="flex items-center gap-3">
             <span
               className="grid size-5 shrink-0 place-items-center rounded-full text-[11px] font-bold"
-              style={{ background: tint, color: accentColor }}>
+              style={{ background: tint, color: accentColor }}
+            >
               ✓
             </span>
             {feature}
@@ -73,7 +88,12 @@ const PricingCard = ({
         type="button"
         onClick={onSelect}
         className="mt-8 h-11 w-full cursor-pointer rounded-xl font-semibold transition hover:brightness-110 active:scale-[0.98]"
-        style={isPopular ? { background: accentColor, color: "#ffffff" } : { background: tint, color: accentColor }}>
+        style={
+          isPopular
+            ? { background: accentColor, color: "#ffffff" }
+            : { background: tint, color: accentColor }
+        }
+      >
         {buttonText}
       </button>
     </div>

@@ -3,7 +3,13 @@
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
 }
 
 .rui-marquee-row {

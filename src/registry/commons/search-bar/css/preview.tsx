@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import { Search, X } from "lucide-react";
 import "./style.css";
 
@@ -34,7 +39,10 @@ const SearchWithHotkey = ({
   useEffect(() => {
     if (!enableHotkey || !enableModal) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === hotkey.toLowerCase()) {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === hotkey.toLowerCase()
+      ) {
         e.preventDefault();
         setOpen((o) => !o);
       }
@@ -53,15 +61,29 @@ const SearchWithHotkey = ({
     if (e.key === "Escape") setOpen(false);
   };
 
-  const shortcut = enableHotkey && <kbd className="rui-search-kbd">Ctrl {hotkey.toUpperCase()}</kbd>;
+  const shortcut = enableHotkey && (
+    <kbd className="rui-search-kbd">Ctrl {hotkey.toUpperCase()}</kbd>
+  );
 
   if (!enableModal) {
     return (
       <label
         className={`rui-search-field ${className}`}
-        style={{ width, borderRadius: radius, ["--rui-accent" as string]: accentColor }}>
+        style={{
+          width,
+          maxWidth: "100%",
+          borderRadius: radius,
+          ["--rui-accent" as string]: accentColor,
+        }}
+      >
         <Search className="rui-search-icon" />
-        <input value={query} onChange={onChange} type="text" placeholder={placeholder} className="rui-search-input" />
+        <input
+          value={query}
+          onChange={onChange}
+          type="text"
+          placeholder={placeholder}
+          className="rui-search-input"
+        />
         {shortcut}
       </label>
     );
@@ -69,7 +91,12 @@ const SearchWithHotkey = ({
 
   return (
     <div className={className}>
-      <button type="button" onClick={() => setOpen(true)} className="rui-search-trigger" style={{ width, borderRadius: radius }}>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="rui-search-trigger"
+        style={{ width, maxWidth: "100%", borderRadius: radius }}
+      >
         <Search className="rui-search-icon" />
         <span className="rui-search-placeholder">{placeholder}</span>
         {shortcut}
@@ -82,8 +109,12 @@ const SearchWithHotkey = ({
             aria-label="Search"
             className="rui-search-dialog"
             style={{ borderRadius: radius + 4 }}
-            onClick={(e) => e.stopPropagation()}>
-            <div className="rui-search-box" style={{ borderColor: accentColor, borderRadius: radius }}>
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="rui-search-box"
+              style={{ borderColor: accentColor, borderRadius: radius }}
+            >
               <Search className="rui-search-icon rui-search-icon-lg" />
               <input
                 autoFocus
@@ -94,7 +125,12 @@ const SearchWithHotkey = ({
                 placeholder={placeholder}
                 className="rui-search-input"
               />
-              <button type="button" aria-label="Close" onClick={() => setOpen(false)} className="rui-search-close">
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => setOpen(false)}
+                className="rui-search-close"
+              >
                 <X className="rui-search-icon-lg" />
               </button>
             </div>

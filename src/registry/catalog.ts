@@ -2,16 +2,7 @@
 // scripts/build-registry.ts reads both and fails on anything that does not match.
 
 // Sidebar order. Every folder in src/registry/ must be one of these.
-export const CATEGORIES = [
-  "button",
-  "card",
-  "carousel",
-  "text-effect",
-  "grid",
-  "cursor",
-  "image",
-  "commons",
-] as const;
+export const CATEGORIES = ["button", "card", "carousel", "text-effect", "grid", "cursor", "image", "commons"] as const;
 
 // A field of an object prop.
 export interface PropField {

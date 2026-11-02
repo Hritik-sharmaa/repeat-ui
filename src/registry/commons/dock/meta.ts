@@ -10,7 +10,8 @@ export default {
       name: "items",
       type: "DockItem[]",
       default: "-",
-      description: "Tiles: { label, icon, onClick? }. Icons are sized to the tile; SVGs fill 46% of it.",
+      description:
+        "Tiles: { label, icon, onClick? }. Icons are sized to the tile; SVGs fill 46% of it.",
     },
     {
       name: "baseSize",

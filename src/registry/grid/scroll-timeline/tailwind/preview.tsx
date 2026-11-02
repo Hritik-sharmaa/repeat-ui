@@ -41,13 +41,19 @@ const ScrollTimeline = ({
   className = "",
 }: ScrollTimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 55%"] });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 75%", "end 55%"],
+  });
   const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   return (
     <div ref={ref} className={`${C.root} ${className}`}>
       <div className={C.rail} style={{ left: 7, background: lineColor }}>
-        <motion.div className={C.progress} style={{ scaleY, background: accentColor }} />
+        <motion.div
+          className={C.progress}
+          style={{ scaleY, background: accentColor }}
+        />
       </div>
       <ol className={C.list} style={{ gap }}>
         {items.map((item) => (
@@ -58,15 +64,27 @@ const ScrollTimeline = ({
             initial="idle"
             whileInView="lit"
             viewport={{ margin: "0px 0px -40% 0px", amount: "all" }}
-            variants={{ idle: { opacity: 0.35, x: -6 }, lit: { opacity: 1, x: 0 } }}
-            transition={{ duration: 0.5, ease: "easeOut" }}>
+            variants={{
+              idle: { opacity: 0.35, x: -6 },
+              lit: { opacity: 1, x: 0 },
+            }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
             <motion.span
               aria-hidden
               className={C.dot}
               style={{ left: 0, borderColor: accentColor }}
               variants={{
-                idle: { backgroundColor: dotColor, scale: 0.8, boxShadow: `0 0 0 0 ${accentColor}00` },
-                lit: { backgroundColor: accentColor, scale: 1, boxShadow: `0 0 16px 2px ${accentColor}66` },
+                idle: {
+                  backgroundColor: dotColor,
+                  scale: 0.8,
+                  boxShadow: `0 0 0 0 ${accentColor}00`,
+                },
+                lit: {
+                  backgroundColor: accentColor,
+                  scale: 1,
+                  boxShadow: `0 0 16px 2px ${accentColor}66`,
+                },
               }}
             />
             <p className={C.date} style={{ color: accentColor }}>

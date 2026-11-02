@@ -46,7 +46,8 @@ export default {
       name: "onCopy",
       type: "(count: number) => void",
       default: "-",
-      description: "Called after each copy, with how many times it has been copied.",
+      description:
+        "Called after each copy, with how many times it has been copied.",
     },
     {
       name: "className",

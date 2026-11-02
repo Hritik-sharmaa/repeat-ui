@@ -57,7 +57,12 @@ const AccordionGallery = ({
             onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
             className={C.panel}
-            style={{ flexGrow: open ? expandRatio : 1, flexBasis: 0, borderRadius: radius }}>
+            style={{
+              flexGrow: open ? expandRatio : 1,
+              flexBasis: 0,
+              borderRadius: radius,
+            }}
+          >
             <img
               src={item.image}
               alt=""
@@ -67,7 +72,13 @@ const AccordionGallery = ({
             />
             <div className={C.shade} />
             <span className={C.index}>{String(i + 1).padStart(2, "0")}</span>
-            <div className={C.caption} style={{ opacity: open ? 1 : 0, transform: open ? "none" : "translateY(12px)" }}>
+            <div
+              className={C.caption}
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? "none" : "translateY(12px)",
+              }}
+            >
               <p className={C.title}>{item.title}</p>
               {item.subtitle && <p className={C.subtitle}>{item.subtitle}</p>}
             </div>

@@ -3,7 +3,11 @@
 import type { ComponentProps } from "react";
 import PricingCard from "./preview";
 
-const features = ["Advanced data analysis", "Priority support", "Unlimited storage"];
+const features = [
+  "Advanced data analysis",
+  "Priority support",
+  "Unlimited storage",
+];
 
 // Three tiers. Customizing changes the highlighted middle card; colour and currency apply to all three.
 const PricingCardDemo = ({
@@ -14,8 +18,23 @@ const PricingCardDemo = ({
   isPopular = true,
   ...shared
 }: ComponentProps<typeof PricingCard>) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-    <PricingCard plan="Basic" price={90} features={features} buttonText="Start with Basic" {...shared} />
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 32,
+    }}
+  >
+    <PricingCard
+      plan="Basic"
+      price={90}
+      features={features}
+      buttonText="Start with Basic"
+      {...shared}
+    />
     <PricingCard
       plan={plan}
       price={price}

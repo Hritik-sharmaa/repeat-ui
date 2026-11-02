@@ -47,7 +47,8 @@ const Bell = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    aria-hidden>
+    aria-hidden
+  >
     <path d="M10.27 21a2 2 0 0 0 3.46 0M3.26 15.33A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.67C19.41 13.96 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.41 5.96-2.74 7.33" />
   </svg>
 );
@@ -77,11 +78,12 @@ const StackNotifications = ({
   return (
     <motion.div
       className={`${C.root} ${className}`}
-      style={{ width }}
+      style={{ width, maxWidth: "100%" }}
       animate={{ height }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}>
+      onMouseLeave={() => setHovered(false)}
+    >
       <AnimatePresence initial={false}>
         {visible.map((n, i) => (
           <motion.div
@@ -89,9 +91,17 @@ const StackNotifications = ({
             layout
             drag="x"
             dragSnapToOrigin
-            onDragEnd={(_, info) => Math.abs(info.offset.x) > 100 && onDismiss?.(n.id)}
+            onDragEnd={(_, info) =>
+              Math.abs(info.offset.x) > 100 && onDismiss?.(n.id)
+            }
             className={C.card}
-            style={{ height: CARD_HEIGHT, zIndex: visible.length - i, background, color: textColor, transformOrigin: "50% 100%" }}
+            style={{
+              height: CARD_HEIGHT,
+              zIndex: visible.length - i,
+              background,
+              color: textColor,
+              transformOrigin: "50% 100%",
+            }}
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
             animate={{
               opacity: open ? 1 : 1 - i * 0.2,
@@ -99,10 +109,15 @@ const StackNotifications = ({
               scale: open ? 1 : 1 - i * 0.05,
             }}
             exit={{ opacity: 0, x: 80, transition: { duration: 0.2 } }}
-            transition={{ type: "spring", stiffness: 350, damping: 30 }}>
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+          >
             <span
               className={C.icon}
-              style={{ color: accentColor, background: `color-mix(in srgb, ${accentColor} 15%, transparent)` }}>
+              style={{
+                color: accentColor,
+                background: `color-mix(in srgb, ${accentColor} 15%, transparent)`,
+              }}
+            >
               {n.icon ?? <Bell />}
             </span>
             <div className={C.body}>
@@ -114,7 +129,8 @@ const StackNotifications = ({
               aria-label="Dismiss"
               className={C.close}
               style={{ color: textColor }}
-              onClick={() => onDismiss?.(n.id)}>
+              onClick={() => onDismiss?.(n.id)}
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="14"
@@ -123,7 +139,8 @@ const StackNotifications = ({
                 stroke="currentColor"
                 strokeWidth="2.5"
                 strokeLinecap="round"
-                aria-hidden>
+                aria-hidden
+              >
                 <path d="M18 6 6 18M6 6l12 12" />
               </svg>
             </button>

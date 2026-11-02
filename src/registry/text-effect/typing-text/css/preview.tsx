@@ -58,7 +58,15 @@ const TypingText = ({
       setCurrentIndex(text.length);
     }, pauseAfterComplete);
     return () => clearTimeout(timer);
-  }, [currentIndex, text, speed, isTyping, isDeleting, onComplete, pauseAfterComplete]);
+  }, [
+    currentIndex,
+    text,
+    speed,
+    isTyping,
+    isDeleting,
+    onComplete,
+    pauseAfterComplete,
+  ]);
 
   useEffect(() => {
     if (!isDeleting) return;
@@ -79,18 +87,25 @@ const TypingText = ({
       style={{ fontSize }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}>
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       {showLetterAnimation
         ? [...displayedText].map((char, i) => (
-            <motion.span key={`${char}-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
-              {char === " " ? " " : char}
+            <motion.span
+              key={`${char}-${i}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              {char}
             </motion.span>
           ))
         : displayedText}
       <motion.span
         style={{ color: isDeleting ? deleteColor : cursorColor }}
         animate={{ opacity: [1, 0, 1], scale: [1, 0.8, 1] }}
-        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}>
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+      >
         {character}
       </motion.span>
     </motion.div>

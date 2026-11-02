@@ -5,7 +5,8 @@ const C = {
   root: "flex w-full flex-col overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)]",
   row: "group flex w-max",
   track: "flex shrink-0 animate-[rui-marquee_40s_linear_infinite]",
-  trackPausable: "flex shrink-0 animate-[rui-marquee_40s_linear_infinite] group-hover:[animation-play-state:paused]",
+  trackPausable:
+    "flex shrink-0 animate-[rui-marquee_40s_linear_infinite] group-hover:[animation-play-state:paused]",
   item: "flex shrink-0 items-center gap-2.5 rounded-2xl border border-white/10 px-5 py-3.5 text-sm font-medium shadow-sm transition-colors duration-300 hover:border-white/25",
   dot: "size-1.5 shrink-0 rounded-full",
 };
@@ -66,9 +67,14 @@ const MarqueeGrid = ({
                 animationDuration: `${speed * (1 + r * 0.25)}s`,
                 animationDirection: r % 2 ? "reverse" : "normal",
               } as CSSProperties
-            }>
+            }
+          >
             {row.map((item, i) => (
-              <span key={i} className={C.item} style={{ background: cardColor, color: textColor }}>
+              <span
+                key={i}
+                className={C.item}
+                style={{ background: cardColor, color: textColor }}
+              >
                 <span className={C.dot} style={{ background: accentColor }} />
                 {item}
               </span>

@@ -1,7 +1,24 @@
 "use client";
 
-import { useId, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, type MotionValue } from "motion/react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
+
+// The width available inside an element, without its padding.
+function contentWidth(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  return (
+    el.clientWidth -
+    parseFloat(style.paddingLeft) -
+    parseFloat(style.paddingRight)
+  );
+}
 
 export interface DockItem {
   label: string;
@@ -60,7 +77,11 @@ const DockIcon = ({
     const rect = ref.current?.getBoundingClientRect();
     return rect ? x - (rect.left + rect.width / 2) : distance;
   });
-  const target = useTransform(offset, [-distance, 0, distance], [baseSize, baseSize * magnification, baseSize]);
+  const target = useTransform(
+    offset,
+    [-distance, 0, distance],
+    [baseSize, baseSize * magnification, baseSize],
+  );
   const size = useSpring(target, { mass: 0.1, stiffness: 170, damping: 14 });
 
   return (
@@ -78,7 +99,13 @@ const DockIcon = ({
       onMouseLeave={() => setHovered(false)}
       whileTap={{ scale: 0.92 }}
       className="relative shrink-0 cursor-pointer rounded-[28%] border border-white/10 p-0 shadow-md shadow-black/30"
-      style={{ width: size, height: size, background: tileColor, color: iconColor }}>
+      style={{
+        width: size,
+        height: size,
+        background: tileColor,
+        color: iconColor,
+      }}
+    >
       {/* A soft highlight on the top half, like light on glass. */}
       <span
         aria-hidden
@@ -89,7 +116,8 @@ const DockIcon = ({
         className="absolute inset-0 grid place-items-center [&>svg]:size-[46%]"
         initial={hops ? { y: 0 } : false}
         animate={{ y: [0, -10, 0, -3, 0] }}
-        transition={{ duration: 0.6, ease: "easeOut" }}>
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         {item.icon}
       </motion.span>
       <AnimatePresence>
@@ -99,17 +127,24 @@ const DockIcon = ({
             animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
             exit={{ opacity: 0, y: 4, scale: 0.95, x: "-50%" }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="pointer-events-none absolute -top-10 left-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-neutral-900 px-2.5 py-1 text-xs font-medium text-white shadow-lg">
+            className="pointer-events-none absolute -top-10 left-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-neutral-900 px-2.5 py-1 text-xs font-medium text-white shadow-lg"
+          >
             {item.label}
           </motion.span>
         )}
       </AnimatePresence>
       {active && (
-        <span aria-hidden className="pointer-events-none absolute inset-x-0 -bottom-2.5 flex justify-center">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -bottom-2.5 flex justify-center"
+        >
           <motion.span
             layoutId={dotId}
             className="block size-1 rounded-full"
-            style={{ background: accentColor, boxShadow: `0 0 8px ${accentColor}` }}
+            style={{
+              background: accentColor,
+              boxShadow: `0 0 8px ${accentColor}`,
+            }}
             transition={{ type: "spring", stiffness: 500, damping: 35 }}
           />
         </span>
@@ -133,6 +168,26 @@ const Dock = ({
   className = "",
 }: DockProps) => {
   const mouseX = useMotionValue(Infinity);
+  const dockRef = useRef<HTMLDivElement>(null);
+  // Tiles shrink so the whole row fits a narrow screen; padding and gaps are 12px each.
+  const [fitSize, setFitSize] = useState(baseSize);
+  useEffect(() => {
+    const parent = dockRef.current?.parentElement;
+    if (!parent) return;
+    const measure = (available: number) => {
+      const room = available - 24 - (items.length - 1) * 12;
+      setFitSize(
+        Math.max(24, Math.min(baseSize, Math.floor(room / items.length))),
+      );
+    };
+    // Measure once now, so a phone never sees a frame of overflow, then follow resizes.
+    measure(contentWidth(parent));
+    const observer = new ResizeObserver(([entry]) =>
+      measure(entry.contentRect.width),
+    );
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [baseSize, items.length]);
   const [active, setActive] = useState(items[0]?.label);
   const dotId = useId();
   return (
@@ -140,13 +195,16 @@ const Dock = ({
       onMouseMove={(e) => mouseX.set(e.clientX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={`mx-auto flex w-max items-end gap-3 rounded-3xl border border-white/10 px-3 pb-3.5 pt-3 shadow-2xl shadow-black/40 backdrop-blur-md ${className}`}
-      style={{ background, height: baseSize + 26 }}>
+      ref={dockRef}
+      style={{ background, height: fitSize + 26 }}
+    >
       {items.map((item) => (
         <DockIcon
-          key={item.label}
+          // Remount when the fitted size changes: the spring only rereads its range when the pointer moves.
+          key={`${item.label}-${fitSize}`}
           item={item}
           mouseX={mouseX}
-          baseSize={baseSize}
+          baseSize={fitSize}
           magnification={magnification}
           distance={distance}
           tileColor={tileColor}

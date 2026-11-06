@@ -1,0 +1,54 @@
+.rui-brick {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: pan-y;
+  user-select: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.rui-brick-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rui-brick-rebuild,
+.rui-brick-count {
+  position: absolute;
+  padding: 6px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.rui-brick-rebuild {
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+
+.rui-brick:hover .rui-brick-rebuild,
+.rui-brick-rebuild:focus-visible {
+  opacity: 1;
+}
+
+.rui-brick-rebuild:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.rui-brick-count {
+  bottom: 12px;
+  left: 12px;
+  pointer-events: none;
+}

@@ -1,0 +1,27 @@
+.rui-filings {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  cursor: none;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.rui-filings-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.rui-filings-magnet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms;
+}

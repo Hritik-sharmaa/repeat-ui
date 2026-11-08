@@ -1,0 +1,219 @@
+.rui-projector {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+  outline: none;
+  user-select: none;
+}
+
+.rui-projector-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.rui-projector-lamp,
+.rui-projector-vignette {
+  position: absolute;
+  inset: 4%;
+  border-radius: 2px;
+}
+
+.rui-projector-vignette {
+  pointer-events: none;
+}
+
+.rui-projector-slide {
+  position: absolute;
+  inset: 4%;
+  width: 92%;
+  height: 92%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.rui-projector-caption {
+  position: absolute;
+  bottom: 7%;
+  left: 7%;
+  padding: 4px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.rui-projector-beam {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  margin-bottom: -4px;
+  pointer-events: none;
+}
+
+.rui-projector-beamLight {
+  position: absolute;
+  inset: 0;
+}
+
+.rui-projector-speck {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 9999px;
+}
+
+.rui-projector-body {
+  position: relative;
+  width: 90%;
+  padding: 96px 20px 16px;
+  border-radius: 22px;
+  box-shadow:
+    0 30px 50px -20px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.rui-projector-lens {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 9999px;
+  transform: translateX(-50%);
+}
+
+.rui-projector-trayWrap {
+  position: absolute;
+  top: 0;
+  margin-top: -26%;
+  left: 50%;
+  width: 64%;
+  aspect-ratio: 1;
+  perspective: 700px;
+  transform: translateX(-50%);
+}
+
+.rui-projector-tilt {
+  width: 100%;
+  height: 100%;
+  transform: rotateX(64deg);
+}
+
+.rui-projector-tray {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  box-shadow: 0 18px 24px -12px rgba(0, 0, 0, 0.8);
+}
+
+.rui-projector-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 30%;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+}
+
+.rui-projector-slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12%;
+  height: 17%;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0;
+  border-radius: 3px;
+}
+
+.rui-projector-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rui-projector-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rui-projector-button {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  outline: none;
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.rui-projector-button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+.rui-projector-counter {
+  padding: 6px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.rui-projector-knob {
+  display: none;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 4px solid rgba(0, 0, 0, 0.3);
+  border-radius: 9999px;
+}
+
+.rui-projector-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .rui-projector-body {
+    width: 72%;
+  }
+
+  .rui-projector-knob {
+    display: block;
+  }
+}

@@ -1,0 +1,75 @@
+.rui-holo {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  perspective: 700px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rui-holo-tilt {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 300ms ease-out;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+}
+
+.rui-holo-edge {
+  position: absolute;
+  inset: 0;
+}
+
+.rui-holo-face {
+  position: absolute;
+  overflow: hidden;
+}
+
+.rui-holo-foil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  background-size:
+    300% 300%,
+    100% 100%;
+}
+
+.rui-holo-drift {
+  animation: rui-holo-drift 6s ease-in-out infinite alternate;
+}
+
+.rui-holo-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  transition: opacity 300ms;
+}
+
+.rui-holo-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes rui-holo-drift {
+  from {
+    background-position:
+      0% 0%,
+      0 0;
+  }
+  to {
+    background-position:
+      100% 100%,
+      0 0;
+  }
+}

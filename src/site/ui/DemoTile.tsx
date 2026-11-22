@@ -15,6 +15,7 @@ export const FIT: Record<string, { scale?: number; live?: false }> = {
   "text-effect": { scale: 0.6 },
   grid: { scale: 0.38 },
   image: { scale: 0.55 },
+  sticker: { scale: 0.8 },
   commons: { scale: 0.7 },
   cursor: { live: false },
 };

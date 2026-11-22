@@ -7,6 +7,7 @@ import {
   MousePointer2,
   MousePointerClick,
   SquareUser,
+  Sticker,
   Type,
   type LucideIcon,
 } from "lucide-react";
@@ -21,6 +22,7 @@ const STYLES: Record<string, { icon: LucideIcon; tint: string; blurb: string }> 
   grid: { icon: LayoutGrid, tint: "#f59e0b", blurb: "Bento and masonry layouts, ready to fill." },
   cursor: { icon: MousePointer2, tint: "#ec4899", blurb: "Custom cursors that follow with style." },
   image: { icon: ImageIcon, tint: "#84cc16", blurb: "Photos turned into dither, ASCII and other textures." },
+  sticker: { icon: Sticker, tint: "#f43f5e", blurb: "Die-cut, holographic and name-tag stickers to slap anywhere." },
   commons: { icon: Boxes, tint: "#14b8a6", blurb: "Everyday pieces: search, upload, accordion." },
 };
 
